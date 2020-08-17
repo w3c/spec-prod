@@ -1,0 +1,18 @@
+name: W3C Deploy
+author: 'Sid Vishnoi'
+description: 'Build ReSpec/Bikeshed specs, validate output and publish to w3.org or GitHub pages'
+
+inputs:
+  type:
+    description: Possible values - 'respec', 'bikeshed'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup toolchain
+      run: ${{ github.action_path }}/setup.sh
+      shell: bash
+      env:
+        INPUTS_TYPE: ${{ inputs.type }}
+        HOME: /home/runner
