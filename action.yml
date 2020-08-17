@@ -6,6 +6,8 @@ inputs:
   type:
     description: Possible values - 'respec', 'bikeshed'
     required: true
+  source:
+    description: Source file path.
 
 runs:
   using: composite
@@ -16,3 +18,9 @@ runs:
       env:
         INPUTS_TYPE: ${{ inputs.type }}
         HOME: /home/runner
+    - name: Generate Static HTML
+      run: ${{ github.action_path }}/build.sh
+      shell: bash
+      env:
+        INPUTS_TYPE: ${{ inputs.type }}
+        INPUTS_SOURCE: ${{ inputs.source }}
