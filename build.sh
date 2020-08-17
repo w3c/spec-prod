@@ -20,7 +20,7 @@ case $INPUTS_TYPE in
     ;;
   bikeshed)
     echo "Converting Bikeshed document '$source_file' to HTML..."
-    bikeshed -h
+    bikeshed spec "$source_file" "$OUTFILE"
     ;;
   *)
     echo "Unknown type: $INPUTS_TYPE"
