@@ -5,7 +5,7 @@ case $INPUTS_TYPE in
     mkdir -p $HOME/.npm-global
     npm config set prefix "$HOME/.npm-global"
     export PATH=$HOME/.npm-global/bin:$PATH
-    echo "::add-path::$HOME/.npm-global"
+    echo "::add-path::$HOME/.npm-global/bin"
 
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
     npm install --global --silent respec
