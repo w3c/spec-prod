@@ -22,6 +22,7 @@ runs:
         INPUTS_TYPE: ${{ inputs.type }}
         HOME: /home/runner
     - name: Generate Static HTML
+      id: generate-html
       run: |
         echo "::group::Generate Static HTML"
         ${{ github.action_path }}/build.sh

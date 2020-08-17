@@ -27,3 +27,5 @@ case $INPUTS_TYPE in
     exit 1
     ;;
 esac
+
+echo "::set-output name=output::$OUTFILE"
