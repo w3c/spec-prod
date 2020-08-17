@@ -8,6 +8,9 @@ inputs:
     required: true
   source:
     description: Source file path.
+  validate-links:
+    description: Validate hyperlinks
+    default: true
 
 runs:
   using: composite
@@ -31,3 +34,12 @@ runs:
       env:
         INPUTS_TYPE: ${{ inputs.type }}
         INPUTS_SOURCE: ${{ inputs.source }}
+    - name: Validate hyperlinks
+      run: |
+        echo "::group::Validate hyperlinks"
+        ${{ github.action_path }}/validate-links.sh
+        echo "::endgroup::"
+      shell: bash
+      env:
+        INPUTS_VALIDATE_LINKS: ${{ inputs.validate-links }}
+        OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
