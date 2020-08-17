@@ -13,13 +13,19 @@ runs:
   using: composite
   steps:
     - name: Setup toolchain
-      run: ${{ github.action_path }}/setup.sh
+      run: |
+        echo "::group::Setup toolchain"
+        ${{ github.action_path }}/setup.sh
+        echo "::endgroup::"
       shell: bash
       env:
         INPUTS_TYPE: ${{ inputs.type }}
         HOME: /home/runner
     - name: Generate Static HTML
-      run: ${{ github.action_path }}/build.sh
+      run: |
+        echo "::group::Generate Static HTML"
+        ${{ github.action_path }}/build.sh
+        echo "::endgroup::"
       shell: bash
       env:
         INPUTS_TYPE: ${{ inputs.type }}
