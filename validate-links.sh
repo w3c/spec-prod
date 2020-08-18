@@ -1,5 +1,6 @@
 if [ "$INPUTS_VALIDATE_LINKS" = "true" ]; then
-  npx href-checker "$OUTPUT_FILE" --no-same-site
+  yarn global add href-checker
+  href-checker "$OUTPUT_FILE" --no-same-site
 else
   echo "Skipped."
 fi
