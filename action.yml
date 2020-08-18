@@ -11,6 +11,9 @@ inputs:
   validate-links:
     description: Validate hyperlinks
     default: true
+  validate-markup:
+    description: Validate hyperlinks
+    default: true
 
 runs:
   using: composite
@@ -42,4 +45,13 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_LINKS: ${{ inputs.validate-links }}
+        OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
+    - name: Validate markup
+      run: |
+        echo "::group::Validate markup"
+        ${{ github.action_path }}/validate-markup.sh
+        echo "::endgroup::"
+      shell: bash
+      env:
+        INPUTS_VALIDATE_MARKUP: ${{ inputs.validate-markup }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
