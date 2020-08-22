@@ -2,7 +2,7 @@
 const { existsSync } = require('fs');
 const { inspect } = require('util');
 
-const { exit, setOutput, formatAsHeading } = require('./utils.js');
+const { exit, setOutput, formatAsHeading, yesOrNo } = require('./utils.js');
 
 const inputs = JSON.parse(process.env.INPUTS || '{}');
 console.log(formatAsHeading('Provided input'));
@@ -48,19 +48,8 @@ if (!inputs.type) {
 /**
  * Figure out validation requests.
  */
-if (inputs.validateLinks) {
-  const input = inputs.validateLinks;
-  inputs.validateLinks = input !== 'no' && !!JSON.parse(input);
-} else {
-  inputs.validateLinks = false;
-}
-
-if (inputs.validateMarkup) {
-  const input = inputs.validateMarkup;
-  inputs.validateMarkup = input !== 'no' && !!JSON.parse(input);
-} else {
-  inputs.validateMarkup = false;
-}
+inputs.validateLinks = yesOrNo(inputs.validateLinks) || false;
+inputs.validateMarkup = yesOrNo(inputs.validateMarkup) || false;
 
 /**
  * Make processed inputs available to next steps.

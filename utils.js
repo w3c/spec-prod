@@ -44,10 +44,21 @@ function formatAsHeading(text) {
   return `${marker}\n${text}:\n${marker}`;
 }
 
+function yesOrNo(value) {
+  const str = String(value).trim();
+  if (/^(?:y|yes|true|1|on)$/i.test(str)) {
+    return true;
+  }
+  if (/^(?:n|no|false|0|off)$/i.test(value)) {
+    return false;
+  }
+}
+
 module.exports = {
   exit,
   addPath,
   setEnv,
   setOutput,
   formatAsHeading,
+  yesOrNo,
 };
