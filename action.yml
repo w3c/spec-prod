@@ -5,19 +5,27 @@ description: 'Build ReSpec/Bikeshed specs, validate output and publish to w3.org
 inputs:
   type:
     description: Possible values - 'respec', 'bikeshed'
-    required: true
   source:
     description: Source file path.
   validate-links:
     description: Validate hyperlinks
     default: true
   validate-markup:
-    description: Validate hyperlinks
+    description: Validate markup
     default: true
 
 runs:
   using: composite
   steps:
+    - name: Prepare
+      id: prepare
+      run: |
+        echo "::group::Prepare"
+        node ${{ github.action_path }}/prepare.js
+        echo "::endgroup::"
+      shell: bash
+      env:
+        INPUTS: ${{ toJSON(inputs) }}
     - name: Setup toolchain
       run: |
         echo "::group::Setup toolchain"
@@ -25,7 +33,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_TYPE: ${{ inputs.type }}
+        INPUTS_TYPE: ${{ steps.prepare.outputs.type }}
         HOME: /home/runner
     - name: Generate Static HTML
       id: generate-html
@@ -35,8 +43,8 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_TYPE: ${{ inputs.type }}
-        INPUTS_SOURCE: ${{ inputs.source }}
+        INPUTS_TYPE: ${{ steps.prepare.outputs.type }}
+        INPUTS_SOURCE: ${{ steps.prepare.outputs.source }}
     - name: Validate hyperlinks
       run: |
         echo "::group::Validate hyperlinks"
@@ -44,7 +52,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_LINKS: ${{ inputs.validate-links }}
+        INPUTS_VALIDATE_LINKS: ${{ steps.prepare.outputs.validate-links }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
     - name: Validate markup
       run: |
@@ -53,5 +61,5 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_MARKUP: ${{ inputs.validate-markup }}
+        INPUTS_VALIDATE_MARKUP: ${{ steps.prepare.outputs.validate-markup }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
