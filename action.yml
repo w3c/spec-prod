@@ -7,10 +7,10 @@ inputs:
     description: Possible values - 'respec', 'bikeshed'
   source:
     description: Source file path.
-  validate-links:
+  validateLinks:
     description: Validate hyperlinks
     default: true
-  validate-markup:
+  validateMarkup:
     description: Validate markup
     default: true
 
@@ -52,7 +52,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_LINKS: ${{ steps.prepare.outputs.validate-links }}
+        INPUTS_VALIDATE_LINKS: ${{ steps.prepare.outputs.validateLinks }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
     - name: Validate markup
       run: |
@@ -61,5 +61,5 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_MARKUP: ${{ steps.prepare.outputs.validate-markup }}
+        INPUTS_VALIDATE_MARKUP: ${{ steps.prepare.outputs.validateMarkup }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}

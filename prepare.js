@@ -48,18 +48,18 @@ if (!inputs.type) {
 /**
  * Figure out validation requests.
  */
-if (inputs['validate-links']) {
-  const input = inputs['validate-links'];
-  inputs['validate-links'] = input !== 'no' && !!JSON.parse(input);
+if (inputs.validateLinks) {
+  const input = inputs.validateLinks;
+  inputs.validateLinks = input !== 'no' && !!JSON.parse(input);
 } else {
-  inputs['validate-links'] = false;
+  inputs.validateLinks = false;
 }
 
-if (inputs['validate-markup']) {
-  const input = inputs['validate-markup'];
-  inputs['validate-markup'] = input !== 'no' && !!JSON.parse(input);
+if (inputs.validateMarkup) {
+  const input = inputs.validateMarkup;
+  inputs.validateMarkup = input !== 'no' && !!JSON.parse(input);
 } else {
-  inputs['validate-markup'] = false;
+  inputs.validateMarkup = false;
 }
 
 /**
