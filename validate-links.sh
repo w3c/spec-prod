@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source "./utils.sh";
+source "./utils.sh"
 require_env "INPUTS_VALIDATE_LINKS"
 require_env "OUTPUT_FILE"
 

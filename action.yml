@@ -1,6 +1,6 @@
 name: W3C Deploy
-author: 'Sid Vishnoi'
-description: 'Build ReSpec/Bikeshed specs, validate output and publish to w3.org or GitHub pages'
+author: "Sid Vishnoi"
+description: "Build ReSpec/Bikeshed specs, validate output and publish to w3.org or GitHub pages"
 
 inputs:
   type:

@@ -1,24 +1,32 @@
 // @ts-check
-const { execSync } = require('child_process');
+const { execSync } = require("child_process");
+
+/**
+ * @param {string} path
+ */
+function addPath(path) {
+	console.log(`::add-path::${path}`);
+}
 
 /**
  * @param {string} message
  * @param {number} [code]
  */
 function exit(message, code = 1) {
-  if (code === 0) {
-    console.log(message);
-  } else {
-    console.error(message);
-  }
-  process.exit(code);
+	if (code === 0) {
+		console.log(message);
+	} else {
+		console.error(message);
+	}
+	process.exit(code);
 }
 
 /**
- * @param {string} path
+ * @param {string} text
  */
-function addPath(path) {
-  console.log(`::add-path::${path}`);
+function formatAsHeading(text) {
+	const marker = "=".repeat(Math.max(50, text.length));
+	return `${marker}\n${text}:\n${marker}`;
 }
 
 /**
@@ -26,7 +34,7 @@ function addPath(path) {
  * @param {string} value
  */
 function setEnv(key, value) {
-  console.log(`::set-env name=${key}::${value}`);
+	console.log(`::set-env name=${key}::${value}`);
 }
 
 /**
@@ -34,25 +42,7 @@ function setEnv(key, value) {
  * @param {string} value
  */
 function setOutput(key, value) {
-  console.log(`::set-output name=${key}::${value}`);
-}
-
-/**
- * @param {string} text
- */
-function formatAsHeading(text) {
-  const marker = '='.repeat(Math.max(50, text.length));
-  return `${marker}\n${text}:\n${marker}`;
-}
-
-function yesOrNo(value) {
-  const str = String(value).trim();
-  if (/^(?:y|yes|true|1|on)$/i.test(str)) {
-    return true;
-  }
-  if (/^(?:n|no|false|0|off)$/i.test(value)) {
-    return false;
-  }
+	console.log(`::set-output name=${key}::${value}`);
 }
 
 /**
@@ -60,15 +50,25 @@ function yesOrNo(value) {
  * @param {string} command
  */
 function sh(command, options = {}) {
-  return execSync(command, { encoding: 'utf-8', ...options }).trim();
+	return execSync(command, { encoding: "utf-8", ...options }).trim();
+}
+
+function yesOrNo(value) {
+	const str = String(value).trim();
+	if (/^(?:y|yes|true|1|on)$/i.test(str)) {
+		return true;
+	}
+	if (/^(?:n|no|false|0|off)$/i.test(value)) {
+		return false;
+	}
 }
 
 module.exports = {
-  exit,
-  addPath,
-  setEnv,
-  setOutput,
-  formatAsHeading,
-  yesOrNo,
-  sh,
+	addPath,
+	exit,
+	formatAsHeading,
+	setEnv,
+	setOutput,
+	sh,
+	yesOrNo,
 };

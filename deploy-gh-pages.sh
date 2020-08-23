@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source "./utils.sh";
+source "./utils.sh"
 require_env "INPUTS_GH_PAGES_BRANCH"
 require_env "IN_GITHUB_EVENT_NAME"
 require_env "IN_GITHUB_REPOSITORY"
@@ -9,8 +9,8 @@ require_env "IN_GITHUB_TOKEN"
 require_env "OUTPUT_FILE"
 
 if [ "$INPUTS_GH_PAGES_BRANCH" = "false" ]; then
-  echo "Skipped."
-  exit
+    echo "Skipped."
+    exit
 fi
 
 target_branch="$INPUTS_GH_PAGES_BRANCH"
@@ -23,12 +23,12 @@ mv "$OUTPUT_FILE" /tmp/output-build-action/
 # If it exists, we do a pull, otherwise we create a new orphan branch.
 repo_uri="https://github.com/${IN_GITHUB_REPOSITORY}.git/"
 if [[ $(git ls-remote --exit-code --heads "$repo_uri" "$target_branch") ]]; then
-  echo "Remote branch \"${target_branch}\" exists."
-  git fetch origin "$target_branch"
-  git checkout "$target_branch"
+    echo "Remote branch \"${target_branch}\" exists."
+    git fetch origin "$target_branch"
+    git checkout "$target_branch"
 else
-  echo "Remote branch \"${target_branch}\" does not exist."
-  git checkout --orphan "$target_branch"
+    echo "Remote branch \"${target_branch}\" does not exist."
+    git checkout --orphan "$target_branch"
 fi
 
 # Bring back the changed file. We'll be serving it as index.html
@@ -40,7 +40,7 @@ git add .
 git config user.name "$IN_GITHUB_ACTOR"
 git config user.email "$(git show -s --format='%ae' $IN_GITHUB_SHA)"
 github_actions_bot="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
-read -r -d '' commit_message <<- EOT_COMMIT_MSG
+read -r -d '' commit_message <<-EOT_COMMIT_MSG
 	chore(rebuild): $(git log --format=%B -n 1 $IN_GITHUB_SHA)
 
 	SHA: ${IN_GITHUB_SHA}
@@ -52,8 +52,8 @@ EOT_COMMIT_MSG
 echo "$commit_message" | git commit -F -
 
 if [ $? -ne 0 ]; then
-  echo "Nothing to commit. Skipping deploy."
-  exit 0
+    echo "Nothing to commit. Skipping deploy."
+    exit 0
 fi
 
 # Push it!
