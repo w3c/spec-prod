@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 source "${BASH_SOURCE%/*}/utils.sh"
 require_env "INPUTS_VALIDATE_LINKS"
 require_env "OUTPUT_FILE"

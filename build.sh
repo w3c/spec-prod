@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 source "${BASH_SOURCE%/*}/utils.sh"
 require_env "INPUTS_TYPE"
 require_env "INPUTS_SOURCE"

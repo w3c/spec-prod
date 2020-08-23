@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 source "${BASH_SOURCE%/*}/utils.sh"
 require_env "INPUTS_GH_PAGES_BRANCH"
 require_env "IN_GITHUB_EVENT_NAME"
