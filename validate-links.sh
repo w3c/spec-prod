@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+source "./utils.sh";
+require_env "INPUTS_VALIDATE_LINKS"
+require_env "OUTPUT_FILE"
+
 if [ "$INPUTS_VALIDATE_LINKS" = "false" ]; then
   echo "Skipped."
   exit 0

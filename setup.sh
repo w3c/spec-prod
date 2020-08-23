@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+source "./utils.sh";
+require_env "INPUTS_TYPE"
+
 export PATH="$(yarn global bin):$PATH"
 echo "::add-path::$(yarn global bin)"
 echo "::set-env name=PUPPETEER_SKIP_CHROMIUM_DOWNLOAD::1"

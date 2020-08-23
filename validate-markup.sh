@@ -1,3 +1,8 @@
+#!/usr/bin/env bash
+source "./utils.sh";
+require_env "INPUTS_VALIDATE_MARKUP"
+require_env "OUTPUT_FILE"
+
 if [ "$INPUTS_VALIDATE_MARKUP" = "false" ]; then
   echo "Skipped."
   exit 0
