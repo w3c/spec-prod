@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source "./utils.sh"
+source "${BASH_SOURCE%/*}/utils.sh"
 require_env "INPUTS_VALIDATE_MARKUP"
 require_env "OUTPUT_FILE"
 
