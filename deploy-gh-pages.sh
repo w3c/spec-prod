@@ -42,9 +42,11 @@ git status
 echo "Committing as ${IN_GITHUB_ACTOR}"
 git config user.name "$IN_GITHUB_ACTOR"
 git config user.email "$(git show -s --format='%ae' $IN_GITHUB_SHA)"
+
 github_actions_bot="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
 original_commmit_message=$(git log --format=%B -n 1 $IN_GITHUB_SHA)
-read -r -d '' commit_message <<-EOT_COMMIT_MSG
+commit_message=$(
+    cat <<-EOT_COMMIT_MSG
 	chore(rebuild): ${original_commmit_message}
 
 	SHA: ${IN_GITHUB_SHA}
@@ -53,8 +55,9 @@ read -r -d '' commit_message <<-EOT_COMMIT_MSG
 
 	Co-authored-by: ${github_actions_bot}
 EOT_COMMIT_MSG
-
+)
 echo "$commit_message"
+
 set +e
 echo "$commit_message" | git commit -F -
 if [ $? -ne 0 ]; then
