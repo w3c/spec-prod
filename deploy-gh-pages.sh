@@ -37,7 +37,9 @@ mv "/tmp/output-build-action/$OUTPUT_FILE" index.html
 
 # Start the commit!
 git add .
+git status
 
+echo "Committing as ${IN_GITHUB_ACTOR}"
 git config user.name "$IN_GITHUB_ACTOR"
 git config user.email "$(git show -s --format='%ae' $IN_GITHUB_SHA)"
 github_actions_bot="github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
@@ -56,6 +58,8 @@ if [ $? -ne 0 ]; then
     echo "Nothing to commit. Skipping deploy."
     exit 0
 fi
+
+git log -p -1 --color
 
 # Push it!
 REPO_URI="https://x-access-token:${INPUTS_GITHUB_TOKEN}@github.com/${IN_GITHUB_REPOSITORY}.git/"
