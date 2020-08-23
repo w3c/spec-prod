@@ -2,11 +2,11 @@
 set -e
 source "${BASH_SOURCE%/*}/utils.sh"
 require_env "INPUTS_GH_PAGES_BRANCH"
+require_env "INPUTS_GITHUB_TOKEN"
 require_env "IN_GITHUB_EVENT_NAME"
 require_env "IN_GITHUB_REPOSITORY"
 require_env "IN_GITHUB_ACTOR"
 require_env "IN_GITHUB_SHA"
-require_env "IN_GITHUB_TOKEN"
 require_env "OUTPUT_FILE"
 
 if [ "$INPUTS_GH_PAGES_BRANCH" = "false" ]; then
@@ -58,6 +58,6 @@ if [ $? -ne 0 ]; then
 fi
 
 # Push it!
-REPO_URI="https://x-access-token:${IN_GITHUB_TOKEN}@github.com/${IN_GITHUB_REPOSITORY}.git/"
+REPO_URI="https://x-access-token:${INPUTS_GITHUB_TOKEN}@github.com/${IN_GITHUB_REPOSITORY}.git/"
 git remote set-url origin "$REPO_URI"
 git push --force-with-lease origin "$target_branch"
