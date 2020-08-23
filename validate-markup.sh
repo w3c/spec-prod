@@ -1,4 +1,4 @@
-if [ "$INPUTS_VALIDATE_MARKUP" != "true" ]; then
+if [ "$INPUTS_VALIDATE_MARKUP" = "false" ]; then
   echo "Skipped."
   exit 0
 fi
