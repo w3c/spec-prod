@@ -31,6 +31,7 @@ runs:
         INPUTS: ${{ toJSON(inputs) }}
         IN_GITHUB_TOKEN: ${{ github.token }}
         IN_GITHUB_EVENT_NAME: ${{ github.event_name }}
+
     - name: Setup toolchain
       run: |
         echo "::group::Setup toolchain"
@@ -40,6 +41,7 @@ runs:
       env:
         INPUTS_TYPE: ${{ steps.prepare.outputs.type }}
         HOME: /home/runner
+
     - name: Generate Static HTML
       id: generate-html
       run: |
@@ -50,6 +52,7 @@ runs:
       env:
         INPUTS_TYPE: ${{ steps.prepare.outputs.type }}
         INPUTS_SOURCE: ${{ steps.prepare.outputs.source }}
+
     - name: Validate hyperlinks
       run: |
         echo "::group::Validate hyperlinks"
@@ -59,6 +62,7 @@ runs:
       env:
         INPUTS_VALIDATE_LINKS: ${{ steps.prepare.outputs.validateLinks }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
+
     - name: Validate markup
       run: |
         echo "::group::Validate markup"
@@ -68,6 +72,7 @@ runs:
       env:
         INPUTS_VALIDATE_MARKUP: ${{ steps.prepare.outputs.validateMarkup }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
+
     - name: Deploy to GitHub pages
       run: |
         echo "::group::Deploy to GitHub pages"
