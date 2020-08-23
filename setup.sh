@@ -16,8 +16,4 @@ case $INPUTS_TYPE in
     python3 -m pip --quiet install bikeshed
     bikeshed update
     ;;
-  *)
-    echo "Unknown type: $INPUTS_TYPE"
-    exit 1
-    ;;
 esac
