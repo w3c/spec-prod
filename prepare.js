@@ -2,7 +2,7 @@
 const { existsSync } = require('fs');
 const { inspect } = require('util');
 
-const { exit, setOutput, formatAsHeading, yesOrNo } = require('./utils.js');
+const { exit, setOutput, formatAsHeading, sh, yesOrNo } = require('./utils.js');
 
 const inputs = JSON.parse(process.env.INPUTS || '{}');
 console.log(formatAsHeading('Provided input'));
@@ -50,6 +50,36 @@ if (!inputs.type) {
  */
 inputs.validateLinks = yesOrNo(inputs.validateLinks) || false;
 inputs.validateMarkup = yesOrNo(inputs.validateMarkup) || false;
+
+/**
+ * Figure out GitHub pages deployment.
+ */
+const event = process.env.IN_GITHUB_EVENT_NAME;
+const shouldTryDeployToGitHubPages = event === 'push';
+if (shouldTryDeployToGitHubPages) {
+  if (inputs.ghPages) {
+    const askedNotToDeploy = yesOrNo(inputs.ghPages) === false;
+    if (askedNotToDeploy) {
+      inputs.ghPages = false;
+    } else {
+      if (yesOrNo(inputs.ghPages) === true) {
+        inputs.ghPages = 'gh-pages';
+      }
+      const currentBranch = sh('git branch --show-current');
+      if (currentBranch === inputs.ghPages) {
+        exit(`Current branch and "ghPages" cannot be same.`);
+      }
+      if (!inputs.GITHUB_TOKEN) {
+        console.log('Using default GITHUB_TOKEN.');
+        inputs.GITHUB_TOKEN = process.env.IN_GITHUB_TOKEN;
+      }
+    }
+  } else {
+    throw new Error('Unreachable');
+  }
+} else {
+  inputs.ghPages = false;
+}
 
 /**
  * Make processed inputs available to next steps.

@@ -13,6 +13,9 @@ inputs:
   validateMarkup:
     description: Validate markup
     default: true
+  ghPages:
+    description: Provide a branch name (default "gh-pages") to deploy to GitHub pages. Set to false to not deploy.
+    default: "gh-pages"
 
 runs:
   using: composite
@@ -26,6 +29,8 @@ runs:
       shell: bash
       env:
         INPUTS: ${{ toJSON(inputs) }}
+        IN_GITHUB_TOKEN: ${{ github.token }}
+        IN_GITHUB_EVENT_NAME: ${{ github.event_name }}
     - name: Setup toolchain
       run: |
         echo "::group::Setup toolchain"
@@ -62,4 +67,19 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_MARKUP: ${{ steps.prepare.outputs.validateMarkup }}
+        OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
+    - name: Deploy to GitHub pages
+      run: |
+        echo "::group::Deploy to GitHub pages"
+        ${{ github.action_path }}/deploy-gh-pages.sh
+        echo "::endgroup::"
+      shell: bash
+      env:
+        INPUTS_GITHUB_TOKEN: ${{ steps.prepare.outputs.GITHUB_TOKEN }}
+        IN_GITHUB_EVENT_NAME: ${{ github.event_name }}
+        IN_GITHUB_REPOSITORY: ${{ github.repository }}
+        IN_GITHUB_SHA: ${{ github.sha }}
+        IN_GITHUB_ACTOR: ${{ github.actor }}
+        INPUTS_GH_PAGES_BRANCH: ${{ steps.prepare.outputs.ghPages }}
+        INPUTS_SOURCE: ${{ steps.prepare.outputs.source }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}

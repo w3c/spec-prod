@@ -1,4 +1,5 @@
 // @ts-check
+const { execSync } = require('child_process');
 
 /**
  * @param {string} message
@@ -54,6 +55,14 @@ function yesOrNo(value) {
   }
 }
 
+/**
+ * Synchronously run a shell command get its result.
+ * @param {string} command
+ */
+function sh(command, options = {}) {
+  return execSync(command, { encoding: 'utf-8', ...options }).trim();
+}
+
 module.exports = {
   exit,
   addPath,
@@ -61,4 +70,5 @@ module.exports = {
   setOutput,
   formatAsHeading,
   yesOrNo,
+  sh,
 };
