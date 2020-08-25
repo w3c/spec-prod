@@ -9,6 +9,17 @@ function addPath(path) {
 }
 
 /**
+ * Get env variable value
+ * @param {string} name name of env variable
+ * @throws if env variable is not set
+ */
+function env(name) {
+	const value = process.env[name];
+	if (value) return value;
+	exit(`env variable \`${name}\` is not set.`);
+}
+
+/**
  * @param {string} message
  * @param {number} [code]
  */
@@ -77,6 +88,7 @@ function yesOrNo(value) {
 
 module.exports = {
 	addPath,
+	env,
 	exit,
 	formatAsHeading,
 	setEnv,
