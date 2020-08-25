@@ -48,9 +48,21 @@ function setOutput(key, value) {
 /**
  * Synchronously run a shell command get its result.
  * @param {string} command
+ * @param {object} [options]
+ * @param {boolean} [options.output] show stdout
+ * @param {string} [options.input] stdin
  */
-function sh(command, options = {}) {
-	return execSync(command, { encoding: "utf-8", ...options }).trim();
+function sh(command, { output = false, input = "" } = {}) {
+	const BOLD = "\x1b[1m";
+	const RESET = "\x1b[22m";
+	try {
+		console.group(`\n${BOLD}$ ${command}${RESET}`);
+		const stdout = execSync(command, { encoding: "utf-8", input }).trim();
+		if (output && stdout) console.log(stdout);
+		return stdout;
+	} finally {
+		console.groupEnd();
+	}
 }
 
 function yesOrNo(value) {
