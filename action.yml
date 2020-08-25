@@ -76,7 +76,7 @@ runs:
     - name: Deploy to GitHub pages
       run: |
         echo "::group::Deploy to GitHub pages"
-        ${{ github.action_path }}/deploy-gh-pages.sh
+        node ${{ github.action_path }}/deploy-gh-pages.js
         echo "::endgroup::"
       shell: bash
       env:
