@@ -28,9 +28,8 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS: ${{ toJSON(inputs) }}
-        IN_GITHUB_TOKEN: ${{ github.token }}
-        IN_GITHUB_EVENT_NAME: ${{ github.event_name }}
+        INPUTS_USER: ${{ toJSON(inputs) }}
+        INPUTS_GITHUB: ${{ toJSON(github) }}
 
     - name: Setup toolchain
       run: |
@@ -39,7 +38,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_TYPE: ${{ steps.prepare.outputs.type }}
+        INPUTS_TYPE: ${{ fromJson(steps.prepare.outputs.all).type }}
         HOME: /home/runner
 
     - name: Generate Static HTML
@@ -50,8 +49,8 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_TYPE: ${{ steps.prepare.outputs.type }}
-        INPUTS_SOURCE: ${{ steps.prepare.outputs.source }}
+        INPUTS_TYPE: ${{ fromJson(steps.prepare.outputs.all).type }}
+        INPUTS_SOURCE: ${{ fromJson(steps.prepare.outputs.all).source }}
 
     - name: Validate hyperlinks
       run: |
@@ -60,7 +59,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_LINKS: ${{ steps.prepare.outputs.validateLinks }}
+        INPUTS_VALIDATE_LINKS: ${{ fromJson(steps.prepare.outputs.all).validate.links }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
 
     - name: Validate markup
@@ -70,7 +69,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_MARKUP: ${{ steps.prepare.outputs.validateMarkup }}
+        INPUTS_VALIDATE_MARKUP: ${{ fromJson(steps.prepare.outputs.all).validate.markup }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
 
     - name: Deploy to GitHub pages
@@ -80,11 +79,6 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_GITHUB_TOKEN: ${{ steps.prepare.outputs.GITHUB_TOKEN }}
-        IN_GITHUB_EVENT_NAME: ${{ github.event_name }}
-        IN_GITHUB_REPOSITORY: ${{ github.repository }}
-        IN_GITHUB_SHA: ${{ github.sha }}
-        IN_GITHUB_ACTOR: ${{ github.actor }}
-        INPUTS_GH_PAGES_BRANCH: ${{ steps.prepare.outputs.ghPages }}
-        INPUTS_SOURCE: ${{ steps.prepare.outputs.source }}
+        INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.all).deploy.ghPages) }}
+        INPUTS_SOURCE: ${{ fromJson(steps.prepare.outputs.all).source }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}

@@ -2,19 +2,19 @@
 const path = require("path");
 const os = require("os");
 const fs = require("fs").promises;
-const { env, exit, sh, yesOrNo } = require("./utils.js");
+const { env, exit, sh } = require("./utils.js");
 
-const targetBranch = env("INPUTS_GH_PAGES_BRANCH");
-const githubEventName = env("IN_GITHUB_EVENT_NAME");
-const repo = env("IN_GITHUB_REPOSITORY");
-const userName = env("IN_GITHUB_ACTOR");
-const sha = env("IN_GITHUB_SHA");
+/** @type {import("./prepare.js").GithubPagesDeployOptions} */
+const inputs = JSON.parse(env("INPUTS_DEPLOY"));
 const outputFile = env("OUTPUT_FILE");
-const GITHUB_TOKEN = env("INPUTS_GITHUB_TOKEN");
 
-if (yesOrNo(targetBranch) === false) {
+if (inputs === false) {
 	exit("Skipped.", 0);
+	process.exit(1); // TypeScript Bug. It cries.
 }
+
+const { targetBranch, token, event, sha, repository, actor } = inputs;
+
 main();
 
 async function main() {
@@ -54,7 +54,7 @@ async function prepare(tmpOutputFile) {
 
 	// Check if target branch remote exists on remote.
 	// If it exists, we do a pull, otherwise we create a new orphan branch.
-	const repoUri = `https://github.com/${repo}.git/`;
+	const repoUri = `https://github.com/${repository}.git/`;
 	if (sh(`git ls-remote --heads "${repoUri}" "${targetBranch}"`)) {
 		sh(`git fetch origin "${targetBranch}"`, { output: true });
 		sh(`git checkout "${targetBranch}"`, { output: true });
@@ -73,7 +73,7 @@ async function commit() {
 	sh(`git status`, { output: true });
 
 	const email = sh(`git show -s --format='%ae' ${sha}`);
-	sh(`git config user.name "${userName}"`);
+	sh(`git config user.name "${actor}"`);
 	sh(`git config user.email "${email}"`);
 
 	const originalCommmitMessage = sh(`git log --format=%B -n1 ${sha}`);
@@ -81,7 +81,7 @@ async function commit() {
 		`chore(rebuild): ${originalCommmitMessage}`,
 		"",
 		`SHA: ${sha}`,
-		`Reason: ${githubEventName}`,
+		`Reason: ${event}`,
 		"",
 		"",
 		`Co-authored-by: ${GITHUB_ACTIONS_BOT}`,
@@ -97,8 +97,8 @@ async function commit() {
 }
 
 async function push() {
-	const REPO_URI = `https://x-access-token:${GITHUB_TOKEN}@github.com/${repo}.git/`;
-	sh(`git remote set-url origin "${REPO_URI}"`, { output: true });
+	const repoURI = `https://x-access-token:${token}@github.com/${repository}.git/`;
+	sh(`git remote set-url origin "${repoURI}"`, { output: true });
 	sh(`git push --force-with-lease origin "${targetBranch}"`);
 }
 

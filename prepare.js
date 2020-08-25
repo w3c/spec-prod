@@ -9,12 +9,9 @@ main();
 
 function main() {
 	/** @type {Inputs} */
-	const inputs = JSON.parse(env("INPUTS"));
+	const inputs = JSON.parse(env("INPUTS_USER"));
 	/** @type {GitHubContext} */
-	const githubContext = {
-		token: env("IN_GITHUB_TOKEN"),
-		event_name: env("IN_GITHUB_EVENT_NAME"),
-	};
+	const githubContext = JSON.parse(env("INPUTS_GITHUB"));
 
 	console.log(formatAsHeading("Provided input"));
 	console.log(inspect(inputs, false, Infinity, true));
@@ -25,9 +22,7 @@ function main() {
 	console.log(inspect(normalizedInputs, false, Infinity, true));
 
 	// Make processed inputs available to next steps.
-	for (const [key, val] of Object.entries(normalizedInputs)) {
-		setOutput(key, val);
-	}
+	setOutput("all", JSON.stringify(normalizedInputs));
 }
 
 /**
@@ -42,6 +37,9 @@ function main() {
  * @typedef {object} GitHubContext
  * @property {string} GitHubContext.token
  * @property {string} GitHubContext.event_name
+ * @property {string} GitHubContext.repository
+ * @property {string} GitHubContext.sha
+ * @property {string} GitHubContext.actor
  *
  * @param {Inputs} inputs
  * @param {GitHubContext} githubContext
@@ -49,11 +47,10 @@ function main() {
 function processInputs(inputs, githubContext) {
 	return {
 		...typeAndInput(inputs),
-		...validation(inputs),
-		...(githubPagesDeployment(inputs, githubContext) || {
-			ghPages: false,
-			GITHUB_TOKEN: "NOT_REQUIRED",
-		}),
+		validate: validation(inputs),
+		deploy: {
+			ghPages: githubPagesDeployment(inputs, githubContext),
+		},
 	};
 }
 
@@ -107,9 +104,9 @@ function typeAndInput(inputs) {
  * @param {Inputs} inputs
  */
 function validation(inputs) {
-	const validateLinks = yesOrNo(inputs.validateLinks) || false;
-	const validateMarkup = yesOrNo(inputs.validateMarkup) || false;
-	return { validateLinks, validateMarkup };
+	const links = yesOrNo(inputs.validateLinks) || false;
+	const markup = yesOrNo(inputs.validateMarkup) || false;
+	return { links, markup };
 }
 
 /**
@@ -119,7 +116,7 @@ function validation(inputs) {
  * @typedef {ReturnType<typeof githubPagesDeployment>} GithubPagesDeployOptions
  */
 function githubPagesDeployment(inputs, githubContext) {
-	const { event_name: event } = githubContext;
+	const { event_name: event, sha, repository, actor } = githubContext;
 
 	const shouldTryDeployToGitHubPages = event === "push";
 	if (!shouldTryDeployToGitHubPages) {
@@ -144,5 +141,5 @@ function githubPagesDeployment(inputs, githubContext) {
 		token = githubContext.token;
 	}
 
-	return { ghPages: targetBranch, GITHUB_TOKEN: token };
+	return { targetBranch, token, event, sha, repository, actor };
 }
