@@ -50,7 +50,7 @@ function setEnv(key, value) {
 
 /**
  * @param {string} key
- * @param {string} value
+ * @param {string|boolean|null|number} value
  */
 function setOutput(key, value) {
 	console.log(`::set-output name=${key}::${value}`);
