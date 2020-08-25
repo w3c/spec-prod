@@ -1,7 +1,7 @@
 // @ts-check
 const path = require("path");
 const os = require("os");
-const fs = require("fs");
+const fs = require("fs").promises;
 const { env, exit, sh, yesOrNo } = require("./utils.js");
 
 const targetBranch = env("INPUTS_GH_PAGES_BRANCH");
@@ -15,37 +15,39 @@ const GITHUB_TOKEN = env("INPUTS_GITHUB_TOKEN");
 if (yesOrNo(targetBranch) === false) {
 	exit("Skipped.", 0);
 }
+main();
 
-const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "w3c-deploy-output-"));
-const tmpOutputFile = path.join(tmpDir, outputFile);
-let error = null;
-try {
-	prepare(tmpOutputFile);
-	const committed = commit();
-	if (!committed) {
+async function main() {
+	const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "w3c-deploy-output-"));
+	const tmpOutputFile = path.join(tmpDir, outputFile);
+	let error = null;
+	try {
+		await prepare(tmpOutputFile);
+		const committed = await commit();
+		if (!committed) {
+			await cleanUp(tmpOutputFile);
+			exit(`Nothing to commit. Skipping deploy.`, 0);
+		}
+		await push();
+	} catch (err) {
+		console.error(err);
+		error = err;
+	} finally {
 		cleanUp(tmpOutputFile);
-		exit(`Nothing to commit. Skipping deploy.`, 0);
-	}
-	sh(`git log -p -1 --color --word-diff`, { output: true });
-	push();
-} catch (err) {
-	console.error(err);
-	error = err;
-} finally {
-	cleanUp(tmpOutputFile);
-	if (error) {
-		console.log();
-		console.log("=".repeat(60));
-		exit(error.message);
+		if (error) {
+			console.log();
+			console.log("=".repeat(60));
+			exit(error.message);
+		}
 	}
 }
 
 /**
  * @param {string} tmpOutputFile
  */
-function prepare(tmpOutputFile) {
+async function prepare(tmpOutputFile) {
 	// Temporarily move built file as we'll be doing a checkout soon.
-	fs.renameSync(outputFile, tmpOutputFile);
+	await fs.rename(outputFile, tmpOutputFile);
 
 	// Clean up working tree
 	sh(`git checkout -- .`);
@@ -61,10 +63,10 @@ function prepare(tmpOutputFile) {
 	}
 
 	// Bring back the changed file. We'll be serving it as index.html
-	fs.copyFileSync(tmpOutputFile, "index.html");
+	await fs.copyFile(tmpOutputFile, "index.html");
 }
 
-function commit() {
+async function commit() {
 	const GITHUB_ACTIONS_BOT = `github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>`;
 
 	sh(`git add .`);
@@ -81,19 +83,20 @@ function commit() {
 		`SHA: ${sha}`,
 		`Reason: ${githubEventName}`,
 		"",
-    "",
+		"",
 		`Co-authored-by: ${GITHUB_ACTIONS_BOT}`,
 	].join("\n");
 
 	try {
 		sh(`git commit --file -`, { input: commitMessage });
+		sh(`git log -p -1 --color --word-diff`, { output: true });
 		return true;
 	} catch (error) {
 		return false;
 	}
 }
 
-function push() {
+async function push() {
 	const REPO_URI = `https://x-access-token:${GITHUB_TOKEN}@github.com/${repo}.git/`;
 	sh(`git remote set-url origin "${REPO_URI}"`, { output: true });
 	sh(`git push --force-with-lease origin "${targetBranch}"`);
@@ -102,9 +105,9 @@ function push() {
 /**
  * @param {string} tmpOutputFile
  */
-function cleanUp(tmpOutputFile) {
+async function cleanUp(tmpOutputFile) {
 	try {
-		fs.unlinkSync("index.html");
+		await fs.unlink("index.html");
 	} catch {}
 
 	try {
@@ -113,6 +116,6 @@ function cleanUp(tmpOutputFile) {
 	} catch {}
 
 	try {
-		fs.copyFileSync(tmpOutputFile, outputFile);
+		await fs.copyFile(tmpOutputFile, outputFile);
 	} catch {}
 }
