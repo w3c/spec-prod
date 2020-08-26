@@ -15,7 +15,7 @@ if (inputs === false) {
 
 const { targetBranch, token, event, sha, repository, actor } = inputs;
 
-main();
+main().catch(error => exit(error));
 
 async function main() {
 	const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "w3c-deploy-output-"));
@@ -33,7 +33,7 @@ async function main() {
 		console.error(err);
 		error = err;
 	} finally {
-		cleanUp(tmpOutputFile);
+		await cleanUp(tmpOutputFile);
 		if (error) {
 			console.log();
 			console.log("=".repeat(60));
@@ -50,16 +50,16 @@ async function prepare(tmpOutputFile) {
 	await fs.rename(outputFile, tmpOutputFile);
 
 	// Clean up working tree
-	sh(`git checkout -- .`);
+	await sh(`git checkout -- .`);
 
 	// Check if target branch remote exists on remote.
 	// If it exists, we do a pull, otherwise we create a new orphan branch.
 	const repoUri = `https://github.com/${repository}.git/`;
-	if (sh(`git ls-remote --heads "${repoUri}" "${targetBranch}"`)) {
-		sh(`git fetch origin "${targetBranch}"`, { output: true });
-		sh(`git checkout "${targetBranch}"`, { output: true });
+	if (await sh(`git ls-remote --heads "${repoUri}" "${targetBranch}"`)) {
+		await sh(`git fetch origin "${targetBranch}"`, "stream");
+		await sh(`git checkout "${targetBranch}"`, "stream");
 	} else {
-		sh(`git checkout --orphan "${targetBranch}"`, { output: true });
+		await sh(`git checkout --orphan "${targetBranch}"`, "stream");
 	}
 
 	// Bring back the changed file. We'll be serving it as index.html
@@ -69,14 +69,14 @@ async function prepare(tmpOutputFile) {
 async function commit() {
 	const GITHUB_ACTIONS_BOT = `github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>`;
 
-	sh(`git add .`);
-	sh(`git status`, { output: true });
+	await sh(`git add .`);
+	await sh(`git status`, "stream");
 
-	const email = sh(`git show -s --format='%ae' ${sha}`);
-	sh(`git config user.name "${actor}"`);
-	sh(`git config user.email "${email}"`);
+	const email = await sh(`git show -s --format='%ae' ${sha}`);
+	await sh(`git config user.name "${actor}"`);
+	await sh(`git config user.email "${email}"`);
 
-	const originalCommmitMessage = sh(`git log --format=%B -n1 ${sha}`);
+	const originalCommmitMessage = await sh(`git log --format=%B -n1 ${sha}`);
 	const commitMessage = [
 		`chore(rebuild): ${originalCommmitMessage}`,
 		"",
@@ -86,10 +86,12 @@ async function commit() {
 		"",
 		`Co-authored-by: ${GITHUB_ACTIONS_BOT}`,
 	].join("\n");
+	const COMMIT_MESSAGE_FILE = path.join(os.tmpdir(), "COMMIT_MSG");
+	await fs.writeFile(COMMIT_MESSAGE_FILE, commitMessage, "utf-8");
 
 	try {
-		sh(`git commit --file -`, { input: commitMessage });
-		sh(`git log -p -1 --color --word-diff`, { output: true });
+		await sh(`git commit --file "${COMMIT_MESSAGE_FILE}"`);
+		await sh(`git log -p -1 --color --word-diff`, "stream");
 		return true;
 	} catch (error) {
 		return false;
@@ -98,8 +100,8 @@ async function commit() {
 
 async function push() {
 	const repoURI = `https://x-access-token:${token}@github.com/${repository}.git/`;
-	sh(`git remote set-url origin "${repoURI}"`, { output: true });
-	sh(`git push --force-with-lease origin "${targetBranch}"`);
+	await sh(`git remote set-url origin "${repoURI}"`);
+	await sh(`git push --force-with-lease origin "${targetBranch}"`, "stream");
 }
 
 /**
@@ -111,8 +113,8 @@ async function cleanUp(tmpOutputFile) {
 	} catch {}
 
 	try {
-		sh(`git checkout -`);
-		sh(`git checkout -- .`);
+		await sh(`git checkout -`);
+		await sh(`git checkout -- .`);
 	} catch {}
 
 	try {

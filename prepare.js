@@ -7,7 +7,7 @@ const { env } = require("./utils.js");
 
 main();
 
-function main() {
+async function main() {
 	/** @type {Inputs} */
 	const inputs = JSON.parse(env("INPUTS_USER"));
 	/** @type {GitHubContext} */
@@ -16,7 +16,7 @@ function main() {
 	console.log(formatAsHeading("Provided input"));
 	console.log(inspect(inputs, false, Infinity, true));
 
-	const normalizedInputs = processInputs(inputs, githubContext);
+	const normalizedInputs = await processInputs(inputs, githubContext);
 
 	console.log(`\n\n${formatAsHeading("Normalized input")}`);
 	console.log(inspect(normalizedInputs, false, Infinity, true));
@@ -44,12 +44,12 @@ function main() {
  * @param {Inputs} inputs
  * @param {GitHubContext} githubContext
  */
-function processInputs(inputs, githubContext) {
+async function processInputs(inputs, githubContext) {
 	return {
 		...typeAndInput(inputs),
 		validate: validation(inputs),
 		deploy: {
-			ghPages: githubPagesDeployment(inputs, githubContext),
+			ghPages: await githubPagesDeployment(inputs, githubContext),
 		},
 	};
 }
@@ -110,12 +110,17 @@ function validation(inputs) {
 }
 
 /**
+ * @template T
+ * @typedef {T extends PromiseLike<infer U> ? U : T} ThenArg<T>
+ */
+
+/**
  * Figure out GitHub pages deployment.
  * @param {Inputs} inputs
  * @param {GitHubContext} githubContext
- * @typedef {ReturnType<typeof githubPagesDeployment>} GithubPagesDeployOptions
+ * @typedef {ThenArg<ReturnType<typeof githubPagesDeployment>>} GithubPagesDeployOptions
  */
-function githubPagesDeployment(inputs, githubContext) {
+async function githubPagesDeployment(inputs, githubContext) {
 	const { event_name: event, sha, repository, actor } = githubContext;
 
 	const shouldTryDeployToGitHubPages = event === "push";
@@ -130,14 +135,13 @@ function githubPagesDeployment(inputs, githubContext) {
 
 	const targetBranch = yesOrNo(inputs.ghPages) ? "gh-pages" : inputs.ghPages;
 
-	const currentBranch = sh("git branch --show-current");
+	const currentBranch = await sh("git branch --show-current", "silent");
 	if (currentBranch === targetBranch) {
 		exit(`Current branch and "ghPages" cannot be same.`);
 	}
 
 	let token = inputs.GITHUB_TOKEN;
 	if (!token) {
-		console.log("Using default GITHUB_TOKEN.");
 		token = githubContext.token;
 	}
 

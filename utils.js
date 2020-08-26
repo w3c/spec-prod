@@ -1,5 +1,5 @@
 // @ts-check
-const { execSync } = require("child_process");
+const { exec } = require("child_process");
 
 /**
  * @param {string} path
@@ -57,22 +57,49 @@ function setOutput(key, value) {
 }
 
 /**
- * Synchronously run a shell command get its result.
+ * Asynchronously run a shell command get its result.
  * @param {string} command
- * @param {object} [options]
- * @param {boolean} [options.output] show stdout
- * @param {string} [options.input] stdin
+ * @param {"buffer"|"stream"|"silent"} [output]
+ * @returns {Promise<string>}
+ * @throws {Promise<{ stdout: string, stderr: string, code: number }>}
  */
-function sh(command, { output = false, input = "" } = {}) {
+function sh(command, output) {
 	const BOLD = "\x1b[1m";
 	const RESET = "\x1b[22m";
+	if (output !== "silent") {
+		console.group(`${BOLD}$ ${command}${RESET}`);
+	}
+
 	try {
-		console.group(`\n${BOLD}$ ${command}${RESET}`);
-		const stdout = execSync(command, { encoding: "utf-8", input }).trim();
-		if (output && stdout) console.log(stdout);
-		return stdout;
+		return new Promise((resolve, reject) => {
+			let stdout = "";
+			let stderr = "";
+			const child = exec(command, { encoding: "utf-8" });
+			child.stdout.on("data", chunk => {
+				if (output === "stream") process.stdout.write(chunk);
+				stdout += chunk;
+			});
+			child.stderr.on("data", chunk => {
+				if (output === "stream") process.stderr.write(chunk);
+				stderr += chunk;
+			});
+			child.on("exit", code => {
+				stdout = stdout.trim();
+				stderr = stderr.trim();
+				if (output === "buffer") {
+					if (stdout) console.log(stdout);
+					if (stderr) console.error(stderr);
+				}
+				if (output && output !== "silent") {
+					console.log();
+				}
+				code === 0 ? resolve(stdout) : reject({ stdout, stderr, code });
+			});
+		});
 	} finally {
-		console.groupEnd();
+		if (output !== "silent") {
+			console.groupEnd();
+		}
 	}
 }
 
