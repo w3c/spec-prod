@@ -1,9 +1,14 @@
 // @ts-check
 const { existsSync } = require("fs");
-const { inspect } = require("util");
-
-const { exit, setOutput, formatAsHeading, sh, yesOrNo } = require("./utils.js");
-const { env } = require("./utils.js");
+const {
+	env,
+	exit,
+	formatAsHeading,
+	pprint,
+	setOutput,
+	sh,
+	yesOrNo,
+} = require("./utils.js");
 
 main();
 
@@ -14,13 +19,13 @@ async function main() {
 	const githubContext = JSON.parse(env("INPUTS_GITHUB"));
 
 	console.log(formatAsHeading("Provided input"));
-	console.log(inspect(inputs, false, Infinity, true));
+	pprint(inputs);
 	console.log();
 
 	const normalizedInputs = await processInputs(inputs, githubContext);
 
 	console.log(`\n${formatAsHeading("Normalized input")}`);
-	console.log(inspect(normalizedInputs, false, Infinity, true));
+	pprint(normalizedInputs);
 
 	// Make processed inputs available to next steps.
 	setOutput("all", JSON.stringify(normalizedInputs));
