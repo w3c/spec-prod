@@ -6,7 +6,6 @@ const {
 	formatAsHeading,
 	pprint,
 	setOutput,
-	sh,
 	yesOrNo,
 } = require("./utils.js");
 
@@ -44,12 +43,15 @@ async function main() {
  * @property {string} [inputs.wgDecisionURL]
  * @property {string} [inputs.w3cNotificationEmails]
  *
+ * @typedef {{ default_branch: string }} Repository
+ *
  * @typedef {object} GitHubContext
  * @property {string} GitHubContext.token
  * @property {string} GitHubContext.event_name
  * @property {string} GitHubContext.repository
  * @property {string} GitHubContext.sha
  * @property {string} GitHubContext.actor
+ * @property {{ repository: Repository }} GitHubContext.event
  *
  * @param {Inputs} inputs
  * @param {GitHubContext} githubContext
@@ -59,7 +61,7 @@ async function processInputs(inputs, githubContext) {
 		...typeAndInput(inputs),
 		validate: validation(inputs),
 		deploy: {
-			ghPages: await githubPagesDeployment(inputs, githubContext),
+			ghPages: githubPagesDeployment(inputs, githubContext),
 			w3c: await w3cEchidnaDeployment(inputs, githubContext),
 		},
 	};
@@ -129,10 +131,11 @@ function validation(inputs) {
  * Figure out GitHub pages deployment.
  * @param {Inputs} inputs
  * @param {GitHubContext} githubContext
- * @typedef {ThenArg<ReturnType<typeof githubPagesDeployment>>} GithubPagesDeployOptions
+ * @typedef {ReturnType<typeof githubPagesDeployment>} GithubPagesDeployOptions
  */
-async function githubPagesDeployment(inputs, githubContext) {
+function githubPagesDeployment(inputs, githubContext) {
 	const { event_name: event, sha, repository, actor } = githubContext;
+	const { default_branch: defaultBranch } = githubContext.event.repository;
 
 	if (!shouldTryDeploy(event)) {
 		return false;
@@ -145,9 +148,8 @@ async function githubPagesDeployment(inputs, githubContext) {
 
 	const targetBranch = yesOrNo(inputs.ghPages) ? "gh-pages" : inputs.ghPages;
 
-	const currentBranch = await sh("git branch --show-current", "silent");
-	if (currentBranch === targetBranch) {
-		exit(`Current branch and "ghPages" cannot be same.`);
+	if (defaultBranch === targetBranch) {
+		exit(`Default branch and "ghPages": "${targetBranch}" cannot be same.`);
 	}
 
 	let token = inputs.GITHUB_TOKEN;
