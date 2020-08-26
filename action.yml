@@ -45,7 +45,7 @@ runs:
       id: generate-html
       run: |
         echo "::group::Generate Static HTML"
-        ${{ github.action_path }}/build.sh
+        node ${{ github.action_path }}/build.js
         echo "::endgroup::"
       shell: bash
       env:
