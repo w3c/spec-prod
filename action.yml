@@ -16,6 +16,15 @@ inputs:
   ghPages:
     description: Provide a branch name (default "gh-pages") to deploy to GitHub pages. Set to false to not deploy.
     default: "gh-pages"
+  # Related to W3C Deployment using Echidna
+  ECHIDNA_TOKEN:
+    description: Echidna token
+  echidnaManifestURL:
+    description: Echidna manifest URL
+  wgDecisionURL:
+    description: A URL to the working group decision to use auto-publish (usually from a w3c mailing list).
+  w3cNotificationEmails:
+    description: Comma separated list of email addresses to CC
 
 runs:
   using: composite
@@ -82,3 +91,12 @@ runs:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.all).deploy.ghPages) }}
         INPUTS_SOURCE: ${{ fromJson(steps.prepare.outputs.all).source }}
         OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
+
+    - name: Deploy to W3C
+      run: |
+        echo "::group::Deploy to W3C"
+        node ${{ github.action_path }}/deploy-w3c-echidna.js
+        echo "::endgroup::"
+      shell: bash
+      env:
+        INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.all).deploy.w3c) }}

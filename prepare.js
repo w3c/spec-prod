@@ -15,10 +15,11 @@ async function main() {
 
 	console.log(formatAsHeading("Provided input"));
 	console.log(inspect(inputs, false, Infinity, true));
+	console.log();
 
 	const normalizedInputs = await processInputs(inputs, githubContext);
 
-	console.log(`\n\n${formatAsHeading("Normalized input")}`);
+	console.log(`\n${formatAsHeading("Normalized input")}`);
 	console.log(inspect(normalizedInputs, false, Infinity, true));
 
 	// Make processed inputs available to next steps.
@@ -33,6 +34,10 @@ async function main() {
  * @property {string} [inputs.validateMarkup]
  * @property {string} [inputs.ghPages]
  * @property {string} [inputs.GITHUB_TOKEN]
+ * @property {string} [inputs.ECHIDNA_TOKEN]
+ * @property {string} [inputs.echidnaManifestURL]
+ * @property {string} [inputs.wgDecisionURL]
+ * @property {string} [inputs.w3cNotificationEmails]
  *
  * @typedef {object} GitHubContext
  * @property {string} GitHubContext.token
@@ -50,6 +55,7 @@ async function processInputs(inputs, githubContext) {
 		validate: validation(inputs),
 		deploy: {
 			ghPages: await githubPagesDeployment(inputs, githubContext),
+			w3c: await w3cEchidnaDeployment(inputs, githubContext),
 		},
 	};
 }
@@ -123,8 +129,7 @@ function validation(inputs) {
 async function githubPagesDeployment(inputs, githubContext) {
 	const { event_name: event, sha, repository, actor } = githubContext;
 
-	const shouldTryDeployToGitHubPages = event === "push";
-	if (!shouldTryDeployToGitHubPages) {
+	if (!shouldTryDeploy(event)) {
 		return false;
 	}
 
@@ -146,4 +151,51 @@ async function githubPagesDeployment(inputs, githubContext) {
 	}
 
 	return { targetBranch, token, event, sha, repository, actor };
+}
+
+/**
+ * Figure out GitHub pages deployment.
+ * @param {Inputs} inputs
+ * @param {GitHubContext} githubContext
+ * @typedef {ThenArg<ReturnType<typeof w3cEchidnaDeployment>>} W3CDeployOptions
+ */
+async function w3cEchidnaDeployment(inputs, githubContext) {
+	const { event_name: event, repository } = githubContext;
+	const { ECHIDNA_TOKEN, wgDecisionURL } = inputs;
+
+	if (!shouldTryDeploy(event)) {
+		return false;
+	}
+
+	if (!ECHIDNA_TOKEN || !wgDecisionURL) {
+		console.log(
+			"📣 Skipping deploy to W3C as required inputs were not provided.",
+		);
+		return false;
+	}
+
+	let manifest = inputs.echidnaManifestURL;
+	if (!manifest) {
+		if (existsSync("ECHIDNA")) {
+			const [owner, name] = repository.split("/");
+			manifest = `https://${owner}.github.io/${name}/ECHIDNA`;
+		} else {
+			console.error(`🚧 Echidna manifest file was not found.`);
+			return false;
+		}
+	}
+
+	return {
+		manifest,
+		wgDecisionURL,
+		cc: inputs.w3cNotificationEmails,
+		token: ECHIDNA_TOKEN,
+	};
+}
+
+/**
+ * @param {string} githubEvent
+ */
+function shouldTryDeploy(githubEvent) {
+	return githubEvent === "push";
 }

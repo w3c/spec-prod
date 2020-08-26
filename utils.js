@@ -1,4 +1,6 @@
 // @ts-check
+const https = require("https");
+const { inspect } = require("util");
 const { exec } = require("child_process");
 
 /**
@@ -22,6 +24,7 @@ function env(name) {
 /**
  * @param {string} message
  * @param {number} [code]
+ * @returns {never}
  */
 function exit(message, code = 1) {
 	if (code === 0) {
@@ -38,6 +41,40 @@ function exit(message, code = 1) {
 function formatAsHeading(text) {
 	const marker = "=".repeat(Math.max(50, text.length));
 	return `${marker}\n${text}:\n${marker}`;
+}
+
+/**
+ * Print print using util.inspect
+ * @param {any} obj
+ */
+function pprint(obj) {
+	console.log(inspect(obj, false, Infinity, true));
+}
+
+/**
+ * Send a HTTP request.
+ * @param {URL} url
+ * @param {import('https').RequestOptions & { body?: string }} options
+ * @returns {Promise<any>}
+ */
+function request(url, { body, ...options } = {}) {
+	console.log(`📡 Request: ${url}`);
+	return new Promise((resolve, reject) => {
+		const req = https.request(url, options, res => {
+			const chunks = [];
+			res.on("data", data => chunks.push(data));
+			res.on("end", () => {
+				const body = Buffer.concat(chunks).toString();
+				const contentType = res.headers["content-type"] || "";
+				contentType.includes("application/json")
+					? resolve(JSON.parse(body))
+					: resolve(body);
+			});
+		});
+		req.on("error", reject);
+		if (body) req.write(body);
+		req.end();
+	});
 }
 
 /**
@@ -118,6 +155,8 @@ module.exports = {
 	env,
 	exit,
 	formatAsHeading,
+	pprint,
+	request,
 	setEnv,
 	setOutput,
 	sh,
