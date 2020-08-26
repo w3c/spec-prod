@@ -65,7 +65,7 @@ runs:
     - name: Validate markup
       run: |
         echo "::group::Validate markup"
-        ${{ github.action_path }}/validate-markup.sh
+        node ${{ github.action_path }}/validate-markup.js
         echo "::endgroup::"
       shell: bash
       env:
