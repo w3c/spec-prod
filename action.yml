@@ -55,7 +55,7 @@ runs:
     - name: Validate hyperlinks
       run: |
         echo "::group::Validate hyperlinks"
-        ${{ github.action_path }}/validate-links.sh
+        node ${{ github.action_path }}/validate-links.js
         echo "::endgroup::"
       shell: bash
       env:
