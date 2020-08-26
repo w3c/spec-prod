@@ -72,8 +72,9 @@ async function commit() {
 	await sh(`git add .`);
 	await sh(`git status`, "stream");
 
-	const email = await sh(`git show -s --format='%ae' ${sha}`);
-	await sh(`git config user.name "${actor}"`);
+	const author = await sh(`git show -s --format='%an | %ae' ${sha}`);
+	const [name, email] = author.split(" | ");
+	await sh(`git config user.name "${name}"`);
 	await sh(`git config user.email "${email}"`);
 
 	const originalCommmitMessage = await sh(`git log --format=%B -n1 ${sha}`);
@@ -81,7 +82,7 @@ async function commit() {
 		`chore(rebuild): ${originalCommmitMessage}`,
 		"",
 		`SHA: ${sha}`,
-		`Reason: ${event}`,
+		`Reason: ${event}, by @${actor}`,
 		"",
 		"",
 		`Co-authored-by: ${GITHUB_ACTIONS_BOT}`,
