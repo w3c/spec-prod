@@ -43,7 +43,7 @@ async function main() {
  * @property {string} [inputs.wgDecisionURL]
  * @property {string} [inputs.w3cNotificationEmails]
  *
- * @typedef {{ default_branch: string }} Repository
+ * @typedef {{ default_branch: string, has_pages: boolean }} Repository
  *
  * @typedef {object} GitHubContext
  * @property {string} GitHubContext.token
@@ -135,7 +135,10 @@ function validation(inputs) {
  */
 function githubPagesDeployment(inputs, githubContext) {
 	const { event_name: event, sha, repository, actor } = githubContext;
-	const { default_branch: defaultBranch } = githubContext.event.repository;
+	const {
+		default_branch: defaultBranch,
+		has_pages: hasGitHubPagesEnabled,
+	} = githubContext.event.repository;
 
 	if (!shouldTryDeploy(event)) {
 		return false;
@@ -150,6 +153,10 @@ function githubPagesDeployment(inputs, githubContext) {
 
 	if (defaultBranch === targetBranch) {
 		exit(`Default branch and "ghPages": "${targetBranch}" cannot be same.`);
+	}
+
+	if (!hasGitHubPagesEnabled) {
+		console.log(`📣 Please enable GitHub pages in repository settings.`);
 	}
 
 	let token = inputs.GITHUB_TOKEN;
