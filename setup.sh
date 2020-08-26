@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -e
-source "${BASH_SOURCE%/*}/utils.sh"
-require_env "INPUTS_TYPE"
+if [ -z "$INPUTS_TYPE" ]; then
+    echo "Envirnoment variable \"INPUTS_TYPE\" must be set."
+    exit 1
+fi
 
 export PATH="$(yarn global bin):$PATH"
 echo "::add-path::$(yarn global bin)"
