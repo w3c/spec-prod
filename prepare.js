@@ -32,16 +32,16 @@ async function main() {
 
 /**
  * @typedef {object} Inputs
- * @property {"respec" | "bikeshed"} [inputs.type]
- * @property {string} [inputs.source]
- * @property {string} [inputs.validateLinks]
- * @property {string} [inputs.validateMarkup]
- * @property {string} [inputs.ghPages]
- * @property {string} [inputs.GITHUB_TOKEN]
- * @property {string} [inputs.ECHIDNA_TOKEN]
- * @property {string} [inputs.echidnaManifestURL]
- * @property {string} [inputs.wgDecisionURL]
- * @property {string} [inputs.w3cNotificationEmails]
+ * @property {"respec" | "bikeshed"} [inputs.TYPE]
+ * @property {string} [inputs.SOURCE]
+ * @property {string} [inputs.VALIDATE_LINKS]
+ * @property {string} [inputs.VALIDATE_MARKUP]
+ * @property {string} [inputs.GH_PAGES_BRANCH]
+ * @property {string} [inputs.GH_PAGES_TOKEN]
+ * @property {string} [inputs.W3C_ECHIDNA_TOKEN]
+ * @property {string} [inputs.W3C_MANIFEST_URL]
+ * @property {string} [inputs.W3C_WG_DECISION_URL]
+ * @property {string} [inputs.W3C_NOTIFICATIONS_CC]
  *
  * @typedef {{ default_branch: string, has_pages: boolean }} Repository
  *
@@ -72,8 +72,8 @@ async function processInputs(inputs, githubContext) {
  * @param {Inputs} inputs
  */
 function typeAndInput(inputs) {
-	let type = inputs.type;
-	let source = inputs.source;
+	let type = inputs.TYPE;
+	let source = inputs.SOURCE;
 
 	if (type) {
 		switch (type) {
@@ -117,8 +117,8 @@ function typeAndInput(inputs) {
  * @param {Inputs} inputs
  */
 function validation(inputs) {
-	const links = yesOrNo(inputs.validateLinks) || false;
-	const markup = yesOrNo(inputs.validateMarkup) || false;
+	const links = yesOrNo(inputs.VALIDATE_LINKS) || false;
+	const markup = yesOrNo(inputs.VALIDATE_MARKUP) || false;
 	return { links, markup };
 }
 
@@ -139,17 +139,18 @@ function githubPagesDeployment(inputs, githubContext) {
 		default_branch: defaultBranch,
 		has_pages: hasGitHubPagesEnabled,
 	} = githubContext.event.repository;
+	const ghPagesBranch = inputs.GH_PAGES_BRANCH;
 
 	if (!shouldTryDeploy(event)) {
 		return false;
 	}
 
-	const askedNotToDeploy = yesOrNo(inputs.ghPages) === false;
+	const askedNotToDeploy = yesOrNo(ghPagesBranch) === false;
 	if (askedNotToDeploy) {
 		return false;
 	}
 
-	const targetBranch = yesOrNo(inputs.ghPages) ? "gh-pages" : inputs.ghPages;
+	const targetBranch = yesOrNo(ghPagesBranch) ? "gh-pages" : ghPagesBranch;
 
 	if (defaultBranch === targetBranch) {
 		exit(`Default branch and "ghPages": "${targetBranch}" cannot be same.`);
@@ -159,7 +160,7 @@ function githubPagesDeployment(inputs, githubContext) {
 		console.log(`📣 Please enable GitHub pages in repository settings.`);
 	}
 
-	let token = inputs.GITHUB_TOKEN;
+	let token = inputs.GH_PAGES_TOKEN;
 	if (!token) {
 		token = githubContext.token;
 	}
@@ -175,20 +176,20 @@ function githubPagesDeployment(inputs, githubContext) {
  */
 async function w3cEchidnaDeployment(inputs, githubContext) {
 	const { event_name: event, repository } = githubContext;
-	const { ECHIDNA_TOKEN, wgDecisionURL } = inputs;
-
 	if (!shouldTryDeploy(event)) {
 		return false;
 	}
 
-	if (!ECHIDNA_TOKEN || !wgDecisionURL) {
+	const token = inputs.W3C_ECHIDNA_TOKEN;
+	const wgDecisionURL = inputs.W3C_WG_DECISION_URL;
+	if (!token || !wgDecisionURL) {
 		console.log(
 			"📣 Skipping deploy to W3C as required inputs were not provided.",
 		);
 		return false;
 	}
 
-	let manifest = inputs.echidnaManifestURL;
+	let manifest = inputs.W3C_MANIFEST_URL;
 	if (!manifest) {
 		if (existsSync("ECHIDNA")) {
 			const [owner, name] = repository.split("/");
@@ -199,12 +200,9 @@ async function w3cEchidnaDeployment(inputs, githubContext) {
 		}
 	}
 
-	return {
-		manifest,
-		wgDecisionURL,
-		cc: inputs.w3cNotificationEmails,
-		token: ECHIDNA_TOKEN,
-	};
+	const cc = inputs.W3C_NOTIFICATIONS_CC;
+
+	return { manifest, wgDecisionURL, cc, token: token };
 }
 
 /**

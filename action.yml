@@ -3,27 +3,28 @@ author: "Sid Vishnoi"
 description: "Build ReSpec/Bikeshed specs, validate output and publish to w3.org or GitHub pages"
 
 inputs:
-  type:
+  TYPE:
     description: Possible values - 'respec', 'bikeshed'
-  source:
+  SOURCE:
     description: Source file path.
-  validateLinks:
+  VALIDATE_LINKS:
     description: Validate hyperlinks
     default: true
-  validateMarkup:
+  VALIDATE_MARKUP:
     description: Validate markup
     default: true
-  ghPages:
+  GH_PAGES_BRANCH:
     description: Provide a branch name (default "gh-pages") to deploy to GitHub pages. Set to false to not deploy.
     default: "gh-pages"
-  # Related to W3C Deployment using Echidna
-  ECHIDNA_TOKEN:
+  GH_PAGES_TOKEN:
+    description: GitHub Personal access token. Required only if the default GitHub actions token doesn't have enough permissions.
+  W3C_ECHIDNA_TOKEN:
     description: Echidna token
-  echidnaManifestURL:
+  W3C_MANIFEST_URL:
     description: Echidna manifest URL
-  wgDecisionURL:
+  W3C_WG_DECISION_URL:
     description: A URL to the working group decision to use auto-publish (usually from a w3c mailing list).
-  w3cNotificationEmails:
+  W3C_NOTIFICATIONS_CC:
     description: Comma separated list of email addresses to CC
 
 runs:
