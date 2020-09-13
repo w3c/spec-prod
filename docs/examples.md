@@ -2,7 +2,7 @@
 
 ## Run as a validator on pull requests
 
-If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (`index.html` or `index.bs`) and validates the output.
+If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (`index.html` or `index.bs`) and validates the output. It does not deploy the built document anywhere.
 
 ```yaml
 # .github/workflows/pr.yml

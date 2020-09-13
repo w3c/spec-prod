@@ -31,6 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: sidvishnoi/w3c-deploy@main
+        with:
+          GH_PAGES_BRANCH: gh-pages
 ```
 
 Read more about [the available options](docs/options.md) and learn from [usage examples](docs/examples.md).
