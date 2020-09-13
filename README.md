@@ -33,4 +33,4 @@ jobs:
       - uses: sidvishnoi/w3c-deploy@main
 ```
 
-Read more about [the available options](docs/options.md).
+Read more about [the available options](docs/options.md) and learn from [usage examples](docs/examples.md).
