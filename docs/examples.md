@@ -41,7 +41,7 @@ jobs:
 
 ## Specify toolchain: Bikeshed or ReSpec
 
-Use this if the action cannot figure out the toolchain itself, or if you like to be explicit.
+Provide `TYPE` if the action cannot figure out the toolchain itself, or if you like to be explicit.
 
 ```yaml
 # .github/workflows/pr.yml
