@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: sidvishnoi/w3c-deploy@main
+      - uses: sidvishnoi/w3c-deploy@v1
         with:
           GH_PAGES_BRANCH: gh-pages
 ```
