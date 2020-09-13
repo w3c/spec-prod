@@ -14,8 +14,7 @@ inputs:
     description: Validate markup
     default: true
   GH_PAGES_BRANCH:
-    description: Provide a branch name (default "gh-pages") to deploy to GitHub pages. Set to false to not deploy.
-    default: "gh-pages"
+    description: Provide a branch name to deploy to GitHub pages.
   GH_PAGES_TOKEN:
     description: GitHub Personal access token. Required only if the default GitHub actions token doesn't have enough permissions.
   W3C_ECHIDNA_TOKEN:

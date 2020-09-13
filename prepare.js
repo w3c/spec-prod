@@ -146,7 +146,7 @@ function githubPagesDeployment(inputs, githubContext) {
 	}
 
 	const askedNotToDeploy = yesOrNo(ghPagesBranch) === false;
-	if (askedNotToDeploy) {
+	if (askedNotToDeploy || !ghPagesBranch) {
 		return false;
 	}
 

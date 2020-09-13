@@ -47,7 +47,7 @@ Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or
 
 **Possible values:**: Falsy (see end of page) or a git branch name.
 
-**Default:** gh-pages
+**Default:** None
 
 ## `GH_PAGES_TOKEN`
 
