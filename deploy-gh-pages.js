@@ -18,7 +18,7 @@ const { targetBranch, token, event, sha, repository, actor } = inputs;
 main().catch(error => exit(error));
 
 async function main() {
-	const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "w3c-deploy-output-"));
+	const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "spec-prod-output-"));
 	const tmpOutputFile = path.join(tmpDir, outputFile);
 	let error = null;
 	try {

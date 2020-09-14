@@ -1,4 +1,4 @@
-name: W3C Deploy
+name: Spec Prod
 author: "Sid Vishnoi"
 description: "Build ReSpec/Bikeshed specs, validate output and publish to w3.org or GitHub pages"
 

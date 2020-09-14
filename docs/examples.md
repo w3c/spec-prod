@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: sidvishnoi/w3c-deploy@v1
+      - uses: sidvishnoi/spec-prod@v1
 ```
 
 ### Selectivly enable/disable validators
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: sidvishnoi/w3c-deploy@v1
+      - uses: sidvishnoi/spec-prod@v1
         with:
           VALIDATE_LINKS: false
           VALIDATE_MARKUP: true
@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: sidvishnoi/w3c-deploy@v1
+      - uses: sidvishnoi/spec-prod@v1
         with:
           TOOLCHAIN: respec # or bikeshed
 ```
@@ -79,14 +79,14 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: sidvishnoi/w3c-deploy@v1
+      - uses: sidvishnoi/spec-prod@v1
         with:
           GH_PAGES_BRANCH: gh-pages
 ```
 
 ## Deploy to W3C using Echidna
 
-Presently, only ReSpec documents are supported. See [#12](https://github.com/sidvishnoi/w3c-deploy/issues/12).
+Presently, only ReSpec documents are supported. See [#12](https://github.com/sidvishnoi/spec-prod/issues/12).
 
 ```yaml
 # .github/workflows/pr-push.yml
@@ -101,7 +101,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: sidvishnoi/w3c-deploy@v1
+      - uses: sidvishnoi/spec-prod@v1
         with:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
           # Replace following with appropriate values. See options.md for details.
