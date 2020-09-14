@@ -1,7 +1,7 @@
 // @ts-check
 const { env, exit, setOutput, sh } = require("./utils.js");
 
-const type = env("INPUTS_TYPE");
+const toolchain = env("INPUTS_TOOLCHAIN");
 const source = env("INPUTS_SOURCE");
 
 // Please do not rely on this value. If you would like this to be available as
@@ -9,7 +9,7 @@ const source = env("INPUTS_SOURCE");
 const outputFile = source + ".built.html";
 
 (async () => {
-	switch (type) {
+	switch (toolchain) {
 		case "respec":
 			console.log(`Converting ReSpec document '${source}' to HTML...`);
 			return await sh(`respec -s "${source}" -o "${outputFile}"`, "stream");
@@ -17,7 +17,7 @@ const outputFile = source + ".built.html";
 			console.log(`Converting Bikeshed document '${source}' to HTML...`);
 			return await sh(`bikeshed spec "${source}" "${outputFile}"`, "stream");
 		default:
-			throw new Error(`Unknown "type": "${type}"`);
+			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
 })()
 	.then(() => setOutput("output", outputFile))

@@ -7,7 +7,7 @@ branding:
   color: blue
 
 inputs:
-  TYPE:
+  TOOLCHAIN:
     description: Possible values - 'respec', 'bikeshed'
   SOURCE:
     description: Source file path.
@@ -51,7 +51,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_TYPE: ${{ fromJson(steps.prepare.outputs.all).type }}
+        INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.all).toolchain }}
         HOME: /home/runner
 
     - name: Generate Static HTML
@@ -62,7 +62,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_TYPE: ${{ fromJson(steps.prepare.outputs.all).type }}
+        INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.all).toolchain }}
         INPUTS_SOURCE: ${{ fromJson(steps.prepare.outputs.all).source }}
 
     - name: Validate hyperlinks

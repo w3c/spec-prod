@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
-if [ -z "$INPUTS_TYPE" ]; then
-    echo "Envirnoment variable \"INPUTS_TYPE\" must be set."
+if [ -z "$INPUTS_TOOLCHAIN" ]; then
+    echo "Envirnoment variable \"INPUTS_TOOLCHAIN\" must be set."
     exit 1
 fi
 
@@ -12,7 +12,7 @@ echo "::set-env name=PUPPETEER_EXECUTABLE_PATH::/usr/bin/google-chrome"
 export PATH=$HOME/.local/bin:$PATH
 echo "::add-path::$HOME/.local/bin"
 
-case $INPUTS_TYPE in
+case $INPUTS_TOOLCHAIN in
 respec)
     echo "Installing ReSpec..."
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1

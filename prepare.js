@@ -32,7 +32,7 @@ async function main() {
 
 /**
  * @typedef {object} Inputs
- * @property {"respec" | "bikeshed"} [inputs.TYPE]
+ * @property {"respec" | "bikeshed"} [inputs.TOOLCHAIN]
  * @property {string} [inputs.SOURCE]
  * @property {string} [inputs.VALIDATE_LINKS]
  * @property {string} [inputs.VALIDATE_MARKUP]
@@ -58,7 +58,7 @@ async function main() {
  */
 async function processInputs(inputs, githubContext) {
 	return {
-		...typeAndInput(inputs),
+		...toolchainAndSource(inputs),
 		validate: validation(inputs),
 		deploy: {
 			ghPages: githubPagesDeployment(inputs, githubContext),
@@ -68,15 +68,15 @@ async function processInputs(inputs, githubContext) {
 }
 
 /**
- * Figure out "type" and "source".
+ * Figure out "toolchain" and input "source".
  * @param {Inputs} inputs
  */
-function typeAndInput(inputs) {
-	let type = inputs.TYPE;
+function toolchainAndSource(inputs) {
+	let toolchain = inputs.TOOLCHAIN;
 	let source = inputs.SOURCE;
 
-	if (type) {
-		switch (type) {
+	if (toolchain) {
+		switch (toolchain) {
 			case "respec":
 				source = source || "index.html";
 				break;
@@ -84,32 +84,32 @@ function typeAndInput(inputs) {
 				source = source || "index.bs";
 				break;
 			default:
-				exit(`Invalid input "type": ${type}`);
+				exit(`Invalid input "TOOLCHAIN": ${toolchain}`);
 		}
 	} else if (!source) {
-		exit(`Either of "type" or "source" must be provided.`);
+		exit(`Either of "TOOLCHAIN" or "SOURCE" must be provided.`);
 	}
 
 	if (!existsSync(source)) {
 		exit(`"source" file "${source}" not found.`);
 	}
 
-	if (!type) {
+	if (!toolchain) {
 		switch (source) {
 			case "index.html":
-				type = "respec";
+				toolchain = "respec";
 				break;
 			case "index.bs":
-				type = "bikeshed";
+				toolchain = "bikeshed";
 				break;
 			default:
 				exit(
-					`Failed to figure out "type" from "source". Please specify the "type".`,
+					`Failed to figure out "TOOLCHAIN" from "SOURCE". Please specify the "TOOLCHAIN".`,
 				);
 		}
 	}
 
-	return { type, source };
+	return { toolchain, source };
 }
 
 /**

@@ -41,7 +41,7 @@ jobs:
 
 ## Specify toolchain: Bikeshed or ReSpec
 
-Provide `TYPE` if the action cannot figure out the toolchain itself, or if you like to be explicit.
+Specify `TOOLCHAIN` if the action cannot figure out the toolchain itself, or if you like to be explicit.
 
 ```yaml
 # .github/workflows/pr.yml
@@ -56,7 +56,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: sidvishnoi/w3c-deploy@v1
         with:
-          TYPE: respec # or bikeshed
+          TOOLCHAIN: respec # or bikeshed
 ```
 
 ## Deploy to GitHub pages
