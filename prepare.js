@@ -69,6 +69,7 @@ async function processInputs(inputs, githubContext) {
 
 /**
  * Figure out "toolchain" and input "source".
+ * // TODO: refactor this to remove duplicate logic.
  * @param {Inputs} inputs
  */
 function toolchainAndSource(inputs) {
@@ -86,12 +87,22 @@ function toolchainAndSource(inputs) {
 			default:
 				exit(`Invalid input "TOOLCHAIN": ${toolchain}`);
 		}
-	} else if (!source) {
+	}
+
+	if (!source) {
+		if (existsSync("index.bs")) {
+			source = "index.bs";
+		} else if (existsSync("index.html")) {
+			source = "index.html";
+		}
+	}
+
+	if (!toolchain && !source) {
 		exit(`Either of "TOOLCHAIN" or "SOURCE" must be provided.`);
 	}
 
 	if (!existsSync(source)) {
-		exit(`"source" file "${source}" not found.`);
+		exit(`"SOURCE" file "${source}" not found.`);
 	}
 
 	if (!toolchain) {
