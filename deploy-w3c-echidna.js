@@ -134,11 +134,11 @@ function showErrors(jobs) {
 		specberus(errors) {
 			console.group("Specberus Errors:");
 			for (const error of errors) {
-				const { message, link } = error.extra;
-				const { type } = error;
-				console.group(message);
-				console.log(link);
-				console.log(type);
+				const { message, link } = error.extra || {};
+				const { key, type } = error;
+				console.group(message || key);
+				if (link) console.log(link);
+				if (type) console.log(type);
 				console.groupEnd();
 			}
 			console.groupEnd();
