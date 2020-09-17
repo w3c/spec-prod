@@ -80,7 +80,8 @@ async function getPublishStatus(id) {
 	const isJSON = arg => typeof arg === "string" && arg.startsWith("{");
 
 	// How many seconds to wait before retrying job status check?
-	const RETRY_DURATIONS = [6, 3, 2, 4, 2, 5];
+	// The numbers are based on "experience", so are somewhat random.
+	const RETRY_DURATIONS = [6, 3, 2, 8, 2, 5, 10, 6];
 
 	let url = new URL("https://labs.w3.org/echidna/api/status");
 	url.searchParams.set("id", id);
