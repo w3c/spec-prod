@@ -206,7 +206,7 @@ async function w3cEchidnaDeployment(inputs, githubContext) {
 			const [owner, name] = repository.split("/");
 			manifest = `https://${owner}.github.io/${name}/ECHIDNA`;
 		} else {
-			console.error(`🚧 Echidna manifest file was not found.`);
+			console.log(`🚧 Echidna manifest file was not found.`);
 			return false;
 		}
 	}

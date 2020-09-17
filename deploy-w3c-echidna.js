@@ -40,7 +40,7 @@ async function main() {
 		// Assume it is JSON
 		showErrors(response.results.jobs);
 	}
-	console.error(`Details: ${result.details}`);
+	console.log(`Details: ${result.details}`);
 	exit("💥 Echidna publish has failed.");
 }
 

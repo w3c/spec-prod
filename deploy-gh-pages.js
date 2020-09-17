@@ -30,7 +30,7 @@ async function main() {
 		}
 		await push();
 	} catch (err) {
-		console.error(err);
+		console.log(err);
 		error = err;
 	} finally {
 		await cleanUp(tmpOutputFile);
