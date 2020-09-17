@@ -137,8 +137,8 @@ function showErrors(jobs) {
 				const { message, link } = error.extra || {};
 				const { key, type } = error;
 				console.group(message || key);
-				if (link) console.log(link);
 				if (type) console.log(type);
+				if (link) console.log(link);
 				console.groupEnd();
 			}
 			console.groupEnd();
