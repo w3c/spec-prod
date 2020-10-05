@@ -4,13 +4,6 @@ const { inspect } = require("util");
 const { exec } = require("child_process");
 
 /**
- * @param {string} path
- */
-function addPath(path) {
-	console.log(`::add-path::${path}`);
-}
-
-/**
  * Get env variable value
  * @param {string} name name of env variable
  * @throws if env variable is not set
@@ -79,14 +72,6 @@ function request(url, { body, ...options } = {}) {
 
 /**
  * @param {string} key
- * @param {string} value
- */
-function setEnv(key, value) {
-	console.log(`::set-env name=${key}::${value}`);
-}
-
-/**
- * @param {string} key
  * @param {string|boolean|null|number} value
  */
 function setOutput(key, value) {
@@ -151,13 +136,11 @@ function yesOrNo(value) {
 }
 
 module.exports = {
-	addPath,
 	env,
 	exit,
 	formatAsHeading,
 	pprint,
 	request,
-	setEnv,
 	setOutput,
 	sh,
 	yesOrNo,
