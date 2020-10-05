@@ -6,11 +6,11 @@ if [ -z "$INPUTS_TOOLCHAIN" ]; then
 fi
 
 export PATH="$(yarn global bin):$PATH"
-echo "::add-path::$(yarn global bin)"
-echo "::set-env name=PUPPETEER_SKIP_CHROMIUM_DOWNLOAD::1"
-echo "::set-env name=PUPPETEER_EXECUTABLE_PATH::/usr/bin/google-chrome"
+echo "$(yarn global bin)" >> $GITHUB_PATH
+echo "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1" >> $GITHUB_ENV
+echo "PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome" >> $GITHUB_ENV
 export PATH=$HOME/.local/bin:$PATH
-echo "::add-path::$HOME/.local/bin"
+echo "$HOME/.local/bin" >> $GITHUB_PATH
 
 case $INPUTS_TOOLCHAIN in
 respec)
