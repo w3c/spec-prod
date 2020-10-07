@@ -13,7 +13,7 @@ const outputFile = source + ".built.html";
 		case "respec":
 			console.log(`Converting ReSpec document '${source}' to HTML...`);
 			return await sh(
-				`respec -s "${source}" -o "${outputFile}" --verbose`,
+				`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20`,
 				"stream",
 			);
 		case "bikeshed":
