@@ -12,7 +12,10 @@ const outputFile = source + ".built.html";
 	switch (toolchain) {
 		case "respec":
 			console.log(`Converting ReSpec document '${source}' to HTML...`);
-			return await sh(`respec -s "${source}" -o "${outputFile}"`, "stream");
+			return await sh(
+				`respec -s "${source}" -o "${outputFile}" --verbose`,
+				"stream",
+			);
 		case "bikeshed":
 			console.log(`Converting Bikeshed document '${source}' to HTML...`);
 			return await sh(`bikeshed spec "${source}" "${outputFile}"`, "stream");
