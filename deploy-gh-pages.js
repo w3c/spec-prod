@@ -8,31 +8,30 @@ const { env, exit, sh } = require("./utils.js");
 if (module === require.main) {
 	/** @type {import("./prepare.js").GithubPagesDeployOptions} */
 	const inputs = JSON.parse(env("INPUTS_DEPLOY"));
-	const outputFile = env("OUTPUT_FILE");
+	const outputDir = env("OUTPUT_DIR");
 
 	if (inputs === false) {
 		exit("Skipped.", 0);
 	}
-	main(inputs, outputFile).catch(err =>
-		exit(err.message || "Failed", err.code),
-	);
+	main(inputs, outputDir).catch(err => exit(err.message || "Failed", err.code));
 }
 
 module.exports = main;
 /**
  * @typedef {Exclude<import("./prepare.js").GithubPagesDeployOptions, false>} GithubPagesDeployOptions
  * @param {GithubPagesDeployOptions} inputs
- * @param {string} outputFile
+ * @param {string} outputDir
  */
-async function main(inputs, outputFile) {
-	const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "spec-prod-output-"));
-	const tmpOutputFile = path.join(tmpDir, outputFile);
+async function main(inputs, outputDir) {
+	if (!outputDir.endsWith(path.sep)) {
+		outputDir += path.sep;
+	}
 	let error = null;
 	try {
-		await prepare(outputFile, tmpOutputFile, inputs);
+		await prepare(inputs, outputDir);
 		const committed = await commit(inputs);
 		if (!committed) {
-			await cleanUp(outputFile, tmpOutputFile);
+			await cleanUp();
 			exit(`Nothing to commit. Skipping deploy.`, 0);
 		}
 		await push(inputs);
@@ -40,7 +39,7 @@ async function main(inputs, outputFile) {
 		console.log(err);
 		error = err;
 	} finally {
-		await cleanUp(outputFile, tmpOutputFile);
+		await cleanUp();
 		if (error) {
 			console.log();
 			console.log("=".repeat(60));
@@ -50,17 +49,14 @@ async function main(inputs, outputFile) {
 }
 
 /**
- * @param {string} outputFile
- * @param {string} tmpOutputFile
  * @param {Pick<GithubPagesDeployOptions, "targetBranch" | "repository">} opts
+ * @param {string} outputDir
  */
-async function prepare(outputFile, tmpOutputFile, opts) {
+async function prepare(opts, outputDir) {
+	if (!outputDir.endsWith(path.sep)) {
+		throw new Error("outputDir must end with a trailing slash.");
+	}
 	const { targetBranch, repository } = opts;
-	// Temporarily move built file as we'll be doing a checkout soon.
-	await fs.rename(outputFile, tmpOutputFile);
-
-	// Clean up working tree
-	await sh(`git checkout -- .`);
 
 	// Check if target branch remote exists on remote.
 	// If it exists, we do a pull, otherwise we create a new orphan branch.
@@ -70,10 +66,12 @@ async function prepare(outputFile, tmpOutputFile, opts) {
 		await sh(`git checkout "${targetBranch}"`, "stream");
 	} else {
 		await sh(`git checkout --orphan "${targetBranch}"`, "stream");
+		await sh(`git reset --hard`, "stream");
 	}
 
-	// Bring back the changed file. We'll be serving it as index.html
-	await fs.copyFile(tmpOutputFile, "index.html");
+	await sh(`rsync -av --delete --exclude=.git ${outputDir} .`, "stream");
+	await sh(`git add -A --verbose`, "stream");
+	await sh(`git status`, "buffer");
 }
 
 /**
@@ -81,9 +79,6 @@ async function prepare(outputFile, tmpOutputFile, opts) {
  */
 async function commit({ sha, event, actor }) {
 	const GITHUB_ACTIONS_BOT = `github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>`;
-
-	await sh(`git add .`);
-	await sh(`git status`, "stream");
 
 	const author = await sh(`git show -s --format='%an | %ae' ${sha}`);
 	const [name, email] = author.split(" | ");
@@ -121,21 +116,9 @@ async function push({ repository, targetBranch, token }) {
 	await sh(`git push --force-with-lease origin "${targetBranch}"`, "stream");
 }
 
-/**
- * @param {string} outputFile
- * @param {string} tmpOutputFile
- */
-async function cleanUp(outputFile, tmpOutputFile) {
-	try {
-		await fs.unlink("index.html");
-	} catch {}
-
+async function cleanUp() {
 	try {
 		await sh(`git checkout -`);
 		await sh(`git checkout -- .`);
-	} catch {}
-
-	try {
-		await fs.copyFile(tmpOutputFile, outputFile);
 	} catch {}
 }

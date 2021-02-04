@@ -1,6 +1,6 @@
 // @ts-check
 const path = require("path");
-const { copyFile } = require("fs").promises;
+const { copyFile, unlink } = require("fs").promises;
 const { env, exit, setOutput, sh } = require("./utils.js");
 
 // @ts-expect-error
@@ -58,11 +58,12 @@ async function copyRelevantAssets(outputFile) {
 		env: { VERBOSE: "1" },
 	});
 
-	// Copy outputFile itself.
+	// Move outputFile to the publish directory.
 	const rel = p => path.relative(process.cwd(), p);
 	const destinationFile = path.join(destinationDir, "index.html");
 	console.log(`[COPY] ${rel(outputFile)} >>> ${rel(destinationFile)}`);
 	await copyFile(outputFile, destinationFile);
+	await unlink(outputFile);
 
 	// List all files in output directory
 	await sh(`ls -R`, { output: "buffer", cwd: destinationDir });
