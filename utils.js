@@ -1,7 +1,22 @@
 // @ts-check
 const https = require("https");
+const path = require("path");
 const { inspect } = require("util");
+const { EOL } = require("os");
+const { appendFileSync } = require("fs");
 const { exec } = require("child_process");
+
+/**
+ * Add a new directory to $PATH
+ * @param {string} inputPath
+ */
+function addPath(inputPath) {
+	const githubPathFile = env("GITHUB_PATH");
+	appendFileSync(githubPathFile, `${inputPath}${EOL}`, "utf8");
+
+	// Also update PATH for current process
+	process.env.PATH = `${inputPath}${path.delimiter}${process.env.PATH}`;
+}
 
 /**
  * Get env variable value
@@ -68,6 +83,18 @@ function request(url, { body, ...options } = {}) {
 		if (body) req.write(body);
 		req.end();
 	});
+}
+
+/**
+ * @param {string} key
+ * @param {string|boolean|null|number} value
+ */
+function setEnv(key, value) {
+	const githubEnvFile = env("GITHUB_ENV");
+	appendFileSync(githubEnvFile, `${key}=${value}${EOL}`);
+
+	// Also add the current process.
+	process.env[key] = `${value}`;
 }
 
 /**
@@ -146,11 +173,13 @@ function yesOrNo(value) {
 }
 
 module.exports = {
+	addPath,
 	env,
 	exit,
 	formatAsHeading,
 	pprint,
 	request,
+	setEnv,
 	setOutput,
 	sh,
 	yesOrNo,
