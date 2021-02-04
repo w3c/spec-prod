@@ -102,3 +102,4 @@ runs:
       shell: bash
       env:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.all).deploy.w3c) }}
+        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.output).dir }}
