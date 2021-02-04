@@ -47,12 +47,11 @@ runs:
     - name: Setup toolchain
       run: |
         echo "::group::Setup toolchain"
-        ${{ github.action_path }}/setup.sh
+        node ${{ github.action_path }}/setup.js
         echo "::endgroup::"
       shell: bash
       env:
         INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.all).toolchain }}
-        HOME: /home/runner
 
     - name: Generate Static HTML
       id: generate-html
