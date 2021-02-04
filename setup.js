@@ -13,6 +13,7 @@ async function main(toolchain) {
 		case "respec": {
 			await sh("yarn add respec --silent", {
 				output: "stream",
+				cwd: __dirname,
 				env: {
 					PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1",
 				},
@@ -25,6 +26,7 @@ async function main(toolchain) {
 			const PYTHONUSERBASE = path.join(__dirname, "python_modules");
 			await sh(`pip3 install bikeshed --quiet`, {
 				output: "stream",
+				cwd: __dirname,
 				env: {
 					PYTHONUSERBASE,
 				},

@@ -129,7 +129,6 @@ function sh(command, options = {}) {
 			let stdout = "";
 			let stderr = "";
 			const child = exec(command, {
-				cwd: __dirname,
 				...execOptions,
 				env: { ...process.env, ...execOptions.env },
 				encoding: "utf-8",
