@@ -46,8 +46,8 @@ function exit(message, code = 1) {
 /**
  * @param {string} text
  */
-function formatAsHeading(text) {
-	const marker = "=".repeat(Math.max(50, text.length));
+function formatAsHeading(text, symbol = "=") {
+	const marker = symbol.repeat(Math.max(50, text.length));
 	return `${marker}\n${text}:\n${marker}`;
 }
 

@@ -41,7 +41,7 @@ async function main(inputs, githubContext) {
 
 /**
  * @typedef {object} Inputs
- * @property {"respec" | "bikeshed"} [inputs.TOOLCHAIN]
+ * @property {"respec" | "bikeshed" | string} [inputs.TOOLCHAIN]
  * @property {string} [inputs.SOURCE]
  * @property {string} [inputs.VALIDATE_LINKS]
  * @property {string} [inputs.VALIDATE_MARKUP]
