@@ -72,7 +72,7 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_LINKS: ${{ fromJson(steps.prepare.outputs.all).validate.links }}
-        OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
+        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.output).dir }}
 
     - name: Validate markup
       run: |
@@ -82,7 +82,7 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_MARKUP: ${{ fromJson(steps.prepare.outputs.all).validate.markup }}
-        OUTPUT_FILE: ${{ steps.generate-html.outputs.output }}
+        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.output).dir }}
 
     - name: Deploy to GitHub pages
       run: |

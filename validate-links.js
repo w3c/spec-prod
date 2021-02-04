@@ -6,18 +6,21 @@ if (module === require.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_LINKS")) === false) {
 		exit("Skipped", 0);
 	}
-	const outputFile = env("OUTPUT_FILE");
-	main(outputFile).catch(err => exit(err.message || "Failed", err.code));
+	const outputDir = env("OUTPUT_DIR");
+	main(outputDir).catch(err => exit(err.message || "Failed", err.code));
 }
 
 module.exports = main;
 /**
- * @param {string} outputFile
+ * @param {string} outputDir
  */
-async function main(outputFile) {
+async function main(outputDir) {
 	await sh(`yarn add href-checker --silent`, {
 		output: "stream",
 		cwd: __dirname,
 	});
-	await sh(`href-checker "${outputFile}" --no-same-site`, "stream");
+	await sh(`href-checker index.html --no-same-site`, {
+		output: "stream",
+		cwd: outputDir,
+	});
 }
