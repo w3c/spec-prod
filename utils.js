@@ -104,6 +104,7 @@ function sh(command, options = {}) {
 			const child = exec(command, {
 				cwd: __dirname,
 				...execOptions,
+				env: { ...process.env, ...execOptions.env },
 				encoding: "utf-8",
 			});
 			child.stdout.on("data", chunk => {
