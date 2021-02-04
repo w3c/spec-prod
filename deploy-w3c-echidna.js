@@ -75,7 +75,7 @@ async function publish(outputDir, input) {
 	command += ` -F "decision=${decision}"`;
 	if (cc) command += ` -F "cc=${cc}"`;
 
-	const id = await sh(command, "stream");
+	const id = await sh(command);
 	return id.trim();
 }
 
