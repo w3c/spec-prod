@@ -81,11 +81,16 @@ function setOutput(key, value) {
 /**
  * Asynchronously run a shell command get its result.
  * @param {string} command
- * @param {"buffer"|"stream"|"silent"} [output]
- * @returns {Promise<string>}
+ * @param {Output | Options} [options]
+ * @typedef {"buffer" | "stream" | "silent"} Output
+ * @typedef {{output?: Output} & import("child_process").ExecOptions} Options
+ * @returns {Promise<string>} stdout
  * @throws {Promise<{ stdout: string, stderr: string, code: number }>}
  */
-function sh(command, output) {
+function sh(command, options = {}) {
+	const { output, ...execOptions } =
+		typeof options === "string" ? { output: options } : options;
+
 	const BOLD = "\x1b[1m";
 	const RESET = "\x1b[22m";
 	if (output !== "silent") {
@@ -96,7 +101,11 @@ function sh(command, output) {
 		return new Promise((resolve, reject) => {
 			let stdout = "";
 			let stderr = "";
-			const child = exec(command, { encoding: "utf-8" });
+			const child = exec(command, {
+				cwd: __dirname,
+				...execOptions,
+				encoding: "utf-8",
+			});
 			child.stdout.on("data", chunk => {
 				if (output === "stream") process.stdout.write(chunk);
 				stdout += chunk;
