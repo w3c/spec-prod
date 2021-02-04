@@ -7,6 +7,9 @@ if (yesOrNo(env("INPUTS_VALIDATE_LINKS")) === false) {
 
 (async () => {
 	const outputFile = env("OUTPUT_FILE");
-	await sh(`yarn global add href-checker`, "stream");
+	await sh(`yarn add href-checker --silent`, {
+		output: "stream",
+		cwd: __dirname,
+	});
 	await sh(`href-checker "${outputFile}" --no-same-site`, "stream");
 })().catch(err => exit("Failed.", err.code));
