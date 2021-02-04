@@ -27,7 +27,7 @@ async function main() {
 	pprint(normalizedInputs);
 
 	// Make processed inputs available to next steps.
-	setOutput("all", JSON.stringify(normalizedInputs));
+	return setOutput("all", normalizedInputs);
 }
 
 /**

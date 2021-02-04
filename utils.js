@@ -99,10 +99,15 @@ function setEnv(key, value) {
 
 /**
  * @param {string} key
- * @param {string|boolean|null|number} value
+ * @param {string|boolean|null|number|Record<string, any>} value
  */
 function setOutput(key, value) {
+	const originalValue = value;
+	if (typeof value === "object" && value !== null) {
+		value = JSON.stringify(value);
+	}
 	console.log(`::set-output name=${key}::${value}`);
+	return { [key]: originalValue };
 }
 
 /**

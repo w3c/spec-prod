@@ -12,16 +12,21 @@ const outputFile = source + ".built.html";
 	switch (toolchain) {
 		case "respec":
 			console.log(`Converting ReSpec document '${source}' to HTML...`);
-			return await sh(
+			await sh(
 				`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20`,
 				"stream",
 			);
+			break;
 		case "bikeshed":
 			console.log(`Converting Bikeshed document '${source}' to HTML...`);
-			return await sh(`bikeshed spec "${source}" "${outputFile}"`, "stream");
+			await sh(`bikeshed spec "${source}" "${outputFile}"`, "stream");
+			break;
 		default:
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
+
+	return setOutput("output", outputFile);
+}
 })()
 	.then(() => setOutput("output", outputFile))
 	.catch(err => exit(err.message || "Failed", err.code));
