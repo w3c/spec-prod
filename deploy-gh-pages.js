@@ -4,36 +4,43 @@ const os = require("os");
 const fs = require("fs").promises;
 const { env, exit, sh } = require("./utils.js");
 
-/** @type {import("./prepare.js").GithubPagesDeployOptions} */
-const inputs = JSON.parse(env("INPUTS_DEPLOY"));
-const outputFile = env("OUTPUT_FILE");
+// @ts-expect-error
+if (module === require.main) {
+	/** @type {import("./prepare.js").GithubPagesDeployOptions} */
+	const inputs = JSON.parse(env("INPUTS_DEPLOY"));
+	const outputFile = env("OUTPUT_FILE");
 
-if (inputs === false) {
-	exit("Skipped.", 0);
-	process.exit(1); // TypeScript Bug. It cries.
+	if (inputs === false) {
+		exit("Skipped.", 0);
+	}
+	main(inputs, outputFile).catch(err =>
+		exit(err.message || "Failed", err.code),
+	);
 }
 
-const { targetBranch, token, event, sha, repository, actor } = inputs;
-
-main().catch(error => exit(error));
-
-async function main() {
+module.exports = main;
+/**
+ * @typedef {Exclude<import("./prepare.js").GithubPagesDeployOptions, false>} GithubPagesDeployOptions
+ * @param {GithubPagesDeployOptions} inputs
+ * @param {string} outputFile
+ */
+async function main(inputs, outputFile) {
 	const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "spec-prod-output-"));
 	const tmpOutputFile = path.join(tmpDir, outputFile);
 	let error = null;
 	try {
-		await prepare(tmpOutputFile);
-		const committed = await commit();
+		await prepare(outputFile, tmpOutputFile, inputs);
+		const committed = await commit(inputs);
 		if (!committed) {
-			await cleanUp(tmpOutputFile);
+			await cleanUp(outputFile, tmpOutputFile);
 			exit(`Nothing to commit. Skipping deploy.`, 0);
 		}
-		await push();
+		await push(inputs);
 	} catch (err) {
 		console.log(err);
 		error = err;
 	} finally {
-		await cleanUp(tmpOutputFile);
+		await cleanUp(outputFile, tmpOutputFile);
 		if (error) {
 			console.log();
 			console.log("=".repeat(60));
@@ -43,9 +50,12 @@ async function main() {
 }
 
 /**
+ * @param {string} outputFile
  * @param {string} tmpOutputFile
+ * @param {Pick<GithubPagesDeployOptions, "targetBranch" | "repository">} opts
  */
-async function prepare(tmpOutputFile) {
+async function prepare(outputFile, tmpOutputFile, opts) {
+	const { targetBranch, repository } = opts;
 	// Temporarily move built file as we'll be doing a checkout soon.
 	await fs.rename(outputFile, tmpOutputFile);
 
@@ -66,7 +76,10 @@ async function prepare(tmpOutputFile) {
 	await fs.copyFile(tmpOutputFile, "index.html");
 }
 
-async function commit() {
+/**
+ * @param {Pick<GithubPagesDeployOptions, "sha" | "event" | "actor">} opts
+ */
+async function commit({ sha, event, actor }) {
 	const GITHUB_ACTIONS_BOT = `github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>`;
 
 	await sh(`git add .`);
@@ -99,16 +112,20 @@ async function commit() {
 	}
 }
 
-async function push() {
+/**
+ * @param {Pick<GithubPagesDeployOptions, "repository" | "targetBranch" | "token">} opts
+ */
+async function push({ repository, targetBranch, token }) {
 	const repoURI = `https://x-access-token:${token}@github.com/${repository}.git/`;
 	await sh(`git remote set-url origin "${repoURI}"`);
 	await sh(`git push --force-with-lease origin "${targetBranch}"`, "stream");
 }
 
 /**
+ * @param {string} outputFile
  * @param {string} tmpOutputFile
  */
-async function cleanUp(tmpOutputFile) {
+async function cleanUp(outputFile, tmpOutputFile) {
 	try {
 		await fs.unlink("index.html");
 	} catch {}

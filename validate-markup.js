@@ -1,14 +1,22 @@
 // @ts-check
 const { env, exit, sh, yesOrNo } = require("./utils.js");
 
-if (yesOrNo(env("INPUTS_VALIDATE_MARKUP")) === false) {
-	exit("Skipped", 0);
+// @ts-expect-error
+if (module === require.main) {
+	if (yesOrNo(env("INPUTS_VALIDATE_MARKUP")) === false) {
+		exit("Skipped", 0);
+	}
+
+	const outputFile = env("OUTPUT_FILE");
+	main(outputFile).catch(err => exit(err.message || "Failed", err.code));
 }
 
-const outputFile = env("OUTPUT_FILE");
-console.log(`Validating ${outputFile}...`);
-
-(async () => {
+module.exports = main;
+/**
+ * @param {string} outputFile
+ */
+async function main(outputFile) {
+	console.log(`Validating ${outputFile}...`);
 	await sh(`yarn add vnu-jar --silent`, {
 		output: "silent",
 		cwd: __dirname,
@@ -22,4 +30,4 @@ console.log(`Validating ${outputFile}...`);
 	} catch {
 		exit("❌  Not so good... please fix the issues above.");
 	}
-})().catch(err => exit("Failed.", err.code));
+}

@@ -4,16 +4,22 @@ const { env, exit, pprint, request } = require("./utils.js");
 const MAILING_LIST = `https://lists.w3.org/Archives/Public/public-tr-notifications/`;
 const API_URL = "https://labs.w3.org/echidna/api/request";
 
-main().catch(error => exit(error));
-
-async function main() {
+// @ts-expect-error
+if (module === require.main) {
 	/** @type {import("./prepare.js").W3CDeployOptions} */
 	const inputs = JSON.parse(env("INPUTS_DEPLOY"));
 	if (inputs === false) {
 		exit("Skipped.", 0);
-		process.exit(1); // TypeScript Bug. It cries.
 	}
+	main(inputs).catch(err => exit(err.message || "Failed", err.code));
+}
 
+module.exports = main;
+/**
+ * @typedef {Exclude<import("./prepare.js").W3CDeployOptions, false>} W3CDeployOptions
+ * @param {W3CDeployOptions} inputs
+ */
+async function main(inputs) {
 	const { manifest, wgDecisionURL, token, cc } = inputs;
 	console.log(`📣 If it fails, check ${MAILING_LIST}`);
 	const id = await publish({ manifest, wgDecisionURL, token, cc });

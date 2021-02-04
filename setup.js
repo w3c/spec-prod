@@ -2,9 +2,13 @@
 const path = require("path");
 const { addPath, env, exit, sh, setEnv } = require("./utils.js");
 
-const toolchain = env("INPUTS_TOOLCHAIN");
-main(toolchain).catch(err => exit("Failed.", err.code));
+// @ts-expect-error
+if (module === require.main) {
+	const toolchain = env("INPUTS_TOOLCHAIN");
+	main(toolchain).catch(err => exit(err.message || "Failed", err.code));
+}
 
+module.exports = main;
 /**
  * @param {"respec" | "bikeshed" | string} toolchain
  */

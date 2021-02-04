@@ -9,14 +9,23 @@ const {
 	yesOrNo,
 } = require("./utils.js");
 
-main();
-
-async function main() {
+// @ts-expect-error
+if (module === require.main) {
 	/** @type {Inputs} */
 	const inputs = JSON.parse(env("INPUTS_USER"));
 	/** @type {GitHubContext} */
 	const githubContext = JSON.parse(env("INPUTS_GITHUB"));
+	main(inputs, githubContext).catch(err =>
+		exit(err.message || "Failed", err.code),
+	);
+}
 
+module.exports = main;
+/**
+ * @param {Inputs} inputs
+ * @param {GitHubContext} githubContext
+ */
+async function main(inputs, githubContext) {
 	console.log(formatAsHeading("Provided input"));
 	pprint(inputs);
 	console.log();
