@@ -62,6 +62,7 @@ async function main(outputDir, inputs) {
 async function publish(outputDir, input) {
 	const { wgDecisionURL: decision, token, cc } = input;
 	const tarFileName = "/tmp/echidna.tar";
+	await sh("mv index.html Overview.html", { cwd: outputDir });
 	await sh(`tar cvf ${tarFileName} *`, {
 		output: "stream",
 		cwd: outputDir,
@@ -70,7 +71,6 @@ async function publish(outputDir, input) {
 	let command = `curl '${API_URL}'`;
 	command += ` -F "dry-run=true"`;
 	command += ` -F "tar=@${tarFileName}"`;
-	command += ` -F "token=${token}"`;
 	command += ` -F "token=${token}"`;
 	command += ` -F "decision=${decision}"`;
 	if (cc) command += ` -F "cc=${cc}"`;
