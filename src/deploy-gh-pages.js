@@ -69,7 +69,7 @@ async function prepare(opts, outputDir) {
 		await sh(`git reset --hard`, "stream");
 	}
 
-	await sh(`rsync -av --delete --exclude=.git ${outputDir} .`, "stream");
+	await sh(`rsync -av ${outputDir} .`, "stream");
 	await sh(`git add -A --verbose`, "stream");
 	await sh(`git status`, "buffer");
 }
