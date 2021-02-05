@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- General: [`TOOLCHAIN`](#toolchain), [`SOURCE`](#source)
+- Build: [`TOOLCHAIN`](#toolchain), [`SOURCE`](#source), [`BUILD_FAIL_ON`](#build_fail_on)
 - Validation: [`VALIDATE_LINKS`](#validate_links), [`VALIDATE_MARKUP`](#validate_markup)
 - GitHub Pages: [`GH_PAGES_BRANCH`](#gh_pages_branch), [`GH_PAGES_TOKEN`](#gh_pages_token)
 - W3C Publish: [`W3C_ECHIDNA_TOKEN`](#w3c_echidna_token), [`W3C_WG_DECISION_URL`](#w3c_wg_decision_url), [`W3C_NOTIFICATIONS_CC`](#w3c_notifications_cc)
@@ -22,6 +22,22 @@ Source file path.
 **Possible values:** Any valid POSIX file path relative to repository root.
 
 **Default:** None. Inferred from `TOOLCHAIN`: `index.html`/`index.bs` if exists.
+
+## `BUILD_FAIL_ON`
+
+Define exit behaviour on build errors or warnings.
+
+**Possible values:** `"nothing"`, `"fatal"`, `"link-error"`, `"warning"`, `"everything"`.
+
+| `BUILD_FAIL_ON` | Bikeshed               | ReSpec                 |
+| --------------- | ---------------------- | ---------------------- |
+| nothing         | `--die-on=nothing`     | Absent.                |
+| fatal           | `--die-on=fatal `      | `--haltonerror` (`-e`) |
+| link-error      | `--die-on=error `      | `--haltonerror` (`-e`) |
+| warning         | `--die-on=warning `    | `--haltonwarn` (`-w`)  |
+| everything      | `--die-on=everything ` | `-e -w`                |
+
+**Default:** `"fatal"`.
 
 ## `VALIDATE_LINKS`
 
