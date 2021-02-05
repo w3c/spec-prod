@@ -1,5 +1,6 @@
 // @ts-check
-const { env, exit, pprint, request, sh } = require("./utils.js");
+const fetch = require("node-fetch").default;
+const { env, exit, pprint, sh } = require("./utils.js");
 
 const MAILING_LIST = `https://lists.w3.org/Archives/Public/public-tr-notifications/`;
 const API_URL = "https://labs.w3.org/echidna/api/request";
@@ -92,8 +93,6 @@ async function publish(outputDir, input) {
  * @returns {Promise<PublishState>}
  */
 async function getPublishStatus(id) {
-	const isJSON = arg => typeof arg === "string" && arg.startsWith("{");
-
 	// How many seconds to wait before retrying job status check?
 	// The numbers are based on "experience", so are somewhat random.
 	const RETRY_DURATIONS = [6, 3, 2, 8, 2, 5, 10, 6];
@@ -116,12 +115,15 @@ async function getPublishStatus(id) {
 		console.log(`⏱️ Wait ${wait}s for job to finish...`);
 		await new Promise(res => setTimeout(res, wait * 1000));
 
-		response = await request(url, { method: "GET" });
-		if (typeof response === "string" && !response.startsWith("{")) {
+		console.log(`📡 Request: ${url}`);
+		const res = await fetch(url);
+		if (res.headers.get("content-type").includes("json")) {
+			response = await res.json();
+		} else {
+			response = await res.text();
 			state.response = { message: response };
 			continue;
 		}
-		response = isJSON(response) ? JSON.parse(response) : response;
 
 		state.status = response.results.status;
 		state.response = response;
