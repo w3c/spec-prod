@@ -70,7 +70,7 @@ async function publish(outputDir, input) {
 	await sh("mv Overview.html index.html", { cwd: outputDir });
 
 	let command = `curl '${API_URL}'`;
-	command += ` -F "dry-run=true"`;
+	// command += ` -F "dry-run=true"`;
 	command += ` -F "tar=@${tarFileName}"`;
 	command += ` -F "token=${token}"`;
 	command += ` -F "decision=${decision}"`;
