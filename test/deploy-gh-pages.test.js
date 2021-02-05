@@ -1,9 +1,14 @@
 // @ts-check
 const path = require("path");
 
-module.exports = build;
-async function build(outputs = {}) {
-	const ghPages = outputs?.prepare?.all?.deploy?.ghPages || {};
+module.exports = deployGhPages;
+async function deployGhPages(outputs = {}) {
+	const deploy = outputs?.prepare?.all?.deploy;
+	if (deploy && deploy.ghPages === false) {
+		return;
+	}
+
+	const ghPages = deploy?.ghPages || {};
 	const inputs = {
 		targetBranch: ghPages.targetBranch || "gh-pages",
 		token: ghPages.token || "TOKEN",
