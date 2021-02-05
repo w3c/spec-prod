@@ -56,7 +56,7 @@ async function copyRelevantAssets(outputFile) {
 	}
 
 	// Copy local dependencies of outputFile to a "ready to publish" directory
-	await sh("yarn add local-assets@1", {
+	await sh("yarn add local-assets@1 --silent", {
 		output: "stream",
 		cwd: ACTION_DIR,
 	});

@@ -3,6 +3,8 @@ const path = require("path");
 const { addPath, exportVariable } = require("@actions/core");
 const { env, exit, sh, ACTION_DIR } = require("./utils.js");
 
+const PYTHONUSERBASE = path.join(ACTION_DIR, "python_modules");
+
 // @ts-expect-error
 if (module === require.main) {
 	const toolchain = env("INPUTS_TOOLCHAIN");
@@ -14,6 +16,9 @@ module.exports = main;
  * @param {"respec" | "bikeshed" | string} toolchain
  */
 async function main(toolchain) {
+	addPath(path.join(ACTION_DIR, "node_modules", ".bin"));
+	addPath(path.join(PYTHONUSERBASE, "bin"));
+
 	switch (toolchain) {
 		case "respec": {
 			await sh("yarn add respec --silent", {
@@ -23,12 +28,10 @@ async function main(toolchain) {
 					PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1",
 				},
 			});
-			addPath(path.join(ACTION_DIR, "node_modules", ".bin"));
 			exportVariable("PUPPETEER_EXECUTABLE_PATH", "/usr/bin/google-chrome");
 			break;
 		}
 		case "bikeshed": {
-			const PYTHONUSERBASE = path.join(ACTION_DIR, "python_modules");
 			await sh(`pip3 install bikeshed --quiet`, {
 				output: "stream",
 				cwd: ACTION_DIR,
@@ -37,7 +40,6 @@ async function main(toolchain) {
 				},
 			});
 			exportVariable("PYTHONUSERBASE", PYTHONUSERBASE);
-			addPath(path.join(PYTHONUSERBASE, "bin"));
 			await sh("bikeshed update", "stream");
 			break;
 		}
