@@ -50,7 +50,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.all).toolchain }}
+        INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.all).build.toolchain }}
 
     - name: Generate Static HTML
       id: generate-html
@@ -60,8 +60,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.all).toolchain }}
-        INPUTS_SOURCE: ${{ fromJson(steps.prepare.outputs.all).source }}
+        INPUTS_BUILD: ${{ toJSON(fromJson(steps.prepare.outputs.all).build) }}
 
     - name: Validate hyperlinks
       run: |

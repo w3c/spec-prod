@@ -63,10 +63,12 @@ async function main(inputs, githubContext) {
  *
  * @param {Inputs} inputs
  * @param {GitHubContext} githubContext
+ *
+ * @typedef {ThenArg<ReturnType<processInputs>>} ProcessedInput
  */
 async function processInputs(inputs, githubContext) {
 	return {
-		...toolchainAndSource(inputs),
+		build: buildOptions(inputs),
 		validate: validation(inputs),
 		deploy: {
 			ghPages: githubPagesDeployment(inputs, githubContext),
@@ -80,7 +82,7 @@ async function processInputs(inputs, githubContext) {
  * // TODO: refactor this to remove duplicate logic.
  * @param {Inputs} inputs
  */
-function toolchainAndSource(inputs) {
+function buildOptions(inputs) {
 	let toolchain = inputs.TOOLCHAIN;
 	let source = inputs.SOURCE;
 

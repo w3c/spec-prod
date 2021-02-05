@@ -1,19 +1,22 @@
 // @ts-check
+/**
+ * @typedef {import("./prepare.js").ProcessedInput["build"]} BuildInput
+ */
 const path = require("path");
 const { copyFile, unlink } = require("fs").promises;
 const { env, exit, setOutput, sh, ACTION_DIR } = require("./utils.js");
 
 // @ts-expect-error
 if (module === require.main) {
-	const toolchain = env("INPUTS_TOOLCHAIN");
-	const source = env("INPUTS_SOURCE");
+	/** @type {BuildInput} */
+	const { toolchain, source } = JSON.parse(env("INPUTS_BUILD"));
 	main(toolchain, source).catch(err => exit(err.message || "Failed", err.code));
 }
 
 module.exports = main;
 /**
- * @param {"respec" | "bikeshed" | string} toolchain
- * @param {string} source
+ * @param {BuildInput["toolchain"]} toolchain
+ * @param {BuildInput["source"]} source
  */
 async function main(toolchain, source) {
 	// Please do not rely on this value. If you would like this to be available as
