@@ -67,6 +67,7 @@ async function publish(outputDir, input) {
 		output: "stream",
 		cwd: outputDir,
 	});
+	await sh("mv Overview.html index.html", { cwd: outputDir });
 
 	let command = `curl '${API_URL}'`;
 	command += ` -F "dry-run=true"`;
