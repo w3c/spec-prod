@@ -5,7 +5,7 @@
 - General: [`TOOLCHAIN`](#toolchain), [`SOURCE`](#source)
 - Validation: [`VALIDATE_LINKS`](#validate_links), [`VALIDATE_MARKUP`](#validate_markup)
 - GitHub Pages: [`GH_PAGES_BRANCH`](#gh_pages_branch), [`GH_PAGES_TOKEN`](#gh_pages_token)
-- W3C Publish\*: [`W3C_ECHIDNA_TOKEN`](#w3c_echidna_token), [`W3C_MANIFEST_URL`](#w3c_manifest_url), [`W3C_WG_DECISION_URL`](#w3c_wg_decision_url), [`W3C_NOTIFICATIONS_CC`](#w3c_notifications_cc)
+- W3C Publish\*: [`W3C_ECHIDNA_TOKEN`](#w3c_echidna_token), [`W3C_WG_DECISION_URL`](#w3c_wg_decision_url), [`W3C_NOTIFICATIONS_CC`](#w3c_notifications_cc)
 
 \*W3C Publish: Using Echidna. Presently only supported with ReSpec.
 
@@ -64,20 +64,6 @@ The automated publication workflow requires a [token](https://github.com/w3c/ech
 **Possible values:** A valid Echidna token.
 
 **Default:** None.
-
-## `W3C_MANIFEST_URL`
-
-URL to Echidna manifest file. An [Echidna manifest file](https://github.com/w3c/echidna/wiki/Preparing-your-document#manifest-file) needs live at the root of your repository. It must be accessible via GitHub pages.
-
-An example of a minimal Echidna manifest file (say, `<REPOSITORY_ROOT>/ECHIDNA`):
-
-```
-index.html?specStatus=WD&shortName=your-spec-shortname respec
-```
-
-**Possible values:** A publicly accessible URL to Echidna manifest.
-
-**Default:** `https://ORG.github.io/REPO/ECHIDNA`
 
 ## `W3C_WG_DECISION_URL`
 
