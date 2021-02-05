@@ -9,16 +9,20 @@ const { env, exit, setOutput, sh, ACTION_DIR } = require("./utils.js");
 // @ts-expect-error
 if (module === require.main) {
 	/** @type {BuildInput} */
-	const { toolchain, source } = JSON.parse(env("INPUTS_BUILD"));
-	main(toolchain, source).catch(err => exit(err.message || "Failed", err.code));
+	const { toolchain, source, flags } = JSON.parse(env("INPUTS_BUILD"));
+	main(toolchain, source, flags).catch(err =>
+		exit(err.message || "Failed", err.code),
+	);
 }
 
 module.exports = main;
 /**
  * @param {BuildInput["toolchain"]} toolchain
  * @param {BuildInput["source"]} source
+ * @param {BuildInput["flags"]} additionalFlags
  */
-async function main(toolchain, source) {
+async function main(toolchain, source, additionalFlags) {
+	const flags = additionalFlags.join(" ");
 	// Please do not rely on this value. If you would like this to be available as
 	// an action output, file an issue.
 	const outputFile = source + ".built.html";
@@ -27,13 +31,13 @@ async function main(toolchain, source) {
 		case "respec":
 			console.log(`Converting ReSpec document '${source}' to HTML...`);
 			await sh(
-				`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20`,
+				`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
 				"stream",
 			);
 			break;
 		case "bikeshed":
 			console.log(`Converting Bikeshed document '${source}' to HTML...`);
-			await sh(`bikeshed spec "${source}" "${outputFile}"`, "stream");
+			await sh(`bikeshed spec "${source}" "${outputFile}" ${flags}`, "stream");
 			break;
 		default:
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
