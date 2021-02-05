@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: w3c/spec-prod@v1
+      - uses: w3c/spec-prod@v2
 ```
 
 ### Selectivly enable/disable validators
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: w3c/spec-prod@v1
+      - uses: w3c/spec-prod@v2
         with:
           VALIDATE_LINKS: false
           VALIDATE_MARKUP: true
@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: w3c/spec-prod@v1
+      - uses: w3c/spec-prod@v2
         with:
           TOOLCHAIN: respec # or bikeshed
 ```
@@ -79,14 +79,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: w3c/spec-prod@v1
+      - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
 ```
 
 ## Deploy to W3C using Echidna
-
-Presently, only ReSpec documents are supported. See [#12](https://github.com/w3c/spec-prod/issues/12).
 
 ```yaml
 # .github/workflows/pr-push.yml
@@ -101,9 +99,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: w3c/spec-prod@v1
+      - uses: w3c/spec-prod@v2
         with:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
-          # Replace following with appropriate values. See options.md for details.
+          # Replace following with appropriate value. See options.md for details.
           W3C_WG_DECISION_URL: https://lists.w3.org/Archives/Public/public-group/2014JulSep/1234.html
 ```

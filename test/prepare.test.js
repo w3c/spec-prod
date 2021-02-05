@@ -6,7 +6,7 @@ async function prepare() {
 		SOURCE: "",
 		TOOLCHAIN: "respec",
 		BUILD_FAIL_ON: "fatal",
-		VALIDATE_LINKS: "",
+		VALIDATE_LINKS: "false",
 		VALIDATE_MARKUP: "",
 		GH_PAGES_BRANCH: "",
 		W3C_ECHIDNA_TOKEN: "",
@@ -16,7 +16,7 @@ async function prepare() {
 	};
 	const INPUTS_GITHUB = {
 		event_name: "push",
-		repository: "w3c/payment-request",
+		repository: "sidvishnoi/w3c-deploy-test",
 		event: { repository: { default_branch: "main", has_pages: false } },
 		token: "GITHUB_TOKEN",
 		sha: "GITHUB_SHA",

@@ -2,15 +2,19 @@
 const path = require("path");
 
 module.exports = build;
-async function build(output) {
+async function build(outputs = {}) {
+	const ghPages = outputs?.prepare?.all?.deploy?.ghPages || {};
 	const inputs = {
-		targetBranch: "gh-pages",
-		token: "TOKEN",
-		event: "push",
-		sha: "a820102",
-		repository: "sidvishnoi/w3c-deploy-test",
-		actor: "sidvishnoi",
+		targetBranch: ghPages.targetBranch || "gh-pages",
+		token: ghPages.token || "TOKEN",
+		event: ghPages.event || "push",
+		sha: ghPages.sha || "SHA",
+		repository: ghPages.repository || "sidvishnoi/w3c-deploy-test",
+		actor: ghPages.actor || "sidvishnoi",
 	};
-	const outputDir = path.resolve(process.cwd() + ".built");
+
+	const build = outputs?.build?.output || {};
+	const outputDir = build.dir || path.resolve(process.cwd() + ".built");
+
 	return await require("../src/deploy-gh-pages.js")(inputs, outputDir);
 }

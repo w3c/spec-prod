@@ -2,11 +2,10 @@
 
 module.exports = build;
 async function build(outputs = {}) {
-	const output = outputs?.prepare?.all?.build || {};
-
-	const toolchain = output.toolchain || "respec";
-	const source = output.source || "index.html";
-	const flags = output.flags || ["-e"];
+	const build = outputs?.prepare?.all?.build || {};
+	const toolchain = build.toolchain || "respec";
+	const source = build.source || "index.html";
+	const flags = build.flags || ["-e"];
 
 	return await require("../src/build.js")(toolchain, source, flags);
 }
