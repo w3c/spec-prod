@@ -1,22 +1,8 @@
 // @ts-check
 const https = require("https");
-const path = require("path");
 const { inspect } = require("util");
-const { EOL } = require("os");
-const { appendFileSync } = require("fs");
 const { exec } = require("child_process");
-
-/**
- * Add a new directory to $PATH
- * @param {string} inputPath
- */
-function addPath(inputPath) {
-	const githubPathFile = env("GITHUB_PATH");
-	appendFileSync(githubPathFile, `${inputPath}${EOL}`, "utf8");
-
-	// Also update PATH for current process
-	process.env.PATH = `${inputPath}${path.delimiter}${process.env.PATH}`;
-}
+const core = require("@actions/core");
 
 /**
  * Get env variable value
@@ -87,27 +73,11 @@ function request(url, { body, ...options } = {}) {
 
 /**
  * @param {string} key
- * @param {string|boolean|null|number} value
- */
-function setEnv(key, value) {
-	const githubEnvFile = env("GITHUB_ENV");
-	appendFileSync(githubEnvFile, `${key}=${value}${EOL}`);
-
-	// Also add the current process.
-	process.env[key] = `${value}`;
-}
-
-/**
- * @param {string} key
  * @param {string|boolean|null|number|Record<string, any>} value
  */
 function setOutput(key, value) {
-	const originalValue = value;
-	if (typeof value === "object" && value !== null) {
-		value = JSON.stringify(value);
-	}
-	console.log(`::set-output name=${key}::${value}`);
-	return { [key]: originalValue };
+	core.setOutput(key, value);
+	return { [key]: value };
 }
 
 /**
@@ -177,13 +147,11 @@ function yesOrNo(value) {
 }
 
 module.exports = {
-	addPath,
 	env,
 	exit,
 	formatAsHeading,
 	pprint,
 	request,
-	setEnv,
 	setOutput,
 	sh,
 	yesOrNo,

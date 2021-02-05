@@ -1,6 +1,7 @@
 // @ts-check
 const path = require("path");
-const { addPath, env, exit, sh, setEnv } = require("./utils.js");
+const { addPath, exportVariable } = require("@actions/core");
+const { env, exit, sh } = require("./utils.js");
 
 // @ts-expect-error
 if (module === require.main) {
@@ -23,7 +24,7 @@ async function main(toolchain) {
 				},
 			});
 			addPath(path.join(__dirname, "node_modules", ".bin"));
-			setEnv("PUPPETEER_EXECUTABLE_PATH", "/usr/bin/google-chrome");
+			exportVariable("PUPPETEER_EXECUTABLE_PATH", "/usr/bin/google-chrome");
 			break;
 		}
 		case "bikeshed": {
@@ -35,7 +36,7 @@ async function main(toolchain) {
 					PYTHONUSERBASE,
 				},
 			});
-			setEnv("PYTHONUSERBASE", PYTHONUSERBASE);
+			exportVariable("PYTHONUSERBASE", PYTHONUSERBASE);
 			addPath(path.join(PYTHONUSERBASE, "bin"));
 			await sh("bikeshed update", "stream");
 			break;

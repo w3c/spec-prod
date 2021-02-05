@@ -35,6 +35,7 @@ runs:
       id: prepare
       run: |
         echo "::group::Prepare"
+        yarn --cwd ${{ github.action_path }}
         node ${{ github.action_path }}/prepare.js
         echo "::endgroup::"
       shell: bash
