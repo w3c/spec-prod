@@ -9,6 +9,14 @@ const {
 	yesOrNo,
 } = require("./utils.js");
 
+const FAIL_ON_OPTIONS = [
+	"nothing",
+	"fatal",
+	"link-error",
+	"warning",
+	"everything",
+];
+
 // @ts-expect-error
 if (module === require.main) {
 	/** @type {Inputs} */
@@ -43,6 +51,7 @@ async function main(inputs, githubContext) {
  * @typedef {object} Inputs
  * @property {"respec" | "bikeshed" | string} [inputs.TOOLCHAIN]
  * @property {string} [inputs.SOURCE]
+ * @property {string} [inputs.BUILD_FAIL_ON]
  * @property {string} [inputs.VALIDATE_LINKS]
  * @property {string} [inputs.VALIDATE_MARKUP]
  * @property {string} [inputs.GH_PAGES_BRANCH]
@@ -85,6 +94,7 @@ async function processInputs(inputs, githubContext) {
 function buildOptions(inputs) {
 	let toolchain = inputs.TOOLCHAIN;
 	let source = inputs.SOURCE;
+	let failOn = inputs.BUILD_FAIL_ON;
 
 	if (toolchain) {
 		switch (toolchain) {
@@ -130,7 +140,40 @@ function buildOptions(inputs) {
 		}
 	}
 
-	return { toolchain, source };
+	const flags = [];
+	flags.push(...getFailOnFlags(toolchain, failOn));
+
+	return { toolchain, source, flags };
+}
+
+/**
+ * @param {"respec" | "bikeshed" | string} toolchain
+ * @param {string} failOn
+ */
+function getFailOnFlags(toolchain, failOn) {
+	if (failOn && !FAIL_ON_OPTIONS.includes(failOn)) {
+		exit(
+			`BUILD_FAIL_ON must be one of [${FAIL_ON_OPTIONS.join(", ")}]. ` +
+				`Found "${failOn}".`,
+		);
+	}
+	switch (toolchain) {
+		case "respec": {
+			switch (failOn) {
+				case "fatal":
+				case "link-error":
+					return ["-e"];
+				case "warning":
+					return ["-w"];
+				case "everything":
+					return ["-e", "-w"];
+			}
+		}
+		case "bikeshed": {
+			return [`--die-on=${failOn}`];
+		}
+	}
+	return [];
 }
 
 /**

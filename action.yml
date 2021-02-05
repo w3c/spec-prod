@@ -11,6 +11,9 @@ inputs:
     description: Possible values - 'respec', 'bikeshed'
   SOURCE:
     description: Source file path.
+  BUILD_FAIL_ON:
+    description: Exit behaviour on errors.
+    default: fatal
   VALIDATE_LINKS:
     description: Validate hyperlinks
     default: true
