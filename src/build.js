@@ -68,7 +68,7 @@ async function copyRelevantAssets(outputFile) {
 	// Move outputFile to the publish directory.
 	const rel = p => path.relative(process.cwd(), p);
 	const destinationFile = path.join(destinationDir, "index.html");
-	console.log(`[COPY] ${rel(outputFile)} >>> ${rel(destinationFile)}`);
+	console.log(`[INFO] [COPY] ${rel(outputFile)} >>> ${rel(destinationFile)}`);
 	await copyFile(outputFile, destinationFile);
 	await unlink(outputFile);
 
