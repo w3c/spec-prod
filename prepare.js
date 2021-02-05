@@ -194,7 +194,7 @@ function githubPagesDeployment(inputs, githubContext) {
  * @typedef {ThenArg<ReturnType<typeof w3cEchidnaDeployment>>} W3CDeployOptions
  */
 async function w3cEchidnaDeployment(inputs, githubContext) {
-	const { event_name: event, repository } = githubContext;
+	const { event_name: event } = githubContext;
 	if (!shouldTryDeploy(event)) {
 		return false;
 	}
