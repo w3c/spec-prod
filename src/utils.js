@@ -1,7 +1,10 @@
 // @ts-check
+const path = require("path");
 const { inspect } = require("util");
 const { exec } = require("child_process");
 const core = require("@actions/core");
+
+const ACTION_DIR = path.join(__dirname, "..");
 
 /**
  * Get env variable value
@@ -120,6 +123,7 @@ function yesOrNo(value) {
 }
 
 module.exports = {
+	ACTION_DIR,
 	env,
 	exit,
 	formatAsHeading,

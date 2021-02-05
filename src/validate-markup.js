@@ -1,5 +1,5 @@
 // @ts-check
-const { env, exit, sh, yesOrNo } = require("./utils.js");
+const { env, exit, sh, yesOrNo, ACTION_DIR } = require("./utils.js");
 
 // @ts-expect-error
 if (module === require.main) {
@@ -17,7 +17,7 @@ module.exports = main;
  */
 async function main(outputDir) {
 	console.log(`Validating ${outputDir}/index.html...`);
-	await sh(`yarn add vnu-jar --silent`, { cwd: __dirname });
+	await sh(`yarn add vnu-jar --silent`, { cwd: ACTION_DIR });
 	const vnuJar = require("vnu-jar");
 
 	try {

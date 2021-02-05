@@ -36,7 +36,7 @@ runs:
       run: |
         echo "::group::Prepare"
         yarn --cwd ${{ github.action_path }}
-        node ${{ github.action_path }}/prepare.js
+        node ${{ github.action_path }}/src/prepare.js
         echo "::endgroup::"
       shell: bash
       env:
@@ -46,7 +46,7 @@ runs:
     - name: Setup toolchain
       run: |
         echo "::group::Setup toolchain"
-        node ${{ github.action_path }}/setup.js
+        node ${{ github.action_path }}/src/setup.js
         echo "::endgroup::"
       shell: bash
       env:
@@ -56,7 +56,7 @@ runs:
       id: generate-html
       run: |
         echo "::group::Generate Static HTML"
-        node ${{ github.action_path }}/build.js
+        node ${{ github.action_path }}/src/build.js
         echo "::endgroup::"
       shell: bash
       env:
@@ -66,7 +66,7 @@ runs:
     - name: Validate hyperlinks
       run: |
         echo "::group::Validate hyperlinks"
-        node ${{ github.action_path }}/validate-links.js
+        node ${{ github.action_path }}/src/validate-links.js
         echo "::endgroup::"
       shell: bash
       env:
@@ -76,7 +76,7 @@ runs:
     - name: Validate markup
       run: |
         echo "::group::Validate markup"
-        node ${{ github.action_path }}/validate-markup.js
+        node ${{ github.action_path }}/src/validate-markup.js
         echo "::endgroup::"
       shell: bash
       env:
@@ -86,7 +86,7 @@ runs:
     - name: Deploy to GitHub pages
       run: |
         echo "::group::Deploy to GitHub pages"
-        node ${{ github.action_path }}/deploy-gh-pages.js
+        node ${{ github.action_path }}/src/deploy-gh-pages.js
         echo "::endgroup::"
       shell: bash
       env:
@@ -96,7 +96,7 @@ runs:
     - name: Deploy to W3C
       run: |
         echo "::group::Deploy to W3C"
-        node ${{ github.action_path }}/deploy-w3c-echidna.js
+        node ${{ github.action_path }}/src/deploy-w3c-echidna.js
         echo "::endgroup::"
       shell: bash
       env:

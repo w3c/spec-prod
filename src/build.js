@@ -1,7 +1,7 @@
 // @ts-check
 const path = require("path");
 const { copyFile, unlink } = require("fs").promises;
-const { env, exit, setOutput, sh } = require("./utils.js");
+const { env, exit, setOutput, sh, ACTION_DIR } = require("./utils.js");
 
 // @ts-expect-error
 if (module === require.main) {
@@ -51,7 +51,7 @@ async function copyRelevantAssets(outputFile) {
 	// Copy local dependencies of outputFile to a "ready to publish" directory
 	await sh("yarn add https://github.com/sidvishnoi/local-assets/ --silent", {
 		output: "stream",
-		cwd: __dirname,
+		cwd: ACTION_DIR,
 	});
 	await sh(`local-assets "${outputFile}" -o ${destinationDir}`, {
 		output: "stream",
