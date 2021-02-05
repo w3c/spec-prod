@@ -23,8 +23,6 @@ inputs:
     description: GitHub Personal access token. Required only if the default GitHub actions token doesn't have enough permissions.
   W3C_ECHIDNA_TOKEN:
     description: Echidna token
-  W3C_MANIFEST_URL:
-    description: Echidna manifest URL
   W3C_WG_DECISION_URL:
     description: A URL to the working group decision to use auto-publish (usually from a w3c mailing list).
   W3C_NOTIFICATIONS_CC:
@@ -102,3 +100,4 @@ runs:
       shell: bash
       env:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.all).deploy.w3c) }}
+        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.output).dir }}

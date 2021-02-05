@@ -48,7 +48,6 @@ async function main(inputs, githubContext) {
  * @property {string} [inputs.GH_PAGES_BRANCH]
  * @property {string} [inputs.GH_PAGES_TOKEN]
  * @property {string} [inputs.W3C_ECHIDNA_TOKEN]
- * @property {string} [inputs.W3C_MANIFEST_URL]
  * @property {string} [inputs.W3C_WG_DECISION_URL]
  * @property {string} [inputs.W3C_NOTIFICATIONS_CC]
  *
@@ -195,7 +194,7 @@ function githubPagesDeployment(inputs, githubContext) {
  * @typedef {ThenArg<ReturnType<typeof w3cEchidnaDeployment>>} W3CDeployOptions
  */
 async function w3cEchidnaDeployment(inputs, githubContext) {
-	const { event_name: event, repository } = githubContext;
+	const { event_name: event } = githubContext;
 	if (!shouldTryDeploy(event)) {
 		return false;
 	}
@@ -209,20 +208,9 @@ async function w3cEchidnaDeployment(inputs, githubContext) {
 		return false;
 	}
 
-	let manifest = inputs.W3C_MANIFEST_URL;
-	if (!manifest) {
-		if (existsSync("ECHIDNA")) {
-			const [owner, name] = repository.split("/");
-			manifest = `https://${owner}.github.io/${name}/ECHIDNA`;
-		} else {
-			console.log(`🚧 Echidna manifest file was not found.`);
-			return false;
-		}
-	}
-
 	const cc = inputs.W3C_NOTIFICATIONS_CC;
 
-	return { manifest, wgDecisionURL, cc, token: token };
+	return { wgDecisionURL, cc, token: token };
 }
 
 /**

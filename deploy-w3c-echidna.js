@@ -1,5 +1,5 @@
 // @ts-check
-const { env, exit, pprint, request } = require("./utils.js");
+const { env, exit, pprint, request, sh } = require("./utils.js");
 
 const MAILING_LIST = `https://lists.w3.org/Archives/Public/public-tr-notifications/`;
 const API_URL = "https://labs.w3.org/echidna/api/request";
@@ -8,21 +8,22 @@ const API_URL = "https://labs.w3.org/echidna/api/request";
 if (module === require.main) {
 	/** @type {import("./prepare.js").W3CDeployOptions} */
 	const inputs = JSON.parse(env("INPUTS_DEPLOY"));
+	const outputDir = env("OUTPUT_DIR");
 	if (inputs === false) {
 		exit("Skipped.", 0);
 	}
-	main(inputs).catch(err => exit(err.message || "Failed", err.code));
+	main(outputDir, inputs).catch(err => exit(err.message || "Failed", err.code));
 }
 
 module.exports = main;
 /**
  * @typedef {Exclude<import("./prepare.js").W3CDeployOptions, false>} W3CDeployOptions
  * @param {W3CDeployOptions} inputs
+ * @param {string} outputDir
  */
-async function main(inputs) {
-	const { manifest, wgDecisionURL, token, cc } = inputs;
+async function main(outputDir, inputs) {
 	console.log(`📣 If it fails, check ${MAILING_LIST}`);
-	const id = await publish({ manifest, wgDecisionURL, token, cc });
+	const id = await publish(outputDir, inputs);
 
 	console.group("Getting publish status...");
 	const result = await getPublishStatus(id);
@@ -52,23 +53,31 @@ async function main(inputs) {
 
 /**
  * @param {object} input
- * @param {string} input.manifest Echidna manifest URL
  * @param {string} input.wgDecisionURL
  * @param {string} input.token
  * @param {string} [input.cc]
+ * @param {string} outputDir
  * @returns {Promise<string>}
  */
-async function publish(input) {
-	const { manifest: url, wgDecisionURL: decision, token, cc } = input;
-	const data = { url, decision, token, cc };
-	const body = new URLSearchParams(Object.entries(data)).toString();
-	return await request(new URL(API_URL), {
-		method: "POST",
-		body,
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded",
-		},
+async function publish(outputDir, input) {
+	const { wgDecisionURL: decision, token, cc } = input;
+	const tarFileName = "/tmp/echidna.tar";
+	await sh("mv index.html Overview.html", { cwd: outputDir });
+	await sh(`tar cvf ${tarFileName} *`, {
+		output: "stream",
+		cwd: outputDir,
 	});
+	await sh("mv Overview.html index.html", { cwd: outputDir });
+
+	let command = `curl '${API_URL}'`;
+	// command += ` -F "dry-run=true"`;
+	command += ` -F "tar=@${tarFileName}"`;
+	command += ` -F "token=${token}"`;
+	command += ` -F "decision=${decision}"`;
+	if (cc) command += ` -F "cc=${cc}"`;
+
+	const id = await sh(command);
+	return id.trim();
 }
 
 /**

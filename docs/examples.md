@@ -105,6 +105,5 @@ jobs:
         with:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
           # Replace following with appropriate values. See options.md for details.
-          W3C_MANIFEST_URL: https://w3c.github.io/REPO/MANIFEST
           W3C_WG_DECISION_URL: https://lists.w3.org/Archives/Public/public-group/2014JulSep/1234.html
 ```
