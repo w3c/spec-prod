@@ -154,7 +154,7 @@ function getFailOnFlags(toolchain, failOn) {
 	if (failOn && !FAIL_ON_OPTIONS.includes(failOn)) {
 		exit(
 			`BUILD_FAIL_ON must be one of [${FAIL_ON_OPTIONS.join(", ")}]. ` +
-				`Found ${failOn}.`,
+				`Found "${failOn}".`,
 		);
 	}
 	switch (toolchain) {
