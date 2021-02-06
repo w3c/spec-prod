@@ -53,9 +53,10 @@ Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.
     GH_PAGES_BUILD_OVERRIDE: |
       status: w3c/WD
       TR: https://www.w3.org/TR/my-cool-spec/
-    # Note: the content in GH_PAGES_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
+    # Warning: The content in GH_PAGES_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
     # GitHub Actions allow only strings as input.
-    # Info: above is same as running Bikeshed CLI like:
+    #
+    # Info: Above is same as running Bikeshed CLI like:
     # bikeshed spec INPUT OUTPUT --md-status="w3c/WD" --md-TR="https://www.w3.org/TR/my-cool-spec/"
 ```
 
@@ -79,8 +80,9 @@ Override Bikeshed metadata or ReSpec config for the W3C Deployment and validator
       shortName: my-custom-shortname
       previousMaturity: LC
       previousPublishDate: 2014-05-01
-    # Note: The content in W3C_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
+    # Warning: The content in W3C_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
     # GitHub Actions allow only strings as input.
+    #
     # Info: Above is equivalent to running ReSpec CLI like:
     # respec -s index.html?specStatus=WD&shortName=my-custom-shortname… -o OUTPUT
 ```
