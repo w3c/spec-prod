@@ -78,9 +78,9 @@ async function buildReSpec(source, outputFile, additionalFlags, conf) {
 	console.log(`Converting ReSpec document '${source}' to HTML...`);
 	const flags = additionalFlags.join(" ");
 	const params = new URLSearchParams(conf).toString();
-	const src = `${source}${params ? `?${params}` : ""}`;
+	source = `${source}${params ? `?${params}` : ""}`;
 	await sh(
-		`respec -s "${src}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
+		`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
 		{
 			output: "stream",
 			env: { PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
