@@ -18,9 +18,11 @@ async function main(outputDir) {
 	await sh(`yarn add href-checker --silent`, {
 		output: "stream",
 		cwd: ACTION_DIR,
+		env: { PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1" },
 	});
 	await sh(`href-checker index.html --no-same-site`, {
 		output: "stream",
 		cwd: outputDir,
+		env: { PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
 	});
 }
