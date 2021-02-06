@@ -3,7 +3,7 @@ const path = require("path");
 const { inspect } = require("util");
 const { exec } = require("child_process");
 const core = require("@actions/core");
-const split = require("split");
+const split = require("split2");
 
 const ACTION_DIR = path.join(__dirname, "..");
 
