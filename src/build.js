@@ -56,26 +56,11 @@ async function build(toolchain, source, destDir, additionalFlags, conf) {
 
 	switch (toolchain) {
 		case "respec": {
-			console.log(`Converting ReSpec document '${source}' to HTML...`);
-			const flags = additionalFlags.join(" ");
-			const params = new URLSearchParams(conf).toString();
-			const src = `${source}${params ? `?${params}` : ""}`;
-			await sh(
-				`respec -s "${src}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
-				{
-					output: "stream",
-					env: { PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
-				},
-			);
+			await buildReSpec(source, outputFile, additionalFlags, conf);
 			break;
 		}
 		case "bikeshed": {
-			console.log(`Converting Bikeshed document '${source}' to HTML...`);
-			const metadataFlags = Object.entries(conf || {}).map(
-				([key, val]) => `--md-${key.replace(/\s+/g, "-")}="${val}"`,
-			);
-			const flags = additionalFlags.concat(metadataFlags).join(" ");
-			await sh(`bikeshed spec "${source}" "${outputFile}" ${flags}`, "stream");
+			await buildBikeshed(source, outputFile, additionalFlags, conf);
 			break;
 		}
 		default:
@@ -83,6 +68,41 @@ async function build(toolchain, source, destDir, additionalFlags, conf) {
 	}
 
 	return await copyRelevantAssets(outputFile, destDir);
+}
+
+/**
+ * @param {BuildInput["source"]} source
+ * @param {string} outputFile
+ * @param {BuildInput["flags"]} additionalFlags
+ * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
+ */
+async function buildReSpec(source, outputFile, additionalFlags, conf) {
+	console.log(`Converting ReSpec document '${source}' to HTML...`);
+	const flags = additionalFlags.join(" ");
+	const params = new URLSearchParams(conf).toString();
+	const src = `${source}${params ? `?${params}` : ""}`;
+	await sh(
+		`respec -s "${src}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
+		{
+			output: "stream",
+			env: { PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
+		},
+	);
+}
+
+/**
+ * @param {BuildInput["source"]} source
+ * @param {string} outputFile
+ * @param {BuildInput["flags"]} additionalFlags
+ * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
+ */
+async function buildBikeshed(source, outputFile, additionalFlags, conf) {
+	console.log(`Converting Bikeshed document '${source}' to HTML...`);
+	const metadataFlags = Object.entries(conf || {}).map(
+		([key, val]) => `--md-${key.replace(/\s+/g, "-")}="${val}"`,
+	);
+	const flags = additionalFlags.concat(metadataFlags).join(" ");
+	await sh(`bikeshed spec "${source}" "${outputFile}" ${flags}`, "stream");
 }
 
 /**
