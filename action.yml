@@ -28,6 +28,8 @@ inputs:
     description: Echidna token
   W3C_WG_DECISION_URL:
     description: A URL to the working group decision to use auto-publish (usually from a w3c mailing list).
+  W3C_BUILD_OVERRIDE:
+    description: Override Bikeshed's metadata or ReSpec's respecConfig for W3C deploy and validations.
   W3C_NOTIFICATIONS_CC:
     description: Comma separated list of email addresses to CC
 
