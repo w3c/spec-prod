@@ -27,6 +27,7 @@ async function main(inputs, outputDir) {
 		outputDir += path.sep;
 	}
 	let error = null;
+	await fs.copyFile(".git/config", "/tmp/spec-prod-git-config");
 	try {
 		await prepare(inputs, outputDir);
 		const committed = await commit(inputs);
@@ -120,5 +121,6 @@ async function cleanUp() {
 	try {
 		await sh(`git checkout -`);
 		await sh(`git checkout -- .`);
+		await fs.copyFile("/tmp/spec-prod-git-config", ".git/config");
 	} catch {}
 }
