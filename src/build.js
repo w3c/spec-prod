@@ -78,7 +78,7 @@ async function buildReSpec(source, outputFile, additionalFlags, conf) {
 	console.log(`Converting ReSpec document '${source}' to HTML...`);
 	const flags = additionalFlags.join(" ");
 	const params = new URLSearchParams(conf).toString();
-	source = `${source}${params ? `?${params}` : ""}`;
+	if (params) source += `?${params}`;
 	await sh(
 		`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
 		{
