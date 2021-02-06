@@ -105,7 +105,6 @@ async function sh(command, options = {}) {
 		});
 	} finally {
 		if (output !== "silent") {
-			if (output) console.log();
 			console.groupEnd();
 		}
 	}
