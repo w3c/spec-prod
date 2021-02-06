@@ -54,6 +54,7 @@ async function main(toolchain, source, flags, configOverride) {
 async function build(toolchain, source, destDir, additionalFlags, conf) {
 	const outputFile = source + ".built.html";
 
+	console.group(`[INFO] Build ${toolchain} document "${source}"…`);
 	switch (toolchain) {
 		case "respec":
 			await buildReSpec(source, outputFile, additionalFlags, conf);
@@ -65,7 +66,9 @@ async function build(toolchain, source, destDir, additionalFlags, conf) {
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
 
-	return await copyRelevantAssets(outputFile, destDir);
+	const res = await copyRelevantAssets(outputFile, destDir);
+	console.groupEnd();
+	return res;
 }
 
 /**
@@ -75,7 +78,6 @@ async function build(toolchain, source, destDir, additionalFlags, conf) {
  * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
  */
 async function buildReSpec(source, outputFile, additionalFlags, conf) {
-	console.log(`Converting ReSpec document '${source}' to HTML...`);
 	const flags = additionalFlags.join(" ");
 	const params = new URLSearchParams(conf).toString();
 	if (params) source += `?${params}`;
@@ -95,7 +97,6 @@ async function buildReSpec(source, outputFile, additionalFlags, conf) {
  * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
  */
 async function buildBikeshed(source, outputFile, additionalFlags, conf) {
-	console.log(`Converting Bikeshed document '${source}' to HTML...`);
 	const metadataFlags = Object.entries(conf || {}).map(
 		([key, val]) => `--md-${key.replace(/\s+/g, "-")}="${val}"`,
 	);
