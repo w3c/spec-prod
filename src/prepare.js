@@ -162,7 +162,9 @@ function getConfigOverride(confStr) {
 	/** @type {Record<string, string>} */
 	const config = {};
 	for (const line of confStr.trim().split("\n")) {
-		const [key, value] = line.split(":", 2).map(s => s.trim());
+		const idx = line.indexOf(":");
+		const key = line.slice(0, idx).trim();
+		const value = line.slice(idx + 1).trim();
 		config[key] = value;
 	}
 	return config;
