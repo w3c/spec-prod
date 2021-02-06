@@ -22,31 +22,50 @@ module.exports = main;
  * @param {BuildInput["flags"]} additionalFlags
  */
 async function main(toolchain, source, additionalFlags) {
-	const flags = additionalFlags.join(" ");
 	// Please do not rely on this value. If you would like this to be available as
 	// an action output, file an issue.
 	const outputFile = source + ".built.html";
 
 	switch (toolchain) {
 		case "respec":
-			console.log(`Converting ReSpec document '${source}' to HTML...`);
-			await sh(
-				`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
-				{
-					output: "stream",
-					env: { PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
-				},
-			);
+			await buildReSpec(source, outputFile, additionalFlags);
 			break;
 		case "bikeshed":
-			console.log(`Converting Bikeshed document '${source}' to HTML...`);
-			await sh(`bikeshed spec "${source}" "${outputFile}" ${flags}`, "stream");
+			await buildBikeshed(source, outputFile, additionalFlags);
 			break;
 		default:
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
 
 	return await copyRelevantAssets(outputFile);
+}
+
+/**
+ * @param {BuildInput["source"]} source
+ * @param {string} outputFile
+ * @param {BuildInput["flags"]} additionalFlags
+ */
+async function buildReSpec(source, outputFile, additionalFlags) {
+	const flags = additionalFlags.join(" ");
+	console.log(`Converting ReSpec document '${source}' to HTML...`);
+	await sh(
+		`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
+		{
+			output: "stream",
+			env: { PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
+		},
+	);
+}
+
+/**
+ * @param {BuildInput["source"]} source
+ * @param {string} outputFile
+ * @param {BuildInput["flags"]} additionalFlags
+ */
+async function buildBikeshed(source, outputFile, additionalFlags) {
+	const flags = additionalFlags.join(" ");
+	console.log(`Converting Bikeshed document '${source}' to HTML...`);
+	await sh(`bikeshed spec "${source}" "${outputFile}" ${flags}`, "stream");
 }
 
 /**
