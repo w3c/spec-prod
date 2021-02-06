@@ -9,8 +9,10 @@ const { env, exit, setOutput, sh, ACTION_DIR } = require("./utils.js");
 // @ts-expect-error
 if (module === require.main) {
 	/** @type {BuildInput} */
-	const { toolchain, source, flags } = JSON.parse(env("INPUTS_BUILD"));
-	main(toolchain, source, flags).catch(err =>
+	const { toolchain, source, flags, configOverride } = JSON.parse(
+		env("INPUTS_BUILD"),
+	);
+	main(toolchain, source, flags, configOverride).catch(err =>
 		exit(err.message || "Failed", err.code),
 	);
 }
@@ -19,35 +21,66 @@ module.exports = main;
 /**
  * @param {BuildInput["toolchain"]} toolchain
  * @param {BuildInput["source"]} source
- * @param {BuildInput["flags"]} additionalFlags
+ * @param {BuildInput["flags"]} flags
+ * @param {BuildInput["configOverride"]} configOverride
  */
-async function main(toolchain, source, additionalFlags) {
-	// Please do not rely on this value. If you would like this to be available as
-	// an action output, file an issue.
+async function main(toolchain, source, flags, configOverride) {
+	// TODO: compare equal objects also
+	if (configOverride.gh === configOverride.w3c) {
+		let destDir = path.resolve(process.cwd() + ".built");
+		const out = await build(toolchain, source, destDir, flags, null);
+
+		return { ...setOutput("gh", out), ...setOutput("w3c", out) };
+	}
+
+	let destDirGh = path.resolve(process.cwd() + ".gh");
+	const confGh = configOverride.gh;
+	const outGh = await build(toolchain, source, destDirGh, flags, confGh);
+
+	let destDirW3C = path.resolve(process.cwd() + ".w3c");
+	const confW3C = configOverride.w3c;
+	const outW3C = await build(toolchain, source, destDirW3C, flags, confW3C);
+
+	return { ...setOutput("gh", outGh), ...setOutput("w3c", outW3C) };
+}
+
+/**
+ * @param {BuildInput["toolchain"]} toolchain
+ * @param {BuildInput["source"]} source
+ * @param {string} destDir
+ * @param {BuildInput["flags"]} additionalFlags
+ * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
+ */
+async function build(toolchain, source, destDir, additionalFlags, conf) {
 	const outputFile = source + ".built.html";
 
+	console.group(`[INFO] Build ${toolchain} document "${source}"…`);
 	switch (toolchain) {
 		case "respec":
-			await buildReSpec(source, outputFile, additionalFlags);
+			await buildReSpec(source, outputFile, additionalFlags, conf);
 			break;
 		case "bikeshed":
-			await buildBikeshed(source, outputFile, additionalFlags);
+			await buildBikeshed(source, outputFile, additionalFlags, conf);
 			break;
 		default:
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
 
-	return await copyRelevantAssets(outputFile);
+	const res = await copyRelevantAssets(outputFile, destDir);
+	console.groupEnd();
+	return res;
 }
 
 /**
  * @param {BuildInput["source"]} source
  * @param {string} outputFile
  * @param {BuildInput["flags"]} additionalFlags
+ * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
  */
-async function buildReSpec(source, outputFile, additionalFlags) {
+async function buildReSpec(source, outputFile, additionalFlags, conf) {
 	const flags = additionalFlags.join(" ");
-	console.log(`Converting ReSpec document '${source}' to HTML...`);
+	const params = new URLSearchParams(conf).toString();
+	if (params) source += `?${params}`;
 	await sh(
 		`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
 		{
@@ -61,18 +94,21 @@ async function buildReSpec(source, outputFile, additionalFlags) {
  * @param {BuildInput["source"]} source
  * @param {string} outputFile
  * @param {BuildInput["flags"]} additionalFlags
+ * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
  */
-async function buildBikeshed(source, outputFile, additionalFlags) {
-	const flags = additionalFlags.join(" ");
-	console.log(`Converting Bikeshed document '${source}' to HTML...`);
+async function buildBikeshed(source, outputFile, additionalFlags, conf) {
+	const metadataFlags = Object.entries(conf || {}).map(
+		([key, val]) => `--md-${key.replace(/\s+/g, "-")}="${val}"`,
+	);
+	const flags = additionalFlags.concat(metadataFlags).join(" ");
 	await sh(`bikeshed spec "${source}" "${outputFile}" ${flags}`, "stream");
 }
 
 /**
  * @param {string} outputFile
+ * @param {string} destinationDir
  */
-async function copyRelevantAssets(outputFile) {
-	let destinationDir = path.resolve(process.cwd() + ".built");
+async function copyRelevantAssets(outputFile, destinationDir) {
 	if (!destinationDir.endsWith(path.sep)) {
 		destinationDir += path.sep;
 	}
@@ -98,8 +134,5 @@ async function copyRelevantAssets(outputFile) {
 	// List all files in output directory
 	await sh(`ls -R`, { output: "buffer", cwd: destinationDir });
 
-	return setOutput("output", {
-		dir: destinationDir,
-		file: destinationFile,
-	});
+	return { dir: destinationDir, file: destinationFile };
 }

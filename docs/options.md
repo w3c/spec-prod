@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- Build: [`TOOLCHAIN`](#toolchain), [`SOURCE`](#source), [`BUILD_FAIL_ON`](#build_fail_on)
+- Build: [`TOOLCHAIN`](#toolchain), [`SOURCE`](#source), [`BUILD_FAIL_ON`](#build_fail_on), [`GH_PAGES_BUILD_OVERRIDE`](#gh_pages_build_override), [`W3C_BUILD_OVERRIDE`](#w3c_build_override)
 - Validation: [`VALIDATE_LINKS`](#validate_links), [`VALIDATE_MARKUP`](#validate_markup)
 - GitHub Pages: [`GH_PAGES_BRANCH`](#gh_pages_branch), [`GH_PAGES_TOKEN`](#gh_pages_token)
 - W3C Publish: [`W3C_ECHIDNA_TOKEN`](#w3c_echidna_token), [`W3C_WG_DECISION_URL`](#w3c_wg_decision_url), [`W3C_NOTIFICATIONS_CC`](#w3c_notifications_cc)
@@ -38,6 +38,54 @@ Define exit behaviour on build errors or warnings.
 | everything      | `--die-on=everything ` | `-e -w`                |
 
 **Default:** `"fatal"`.
+
+## `GH_PAGES_BUILD_OVERRIDE`
+
+Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.
+
+**Possible values:** A string or [YAML Literal Block Scalar](https://stackoverflow.com/a/15365296) (multiline string) representing the override config/metadata as key-value pairs. That's mouthful, lets clarify using an example:
+
+```yaml
+# Example: Override Bikeshed metadata for GitHub Pages deployment
+- uses: w3c/spec-prod@v2
+  with:
+    TOOLCHAIN: bikeshed
+    GH_PAGES_BUILD_OVERRIDE: |
+      status: w3c/WD
+      TR: https://www.w3.org/TR/my-cool-spec/
+    # Warning: The content in GH_PAGES_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
+    # GitHub Actions allow only strings as input.
+    #
+    # Info: Above is same as running Bikeshed CLI like:
+    # bikeshed spec INPUT OUTPUT --md-status="w3c/WD" --md-TR="https://www.w3.org/TR/my-cool-spec/"
+```
+
+**Default:** None.
+
+## `W3C_BUILD_OVERRIDE`
+
+Override Bikeshed metadata or ReSpec config for the W3C Deployment and validators.
+
+**Possible values:** Same as [`GH_PAGES_BUILD_OVERRIDE`](#gh_pages_build_override).
+
+**Default:** None.
+
+```yaml
+# Example: Override respecConfig for W3C deployment and validators.
+- uses: w3c/spec-prod@v2
+  with:
+    TOOLCHAIN: respec
+    W3C_BUILD_OVERRIDE: |
+      specStatus: WD
+      shortName: my-custom-shortname
+      previousMaturity: LC
+      previousPublishDate: 2014-05-01
+    # Warning: The content in W3C_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
+    # GitHub Actions allow only strings as input.
+    #
+    # Info: Above is equivalent to running ReSpec CLI like:
+    # respec -s index.html?specStatus=WD&shortName=my-custom-shortname… -o OUTPUT
+```
 
 ## `VALIDATE_LINKS`
 

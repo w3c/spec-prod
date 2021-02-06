@@ -22,12 +22,16 @@ inputs:
     default: true
   GH_PAGES_BRANCH:
     description: Provide a branch name to deploy to GitHub pages.
+  GH_PAGES_BUILD_OVERRIDE:
+    description: Override Bikeshed's metadata or ReSpec's respecConfig for GitHub Pages deployment.
   GH_PAGES_TOKEN:
     description: GitHub Personal access token. Required only if the default GitHub actions token doesn't have enough permissions.
   W3C_ECHIDNA_TOKEN:
     description: Echidna token
   W3C_WG_DECISION_URL:
     description: A URL to the working group decision to use auto-publish (usually from a w3c mailing list).
+  W3C_BUILD_OVERRIDE:
+    description: Override Bikeshed's metadata or ReSpec's respecConfig for W3C deployment and validations.
   W3C_NOTIFICATIONS_CC:
     description: Comma separated list of email addresses to CC
 
@@ -73,7 +77,7 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_LINKS: ${{ fromJson(steps.prepare.outputs.all).validate.links }}
-        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.output).dir }}
+        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.w3c).dir }}
 
     - name: Validate markup
       run: |
@@ -83,7 +87,7 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_MARKUP: ${{ fromJson(steps.prepare.outputs.all).validate.markup }}
-        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.output).dir }}
+        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.w3c).dir }}
 
     - name: Deploy to GitHub pages
       run: |
@@ -93,7 +97,7 @@ runs:
       shell: bash
       env:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.all).deploy.ghPages) }}
-        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.output).dir }}
+        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.gh).dir }}
 
     - name: Deploy to W3C
       run: |
@@ -103,4 +107,4 @@ runs:
       shell: bash
       env:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.all).deploy.w3c) }}
-        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.output).dir }}
+        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.w3c).dir }}

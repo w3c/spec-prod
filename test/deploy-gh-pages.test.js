@@ -18,7 +18,7 @@ async function deployGhPages(outputs = {}) {
 		actor: ghPages.actor || "sidvishnoi",
 	};
 
-	const build = outputs?.build?.output || {};
+	const build = outputs?.build?.gh || {};
 	const outputDir = build.dir || path.resolve(process.cwd() + ".built");
 
 	return await require("../src/deploy-gh-pages.js")(inputs, outputDir);
