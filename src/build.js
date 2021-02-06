@@ -55,14 +55,12 @@ async function build(toolchain, source, destDir, additionalFlags, conf) {
 	const outputFile = source + ".built.html";
 
 	switch (toolchain) {
-		case "respec": {
+		case "respec":
 			await buildReSpec(source, outputFile, additionalFlags, conf);
 			break;
-		}
-		case "bikeshed": {
+		case "bikeshed":
 			await buildBikeshed(source, outputFile, additionalFlags, conf);
 			break;
-		}
 		default:
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
