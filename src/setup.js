@@ -28,7 +28,6 @@ async function main(toolchain) {
 					PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1",
 				},
 			});
-			exportVariable("PUPPETEER_EXECUTABLE_PATH", "/usr/bin/google-chrome");
 			break;
 		}
 		case "bikeshed": {

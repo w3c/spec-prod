@@ -32,7 +32,10 @@ async function main(toolchain, source, additionalFlags) {
 			console.log(`Converting ReSpec document '${source}' to HTML...`);
 			await sh(
 				`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
-				"stream",
+				{
+					output: "stream",
+					env: { PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
+				},
 			);
 			break;
 		case "bikeshed":
@@ -59,10 +62,11 @@ async function copyRelevantAssets(outputFile) {
 	await sh("yarn add local-assets@1 --silent", {
 		output: "stream",
 		cwd: ACTION_DIR,
+		env: { PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1" },
 	});
 	await sh(`local-assets "${outputFile}" -o ${destinationDir}`, {
 		output: "stream",
-		env: { VERBOSE: "1" },
+		env: { VERBOSE: "1", PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
 	});
 
 	// Move outputFile to the publish directory.
