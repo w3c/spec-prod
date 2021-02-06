@@ -9,8 +9,10 @@ const { env, exit, setOutput, sh, ACTION_DIR } = require("./utils.js");
 // @ts-expect-error
 if (module === require.main) {
 	/** @type {BuildInput} */
-	const { toolchain, source, flags } = JSON.parse(env("INPUTS_BUILD"));
-	main(toolchain, source, flags).catch(err =>
+	const { toolchain, source, flags, configOverride } = JSON.parse(
+		env("INPUTS_BUILD"),
+	);
+	main(toolchain, source, flags, configOverride).catch(err =>
 		exit(err.message || "Failed", err.code),
 	);
 }
@@ -19,41 +21,75 @@ module.exports = main;
 /**
  * @param {BuildInput["toolchain"]} toolchain
  * @param {BuildInput["source"]} source
- * @param {BuildInput["flags"]} additionalFlags
+ * @param {BuildInput["flags"]} flags
+ * @param {BuildInput["configOverride"]} configOverride
  */
-async function main(toolchain, source, additionalFlags) {
-	const flags = additionalFlags.join(" ");
-	// Please do not rely on this value. If you would like this to be available as
-	// an action output, file an issue.
+async function main(toolchain, source, flags, configOverride) {
+	// TODO: compare equal objects also
+	if (configOverride.gh === configOverride.w3c) {
+		let destDir = path.resolve(process.cwd() + ".built");
+		const out = await build(toolchain, source, destDir, flags, null);
+
+		return { ...setOutput("gh", out), ...setOutput("w3c", out) };
+	}
+
+	let destDirGh = path.resolve(process.cwd() + ".gh");
+	const confGh = configOverride.gh;
+	const outGh = await build(toolchain, source, destDirGh, flags, confGh);
+
+	let destDirW3C = path.resolve(process.cwd() + ".w3c");
+	const confW3C = configOverride.w3c;
+	const outW3C = await build(toolchain, source, destDirW3C, flags, confW3C);
+
+	return { ...setOutput("gh", outGh), ...setOutput("w3c", outW3C) };
+}
+
+/**
+ * @param {BuildInput["toolchain"]} toolchain
+ * @param {BuildInput["source"]} source
+ * @param {string} destDir
+ * @param {BuildInput["flags"]} additionalFlags
+ * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
+ */
+async function build(toolchain, source, destDir, additionalFlags, conf) {
 	const outputFile = source + ".built.html";
 
 	switch (toolchain) {
-		case "respec":
+		case "respec": {
 			console.log(`Converting ReSpec document '${source}' to HTML...`);
+			const flags = additionalFlags.join(" ");
+			const params = new URLSearchParams(conf).toString();
+			const src = `${source}${params ? `?${params}` : ""}`;
 			await sh(
-				`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
+				`respec -s "${src}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
 				{
 					output: "stream",
 					env: { PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
 				},
 			);
 			break;
-		case "bikeshed":
+		}
+		case "bikeshed": {
 			console.log(`Converting Bikeshed document '${source}' to HTML...`);
+			const metadataFlags = Object.entries(conf || {}).map(
+				([key, val]) => `--md-${key.replace(/\s+/g, "-")}="${val}"`,
+			);
+			const flags = additionalFlags.concat(metadataFlags).join(" ");
 			await sh(`bikeshed spec "${source}" "${outputFile}" ${flags}`, "stream");
 			break;
+		}
 		default:
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
 
-	return await copyRelevantAssets(outputFile);
+	return await copyRelevantAssets(outputFile, destDir);
 }
 
 /**
  * @param {string} outputFile
+ * @param {string} destinationDir
  */
-async function copyRelevantAssets(outputFile) {
-	let destinationDir = path.resolve(process.cwd() + ".built");
+async function copyRelevantAssets(outputFile, destinationDir) {
 	if (!destinationDir.endsWith(path.sep)) {
 		destinationDir += path.sep;
 	}
@@ -79,8 +115,5 @@ async function copyRelevantAssets(outputFile) {
 	// List all files in output directory
 	await sh(`ls -R`, { output: "buffer", cwd: destinationDir });
 
-	return setOutput("output", {
-		dir: destinationDir,
-		file: destinationFile,
-	});
+	return { dir: destinationDir, file: destinationFile };
 }

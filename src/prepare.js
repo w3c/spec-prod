@@ -56,7 +56,9 @@ async function main(inputs, githubContext) {
  * @property {string} [inputs.VALIDATE_MARKUP]
  * @property {string} [inputs.GH_PAGES_BRANCH]
  * @property {string} [inputs.GH_PAGES_TOKEN]
+ * @property {string} [inputs.GH_PAGES_BUILD_OVERRIDE]
  * @property {string} [inputs.W3C_ECHIDNA_TOKEN]
+ * @property {string} [inputs.W3C_BUILD_OVERRIDE]
  * @property {string} [inputs.W3C_WG_DECISION_URL]
  * @property {string} [inputs.W3C_NOTIFICATIONS_CC]
  *
@@ -140,10 +142,30 @@ function buildOptions(inputs) {
 		}
 	}
 
+	const configOverride = {
+		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
+		w3c: getConfigOverride(inputs.W3C_BUILD_OVERRIDE),
+	};
+
 	const flags = [];
 	flags.push(...getFailOnFlags(toolchain, failOn));
 
-	return { toolchain, source, flags };
+	return { toolchain, source, flags, configOverride };
+}
+
+/** @param {string} confStr */
+function getConfigOverride(confStr) {
+	if (!confStr) {
+		return null;
+	}
+
+	/** @type {Record<string, string>} */
+	const config = {};
+	for (const line of confStr.trim().split("\n")) {
+		const [key, value] = line.split(":", 2).map(s => s.trim());
+		config[key] = value;
+	}
+	return config;
 }
 
 /**
