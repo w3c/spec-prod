@@ -3,6 +3,7 @@ const path = require("path");
 const { inspect } = require("util");
 const { exec } = require("child_process");
 const core = require("@actions/core");
+const split = require("split");
 
 const ACTION_DIR = path.join(__dirname, "..");
 
@@ -65,7 +66,7 @@ function setOutput(key, value) {
  * @returns {Promise<string>} stdout
  * @throws {Promise<{ stdout: string, stderr: string, code: number }>}
  */
-function sh(command, options = {}) {
+async function sh(command, options = {}) {
 	const { output, ...execOptions } =
 		typeof options === "string" ? { output: options } : options;
 
@@ -76,7 +77,7 @@ function sh(command, options = {}) {
 	}
 
 	try {
-		return new Promise((resolve, reject) => {
+		return await new Promise((resolve, reject) => {
 			let stdout = "";
 			let stderr = "";
 			const child = exec(command, {
@@ -84,12 +85,12 @@ function sh(command, options = {}) {
 				env: { ...process.env, ...execOptions.env },
 				encoding: "utf-8",
 			});
-			child.stdout.on("data", chunk => {
-				if (output === "stream") process.stdout.write(chunk);
+			child.stdout.pipe(split()).on("data", chunk => {
+				if (output === "stream") console.log(chunk);
 				stdout += chunk;
 			});
-			child.stderr.on("data", chunk => {
-				if (output === "stream") process.stderr.write(chunk);
+			child.stderr.pipe(split()).on("data", chunk => {
+				if (output === "stream") console.log(chunk);
 				stderr += chunk;
 			});
 			child.on("exit", code => {
@@ -99,14 +100,12 @@ function sh(command, options = {}) {
 					if (stdout) console.log(stdout);
 					if (stderr) console.error(stderr);
 				}
-				if (output && output !== "silent") {
-					console.log();
-				}
 				code === 0 ? resolve(stdout) : reject({ stdout, stderr, code });
 			});
 		});
 	} finally {
 		if (output !== "silent") {
+			if (output) console.log();
 			console.groupEnd();
 		}
 	}

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "split": "^1.0.1"
   }
 }
