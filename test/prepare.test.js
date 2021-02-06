@@ -6,6 +6,13 @@ async function prepare() {
 		SOURCE: "",
 		TOOLCHAIN: "respec",
 		BUILD_FAIL_ON: "fatal",
+		W3C_BUILD_OVERRIDE: [
+			"specStatus: WD",
+			"shortName: my-custom-shortname",
+			"previousMaturity: LC",
+			"previousPublishDate: 2014-05-01",
+		].join("\n"),
+		GH_PAGES_BUILD_OVERRIDE: "specStatus: ED\n",
 		VALIDATE_LINKS: "false",
 		VALIDATE_MARKUP: "",
 		GH_PAGES_BRANCH: "",

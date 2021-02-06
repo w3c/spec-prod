@@ -7,7 +7,7 @@ async function validateLinks(outputs = {}) {
 		return;
 	}
 
-	const build = outputs?.build?.output || {};
+	const build = outputs?.build?.w3c || {};
 	const outputDir = build.dir || ".";
 
 	return await require("../src/validate-links.js")(outputDir);
