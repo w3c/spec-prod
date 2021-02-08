@@ -102,7 +102,7 @@ async function buildOptions(inputs) {
 
 	const configOverride = {
 		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
-		w3c: await extendConfigForW3CDeploy(
+		w3c: await extendW3CBuildConfig(
 			getConfigOverride(inputs.W3C_BUILD_OVERRIDE) || {},
 			toolchain,
 		),
@@ -190,7 +190,7 @@ function getConfigOverride(confStr) {
  * @param {ReturnType<getConfigOverride>} conf
  * @param {ReturnType<typeof getBasicBuildOptions>["toolchain"]} toolchain
  */
-async function extendConfigForW3CDeploy(conf, toolchain) {
+async function extendW3CBuildConfig(conf, toolchain) {
 	/** Get present date in YYYY-MM-DD format */
 	const getShortIsoDate = () => new Date().toISOString().slice(0, 10);
 
