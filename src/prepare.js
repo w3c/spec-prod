@@ -102,10 +102,11 @@ async function buildOptions(inputs) {
 
 	const configOverride = {
 		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
-		w3c: getConfigOverride(inputs.W3C_BUILD_OVERRIDE),
+		w3c: await extendConfigForW3CDeploy(
+			getConfigOverride(inputs.W3C_BUILD_OVERRIDE) || {},
+			toolchain,
+		),
 	};
-	await extendConfig(configOverride.gh, toolchain);
-	await extendConfig(configOverride.w3c, toolchain);
 
 	const flags = [];
 	flags.push(...getFailOnFlags(toolchain, inputs.BUILD_FAIL_ON));
@@ -189,11 +190,7 @@ function getConfigOverride(confStr) {
  * @param {ReturnType<getConfigOverride>} conf
  * @param {ReturnType<typeof getBasicBuildOptions>["toolchain"]} toolchain
  */
-async function extendConfig(conf, toolchain) {
-	if (!conf) return;
-	if (toolchain === "respec" && !conf.specStatus) return;
-	if (toolchain === "bikeshed" && !conf.status) return;
-
+async function extendConfigForW3CDeploy(conf, toolchain) {
 	/** Get present date in YYYY-MM-DD format */
 	const getShortIsoDate = () => new Date().toISOString().slice(0, 10);
 
@@ -206,14 +203,20 @@ async function extendConfig(conf, toolchain) {
 
 	const shortName = conf.shortName || conf.shortname;
 	if (shortName) {
-		const prev = await getPreviousVersionInfo(shortName, publishDate);
-		if (toolchain === "respec") {
-			conf.previousMaturity = prev.previousMaturity;
-			conf.previousPublishDate = prev.previousPublishDate;
-		} else if (toolchain === "bikeshed") {
-			conf["previous version"] = prev.previousURI;
+		try {
+			const prev = await getPreviousVersionInfo(shortName, publishDate);
+			if (toolchain === "respec") {
+				conf.previousMaturity = prev.previousMaturity;
+				conf.previousPublishDate = prev.previousPublishDate;
+			} else if (toolchain === "bikeshed") {
+				conf["previous version"] = prev.previousURI;
+			}
+		} catch (error) {
+			console.error(error.message);
 		}
 	}
+
+	return conf;
 }
 
 /**
