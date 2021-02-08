@@ -83,7 +83,7 @@ async function buildReSpec(source, outputFile, additionalFlags, conf) {
 	const flags = additionalFlags.join(" ");
 	const server = await new StaticServer(process.cwd()).start();
 	const src = new URL(source, server.url);
-	for (const [key, val] of Object.entries(conf)) {
+	for (const [key, val] of Object.entries(conf || {})) {
 		src.searchParams.set(key, val);
 	}
 	try {
