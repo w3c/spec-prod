@@ -5,6 +5,7 @@
 const path = require("path");
 const { copyFile, unlink } = require("fs").promises;
 const { env, exit, install, setOutput, sh } = require("./utils.js");
+const { StaticServer } = require("./utils.js");
 const { PUPPETEER_ENV } = require("./constants.js");
 
 // @ts-expect-error
@@ -80,15 +81,19 @@ async function build(toolchain, source, destDir, additionalFlags, conf) {
  */
 async function buildReSpec(source, outputFile, additionalFlags, conf) {
 	const flags = additionalFlags.join(" ");
-	const params = new URLSearchParams(conf).toString();
-	if (params) source += `?${params}`;
-	await sh(
-		`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
-		{
+	const server = await new StaticServer(process.cwd()).start();
+	const src = new URL(source, server.url);
+	for (const [key, val] of Object.entries(conf || {})) {
+		src.searchParams.set(key, val);
+	}
+	try {
+		await sh(`respec -s "${src}" -o "${outputFile}" --verbose -t 20 ${flags}`, {
 			output: "stream",
 			env: PUPPETEER_ENV,
-		},
-	);
+		});
+	} finally {
+		await server.stop();
+	}
 }
 
 /**
