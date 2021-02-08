@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "@actions/core": "^1.2.6",
+    "finalhandler": "^1.1.2",
     "node-fetch": "^2.6.1",
+    "serve-static": "^1.14.1",
     "split2": "^3.2.2"
   }
 }

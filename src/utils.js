@@ -1,8 +1,13 @@
 // @ts-check
 const { inspect } = require("util");
 const { exec } = require("child_process");
+const { createServer } = require("http");
+
 const core = require("@actions/core");
 const split = require("split2");
+const serveStatic = require("serve-static");
+const finalhandler = require("finalhandler");
+
 const { ACTION_DIR } = require("./constants.js");
 
 /**
@@ -130,6 +135,51 @@ function yesOrNo(value) {
 	}
 }
 
+/** A simple HTTP server without all the fancy things. */
+class StaticServer {
+	/** @param {string} dir */
+	constructor(dir) {
+		const serve = serveStatic(dir);
+		this._server = createServer((req, res) => {
+			// @ts-expect-error
+			serve(req, res, finalhandler(req, res));
+		});
+	}
+
+	async start() {
+		for (this._port = 3000; this._port < 9000; this._port++) {
+			try {
+				await this._tryStart(this._port);
+				return this;
+			} catch (error) {
+				await this.stop();
+				if (error.code !== "EADDRINUSE") {
+					throw error;
+				}
+			}
+		}
+		throw new Error("Failed to start static server.");
+	}
+
+	/**
+	 * @private
+	 * @param {number} port
+	 */
+	_tryStart(port) {
+		return new Promise((resolve, reject) => {
+			this._server.listen(port).on("error", reject).on("listening", resolve);
+		});
+	}
+
+	stop() {
+		return new Promise(resolve => this._server.close(err => resolve()));
+	}
+
+	get url() {
+		return `http://localhost:${this._port}`;
+	}
+}
+
 module.exports = {
 	env,
 	exit,
@@ -139,4 +189,5 @@ module.exports = {
 	setOutput,
 	sh,
 	yesOrNo,
+	StaticServer,
 };
