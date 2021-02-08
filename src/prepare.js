@@ -49,7 +49,7 @@ async function main(inputs, githubContext) {
 
 /**
  * @typedef {object} Inputs
- * @property {"respec" | "bikeshed" | string} [inputs.TOOLCHAIN]
+ * @property {"respec" | "bikeshed"} [inputs.TOOLCHAIN]
  * @property {string} [inputs.SOURCE]
  * @property {string} [inputs.BUILD_FAIL_ON]
  * @property {string} [inputs.VALIDATE_LINKS]
@@ -94,9 +94,26 @@ async function processInputs(inputs, githubContext) {
  * @param {Inputs} inputs
  */
 function buildOptions(inputs) {
+	const { toolchain, source } = getBasicBuildOptions(inputs);
+
+	const configOverride = {
+		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
+		w3c: getConfigOverride(inputs.W3C_BUILD_OVERRIDE),
+	};
+
+	const flags = [];
+	flags.push(...getFailOnFlags(toolchain, inputs.BUILD_FAIL_ON));
+
+	return { toolchain, source, flags, configOverride };
+}
+
+/**
+ * @param {Inputs} inputs
+ * @returns {{ toolchain: "respec" | "bikeshed", source: string }}
+ */
+function getBasicBuildOptions(inputs) {
 	let toolchain = inputs.TOOLCHAIN;
 	let source = inputs.SOURCE;
-	let failOn = inputs.BUILD_FAIL_ON;
 
 	if (toolchain) {
 		switch (toolchain) {
@@ -142,15 +159,7 @@ function buildOptions(inputs) {
 		}
 	}
 
-	const configOverride = {
-		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
-		w3c: getConfigOverride(inputs.W3C_BUILD_OVERRIDE),
-	};
-
-	const flags = [];
-	flags.push(...getFailOnFlags(toolchain, failOn));
-
-	return { toolchain, source, flags, configOverride };
+	return { toolchain, source };
 }
 
 /** @param {string} confStr */

@@ -2,6 +2,7 @@
 
 module.exports = prepare;
 async function prepare() {
+	/** @type { import("../src/prepare.js").Inputs } */
 	const INPUTS_USER = {
 		SOURCE: "",
 		TOOLCHAIN: "respec",
@@ -17,10 +18,10 @@ async function prepare() {
 		VALIDATE_MARKUP: "",
 		GH_PAGES_BRANCH: "",
 		W3C_ECHIDNA_TOKEN: "",
-		W3C_MANIFEST_URL: "",
 		W3C_WG_DECISION_URL: "",
 		W3C_NOTIFICATIONS_CC: "",
 	};
+	/** @type { import("../src/prepare.js").GitHubContext } */
 	const INPUTS_GITHUB = {
 		event_name: "push",
 		repository: "sidvishnoi/w3c-deploy-test",
