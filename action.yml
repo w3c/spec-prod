@@ -60,7 +60,7 @@ runs:
         INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.build).toolchain }}
 
     - name: Generate Static HTML
-      id: generate-html
+      id: build
       run: |
         echo "::group::Generate Static HTML"
         node ${{ github.action_path }}/src/build.js
@@ -77,7 +77,7 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_LINKS: ${{ fromJson(steps.prepare.outputs.validate).links }}
-        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.w3c).dir }}
+        OUTPUT_DIR: ${{ fromJson(steps.build.outputs.w3c).dir }}
 
     - name: Validate markup
       run: |
@@ -87,7 +87,7 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_MARKUP: ${{ fromJson(steps.prepare.outputs.validate).markup }}
-        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.w3c).dir }}
+        OUTPUT_DIR: ${{ fromJson(steps.build.outputs.w3c).dir }}
 
     - name: Deploy to GitHub pages
       run: |
@@ -97,7 +97,7 @@ runs:
       shell: bash
       env:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.deploy).ghPages) }}
-        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.gh).dir }}
+        OUTPUT_DIR: ${{ fromJson(steps.build.outputs.gh).dir }}
 
     - name: Deploy to W3C
       run: |
@@ -107,4 +107,4 @@ runs:
       shell: bash
       env:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.deploy).w3c) }}
-        OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.w3c).dir }}
+        OUTPUT_DIR: ${{ fromJson(steps.build.outputs.w3c).dir }}
