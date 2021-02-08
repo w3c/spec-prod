@@ -11,6 +11,7 @@ const {
 	setOutput,
 	yesOrNo,
 } = require("./utils.js");
+const { PUPPETEER_ENV } = require("./constants.js");
 
 const FAIL_ON_OPTIONS = [
 	"nothing",
@@ -224,7 +225,7 @@ async function getPreviousVersionInfo(shortName, publishDate) {
 	const url = "https://www.w3.org/TR/" + shortName + "/";
 
 	const browser = await puppeteer.launch({
-		executablePath: "/usr/bin/google-chrome",
+		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
 	});
 
 	try {
@@ -271,15 +272,17 @@ async function getPreviousVersionInfo(shortName, publishDate) {
 		}
 
 		const thisDate = thisURI.match(/[1-2][0-9]{7}/)[0];
-		const prev =
-			thisDate === publishDate.replace(/\-/g, "") ? previousURI : thisURI;
-		const pDate = prev.match(/[1-2][0-9]{7}/)[0];
+		const prevDate = publishDate.replace(/\-/g, "");
+		const prev = thisDate === prevDate ? previousURI : thisURI;
 
 		const previousMaturity = prev.match(/\/TR\/[0-9]{4}\/([A-Z]+)/)[1];
+
+		const pDate = prev.match(/[1-2][0-9]{7}/)[0];
 		const previousPublishDate = pDate.replace(
 			/(\d{4})(\d{2})(\d{2})/,
 			"$1-$2-$3",
 		);
+
 		return { previousMaturity, previousPublishDate, previousURI };
 	} finally {
 		console.groupEnd();
