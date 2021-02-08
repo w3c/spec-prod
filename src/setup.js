@@ -1,7 +1,7 @@
 // @ts-check
 const path = require("path");
 const { addPath, exportVariable } = require("@actions/core");
-const { env, exit, sh, ACTION_DIR } = require("./utils.js");
+const { env, exit, install, sh, ACTION_DIR } = require("./utils.js");
 
 const PYTHONUSERBASE = path.join(ACTION_DIR, "python_modules");
 
@@ -21,13 +21,7 @@ async function main(toolchain) {
 
 	switch (toolchain) {
 		case "respec": {
-			await sh("yarn add respec --silent", {
-				output: "stream",
-				cwd: ACTION_DIR,
-				env: {
-					PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1",
-				},
-			});
+			await install("respec", { PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1" });
 			break;
 		}
 		case "bikeshed": {

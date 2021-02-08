@@ -41,6 +41,18 @@ function formatAsHeading(text, symbol = "=") {
 }
 
 /**
+ * Locally install a npm package using Yarn.
+ * @param {string | string[]} name
+ * @param {import("child_process").ExecOptions["env"]} env
+ */
+function install(name, env = {}) {
+	if (Array.isArray(name)) {
+		name = name.join(" ");
+	}
+	return sh(`yarn add ${name} --silent`, { cwd: ACTION_DIR, env });
+}
+
+/**
  * Print print using util.inspect
  * @param {any} obj
  */
@@ -125,6 +137,7 @@ module.exports = {
 	env,
 	exit,
 	formatAsHeading,
+	install,
 	pprint,
 	setOutput,
 	sh,

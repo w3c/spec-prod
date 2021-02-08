@@ -4,7 +4,7 @@
  */
 const path = require("path");
 const { copyFile, unlink } = require("fs").promises;
-const { env, exit, setOutput, sh, ACTION_DIR } = require("./utils.js");
+const { env, exit, install, setOutput, sh } = require("./utils.js");
 
 // @ts-expect-error
 if (module === require.main) {
@@ -114,11 +114,7 @@ async function copyRelevantAssets(outputFile, destinationDir) {
 	}
 
 	// Copy local dependencies of outputFile to a "ready to publish" directory
-	await sh("yarn add local-assets@1 --silent", {
-		output: "stream",
-		cwd: ACTION_DIR,
-		env: { PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1" },
-	});
+	await install("local-assets@1", { PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1" });
 	await sh(`local-assets "${outputFile}" -o ${destinationDir}`, {
 		output: "stream",
 		env: { VERBOSE: "1", PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
