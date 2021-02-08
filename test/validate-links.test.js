@@ -2,7 +2,7 @@
 
 module.exports = validateLinks;
 async function validateLinks(outputs = {}) {
-	const validate = outputs?.prepare?.all?.validate;
+	const validate = outputs?.prepare?.validate;
 	if (validate && validate.links === false) {
 		return;
 	}

@@ -2,7 +2,7 @@
 
 module.exports = validateMarkup;
 async function validateMarkup(outputs = {}) {
-	const validate = outputs?.prepare?.all?.validate;
+	const validate = outputs?.prepare?.validate;
 	if (validate && validate.markup === false) {
 		return;
 	}

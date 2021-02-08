@@ -48,7 +48,11 @@ async function main(inputs, githubContext) {
 	pprint(normalizedInputs);
 
 	// Make processed inputs available to next steps.
-	return setOutput("all", normalizedInputs);
+	return {
+		...setOutput("build", normalizedInputs.build),
+		...setOutput("validate", normalizedInputs.validate),
+		...setOutput("deploy", normalizedInputs.deploy),
+	};
 }
 
 /**

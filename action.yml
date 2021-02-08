@@ -57,7 +57,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.all).build.toolchain }}
+        INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.build).toolchain }}
 
     - name: Generate Static HTML
       id: generate-html
@@ -67,7 +67,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_BUILD: ${{ toJSON(fromJson(steps.prepare.outputs.all).build) }}
+        INPUTS_BUILD: ${{ toJSON(fromJson(steps.prepare.outputs.build)) }}
 
     - name: Validate hyperlinks
       run: |
@@ -76,7 +76,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_LINKS: ${{ fromJson(steps.prepare.outputs.all).validate.links }}
+        INPUTS_VALIDATE_LINKS: ${{ fromJson(steps.prepare.outputs.validate).links }}
         OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.w3c).dir }}
 
     - name: Validate markup
@@ -86,7 +86,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_MARKUP: ${{ fromJson(steps.prepare.outputs.all).validate.markup }}
+        INPUTS_VALIDATE_MARKUP: ${{ fromJson(steps.prepare.outputs.validate).markup }}
         OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.w3c).dir }}
 
     - name: Deploy to GitHub pages
@@ -96,7 +96,7 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.all).deploy.ghPages) }}
+        INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.deploy).ghPages) }}
         OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.gh).dir }}
 
     - name: Deploy to W3C
@@ -106,5 +106,5 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.all).deploy.w3c) }}
+        INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.deploy).w3c) }}
         OUTPUT_DIR: ${{ fromJson(steps.generate-html.outputs.w3c).dir }}

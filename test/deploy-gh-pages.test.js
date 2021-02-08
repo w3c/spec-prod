@@ -3,7 +3,7 @@ const path = require("path");
 
 module.exports = deployGhPages;
 async function deployGhPages(outputs = {}) {
-	const deploy = outputs?.prepare?.all?.deploy;
+	const deploy = outputs?.prepare?.deploy;
 	if (deploy && deploy.ghPages === false) {
 		return;
 	}
