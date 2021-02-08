@@ -206,10 +206,10 @@ async function extendConfigForW3CDeploy(conf, toolchain) {
 		try {
 			const prev = await getPreviousVersionInfo(shortName, publishDate);
 			if (toolchain === "respec") {
-				conf.previousMaturity = prev.previousMaturity;
-				conf.previousPublishDate = prev.previousPublishDate;
+				conf.previousMaturity = prev.maturity;
+				conf.previousPublishDate = prev.publishDate;
 			} else if (toolchain === "bikeshed") {
-				conf["previous version"] = prev.previousURI;
+				conf["previous version"] = prev.URI;
 			}
 		} catch (error) {
 			console.error(error.message);
@@ -275,18 +275,20 @@ async function getPreviousVersionInfo(shortName, publishDate) {
 		}
 
 		const thisDate = thisURI.match(/[1-2][0-9]{7}/)[0];
-		const prevDate = publishDate.replace(/\-/g, "");
-		const prev = thisDate === prevDate ? previousURI : thisURI;
+		const targetPublishDate = publishDate.replace(/\-/g, "");
+		const currentURI = thisDate === targetPublishDate ? previousURI : thisURI;
 
-		const previousMaturity = prev.match(/\/TR\/[0-9]{4}\/([A-Z]+)/)[1];
+		const previousMaturity = currentURI.match(/\/TR\/[0-9]{4}\/([A-Z]+)/)[1];
 
-		const pDate = prev.match(/[1-2][0-9]{7}/)[0];
-		const previousPublishDate = pDate.replace(
-			/(\d{4})(\d{2})(\d{2})/,
-			"$1-$2-$3",
-		);
+		const previousPublishDate = currentURI
+			.match(/[1-2][0-9]{7}/)[0]
+			.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
 
-		return { previousMaturity, previousPublishDate, previousURI };
+		return {
+			maturity: previousMaturity,
+			publishDate: previousPublishDate,
+			URI: currentURI,
+		};
 	} finally {
 		console.groupEnd();
 		await browser.close();
