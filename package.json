@@ -2,6 +2,7 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "node-fetch": "^2.6.1",
+    "puppeteer": "^7",
     "split2": "^3.2.2"
   }
 }

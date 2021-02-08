@@ -1,5 +1,8 @@
 // @ts-check
 const { existsSync } = require("fs");
+/** @type {import("puppeteer")["default"]} */
+// @ts-expect-error
+const puppeteer = require("puppeteer");
 const {
 	env,
 	exit,
@@ -79,7 +82,7 @@ async function main(inputs, githubContext) {
  */
 async function processInputs(inputs, githubContext) {
 	return {
-		build: buildOptions(inputs),
+		build: await buildOptions(inputs),
 		validate: validation(inputs),
 		deploy: {
 			ghPages: githubPagesDeployment(inputs, githubContext),
@@ -93,13 +96,15 @@ async function processInputs(inputs, githubContext) {
  * // TODO: refactor this to remove duplicate logic.
  * @param {Inputs} inputs
  */
-function buildOptions(inputs) {
+async function buildOptions(inputs) {
 	const { toolchain, source } = getBasicBuildOptions(inputs);
 
 	const configOverride = {
 		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
 		w3c: getConfigOverride(inputs.W3C_BUILD_OVERRIDE),
 	};
+	await extendConfig(configOverride.gh, toolchain);
+	await extendConfig(configOverride.w3c, toolchain);
 
 	const flags = [];
 	flags.push(...getFailOnFlags(toolchain, inputs.BUILD_FAIL_ON));
@@ -177,6 +182,109 @@ function getConfigOverride(confStr) {
 		config[key] = value;
 	}
 	return config;
+}
+
+/**
+ * @param {ReturnType<getConfigOverride>} conf
+ * @param {ReturnType<typeof getBasicBuildOptions>["toolchain"]} toolchain
+ */
+async function extendConfig(conf, toolchain) {
+	if (!conf) return;
+	if (toolchain === "respec" && !conf.specStatus) return;
+	if (toolchain === "bikeshed" && !conf.status) return;
+
+	/** Get present date in YYYY-MM-DD format */
+	const getShortIsoDate = () => new Date().toISOString().slice(0, 10);
+
+	let publishDate = getShortIsoDate();
+	if (toolchain === "respec") {
+		conf.publishDate = publishDate = conf.publishDate || publishDate;
+	} else if (toolchain === "bikeshed") {
+		conf.date = publishDate = conf.date || publishDate;
+	}
+
+	const shortName = conf.shortName || conf.shortname;
+	if (shortName) {
+		const prev = await getPreviousVersionInfo(shortName, publishDate);
+		if (toolchain === "respec") {
+			conf.previousMaturity = prev.previousMaturity;
+			conf.previousPublishDate = prev.previousPublishDate;
+		} else if (toolchain === "bikeshed") {
+			conf["previous version"] = prev.previousURI;
+		}
+	}
+}
+
+/**
+ * @param {string} shortName
+ * @param {string} publishDate
+ */
+async function getPreviousVersionInfo(shortName, publishDate) {
+	console.group(`[INFO] Finding previous version details...`);
+	const url = "https://www.w3.org/TR/" + shortName + "/";
+
+	const browser = await puppeteer.launch({
+		executablePath: "/usr/bin/google-chrome",
+	});
+
+	try {
+		const page = await browser.newPage();
+		console.log("[INFO] Navigating to", url);
+		const res = await page.goto(url);
+		console.log("[INFO] Navigation complete with statusCode:", res.status());
+		if (!res.ok) {
+			throw new Error(`Failed to fetch ${url}`);
+		}
+
+		const thisURI = await page.$$eval("body div.head dl dt", elems => {
+			const thisVersion = elems.find(el =>
+				/this (?:published )?version/i.test(el.textContent.trim()),
+			);
+			if (thisVersion) {
+				const dd = thisVersion.nextElementSibling;
+				if (dd && dd.localName === "dd") {
+					return dd.querySelector("a").href;
+				}
+			}
+			return null;
+		});
+		console.log("[INFO] thisURI:", thisURI);
+
+		const previousURI = await page.$$eval("body div.head dl dt", elems => {
+			const previousVersion = elems.find(el =>
+				/previous (?:published )?version/i.test(el.textContent.trim()),
+			);
+			if (previousVersion) {
+				const dd = previousVersion.nextElementSibling;
+				if (dd && dd.localName === "dd") {
+					return dd.querySelector("a").href;
+				}
+			}
+			return null;
+		});
+		console.log("[INFO] prevURI:", previousURI);
+
+		if (!thisURI) {
+			throw new Error(
+				"Couldn't find a 'This version' uri in the previous version.",
+			);
+		}
+
+		const thisDate = thisURI.match(/[1-2][0-9]{7}/)[0];
+		const prev =
+			thisDate === publishDate.replace(/\-/g, "") ? previousURI : thisURI;
+		const pDate = prev.match(/[1-2][0-9]{7}/)[0];
+
+		const previousMaturity = prev.match(/\/TR\/[0-9]{4}\/([A-Z]+)/)[1];
+		const previousPublishDate = pDate.replace(
+			/(\d{4})(\d{2})(\d{2})/,
+			"$1-$2-$3",
+		);
+		return { previousMaturity, previousPublishDate, previousURI };
+	} finally {
+		console.groupEnd();
+		await browser.close();
+	}
 }
 
 /**
