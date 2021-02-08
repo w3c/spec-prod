@@ -108,7 +108,7 @@ async function buildOptions(inputs) {
 		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
 		w3c: await extendW3CBuildConfig(
 			getConfigOverride(inputs.W3C_BUILD_OVERRIDE) || {},
-			toolchain,
+			{ toolchain, source },
 		),
 	};
 
@@ -192,9 +192,9 @@ function getConfigOverride(confStr) {
 
 /**
  * @param {ReturnType<getConfigOverride>} conf
- * @param {ReturnType<typeof getBasicBuildOptions>["toolchain"]} toolchain
+ * @param {ReturnType<typeof getBasicBuildOptions>} basicBuildOptions
  */
-async function extendW3CBuildConfig(conf, toolchain) {
+async function extendW3CBuildConfig(conf, { toolchain, source }) {
 	/** Get present date in YYYY-MM-DD format */
 	const getShortIsoDate = () => new Date().toISOString().slice(0, 10);
 
@@ -205,7 +205,12 @@ async function extendW3CBuildConfig(conf, toolchain) {
 		conf.date = publishDate = conf.date || publishDate;
 	}
 
-	const shortName = conf.shortName || conf.shortname;
+	let shortName = conf.shortName || conf.shortname;
+	if (!shortName) {
+		if (toolchain === "respec") {
+			shortName = await getShortnameForRespec(source);
+		} // TODO: do same for Bikeshed
+	}
 	if (shortName) {
 		try {
 			const prev = await getPreviousVersionInfo(shortName, publishDate);
@@ -221,6 +226,35 @@ async function extendW3CBuildConfig(conf, toolchain) {
 	}
 
 	return conf;
+}
+
+/** @param {string} source */
+async function getShortnameForRespec(source) {
+	console.group(`[INFO] Finding shortName for ReSpec document: ${source}`);
+	const browser = await puppeteer.launch({
+		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
+	});
+
+	try {
+		const page = await browser.newPage();
+		const url = new URL(source, `file://${process.cwd()}/`).href;
+		console.log("[INFO] Navigating to", url);
+		await page.goto(url);
+		await page.waitForFunction(() => window.hasOwnProperty("respecConfig"), {
+			timeout: 10000,
+		});
+		/** @type {string} */
+		const shortName = await page.evaluate(
+			() => window["respecConfig"].shortName,
+		);
+		console.log("[INFO] shortName:", shortName);
+		return shortName;
+	} catch (error) {
+		console.warn(`[WARN] ${error.message}`);
+	} finally {
+		console.groupEnd();
+		await browser.close();
+	}
 }
 
 /**
