@@ -1,7 +1,8 @@
 // @ts-check
 const path = require("path");
 const { addPath, exportVariable } = require("@actions/core");
-const { env, exit, install, sh, ACTION_DIR } = require("./utils.js");
+const { env, exit, install, sh } = require("./utils.js");
+const { ACTION_DIR, PUPPETEER_ENV } = require("./constants.js");
 
 const PYTHONUSERBASE = path.join(ACTION_DIR, "python_modules");
 
@@ -21,7 +22,7 @@ async function main(toolchain) {
 
 	switch (toolchain) {
 		case "respec": {
-			await install("respec", { PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1" });
+			await install("respec", PUPPETEER_ENV);
 			break;
 		}
 		case "bikeshed": {

@@ -1,11 +1,9 @@
 // @ts-check
-const path = require("path");
 const { inspect } = require("util");
 const { exec } = require("child_process");
 const core = require("@actions/core");
 const split = require("split2");
-
-const ACTION_DIR = path.join(__dirname, "..");
+const { ACTION_DIR } = require("./constants.js");
 
 /**
  * Get env variable value
@@ -133,7 +131,6 @@ function yesOrNo(value) {
 }
 
 module.exports = {
-	ACTION_DIR,
 	env,
 	exit,
 	formatAsHeading,

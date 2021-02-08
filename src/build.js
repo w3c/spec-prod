@@ -5,6 +5,7 @@
 const path = require("path");
 const { copyFile, unlink } = require("fs").promises;
 const { env, exit, install, setOutput, sh } = require("./utils.js");
+const { PUPPETEER_ENV } = require("./constants.js");
 
 // @ts-expect-error
 if (module === require.main) {
@@ -85,7 +86,7 @@ async function buildReSpec(source, outputFile, additionalFlags, conf) {
 		`respec -s "${source}" -o "${outputFile}" --verbose --timeout 20 ${flags}`,
 		{
 			output: "stream",
-			env: { PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
+			env: PUPPETEER_ENV,
 		},
 	);
 }
@@ -114,10 +115,10 @@ async function copyRelevantAssets(outputFile, destinationDir) {
 	}
 
 	// Copy local dependencies of outputFile to a "ready to publish" directory
-	await install("local-assets@1", { PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1" });
+	await install("local-assets@1", PUPPETEER_ENV);
 	await sh(`local-assets "${outputFile}" -o ${destinationDir}`, {
 		output: "stream",
-		env: { VERBOSE: "1", PUPPETEER_EXECUTABLE_PATH: "/usr/bin/google-chrome" },
+		env: { VERBOSE: "1", ...PUPPETEER_ENV },
 	});
 
 	// Move outputFile to the publish directory.
