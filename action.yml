@@ -42,7 +42,7 @@ runs:
       id: prepare
       run: |
         echo "::group::Prepare"
-        yarn --cwd ${{ github.action_path }}
+        yarn --prod --cwd ${{ github.action_path }}
         node ${{ github.action_path }}/src/prepare.js
         echo "::endgroup::"
       shell: bash

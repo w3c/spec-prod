@@ -1,21 +1,13 @@
 // @ts-check
+const path = require("path");
+const { readFileSync, readdirSync } = require("fs");
+const yaml = require("yaml");
 
 module.exports = prepare;
 async function prepare() {
 	/** @type { import("../src/prepare.js").Inputs } */
-	const INPUTS_USER = {
-		SOURCE: "",
-		TOOLCHAIN: "respec",
-		BUILD_FAIL_ON: "fatal",
-		W3C_BUILD_OVERRIDE: ["specStatus: WD"].join("\n"),
-		GH_PAGES_BUILD_OVERRIDE: "specStatus: ED\n",
-		VALIDATE_LINKS: "false",
-		VALIDATE_MARKUP: "",
-		GH_PAGES_BRANCH: "",
-		W3C_ECHIDNA_TOKEN: "",
-		W3C_WG_DECISION_URL: "",
-		W3C_NOTIFICATIONS_CC: "",
-	};
+	const INPUTS_USER = { ...getDefaultInputs(), ...getInputsFromWorkflow() };
+
 	/** @type { import("../src/prepare.js").GitHubContext } */
 	const INPUTS_GITHUB = {
 		event_name: "push",
@@ -26,4 +18,35 @@ async function prepare() {
 		actor: "GITHUB_ACTOR",
 	};
 	return await require("../src/prepare.js")(INPUTS_USER, INPUTS_GITHUB);
+}
+
+/** @returns { Partial<import("../src/prepare.js").Inputs> } */
+function getInputsFromWorkflow() {
+	try {
+		const workflowDir = path.join(process.cwd(), ".github", "workflows");
+		const workflow = readdirSync(workflowDir).find(f => /\.ya?ml$/.test(f));
+		const text = readFileSync(path.join(workflowDir, workflow), "utf8");
+		const parsed = yaml.parse(text);
+		for (const job of Object.values(parsed.jobs)) {
+			const step = job.steps.find(step => step.uses?.includes("w3c/spec-prod"));
+			if (!step) continue;
+			return step.with;
+		}
+	} catch (error) {
+		console.error("Failed to read workflow inputs.");
+		console.error(error);
+	}
+	return {};
+}
+
+/** @returns { Partial<import("../src/prepare.js").Inputs> } */
+function getDefaultInputs() {
+	const action = path.join(__dirname, "..", "action.yml");
+	const text = readFileSync(action, "utf8");
+	const parsed = yaml.parse(text);
+	return Object.fromEntries(
+		Object.entries(parsed.inputs)
+			.filter(([name, info]) => info.default)
+			.map(([name, info]) => [name, info.default]),
+	);
 }
