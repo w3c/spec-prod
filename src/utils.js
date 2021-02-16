@@ -63,12 +63,10 @@ function pprint(obj) {
 	console.log(inspect(obj, false, Infinity, true));
 }
 
-/**
- * @param {string} key
- * @param {string|boolean|null|number|Record<string, any>} value
- */
+/** @type {<K extends string, V>(key: K, value: V) => { [k in K]: V }} */
 function setOutput(key, value) {
 	core.setOutput(key, value);
+	// @ts-expect-error
 	return { [key]: value };
 }
 
