@@ -1,7 +1,5 @@
 // @ts-check
 const { existsSync } = require("fs");
-/** @type {import("puppeteer")["default"]} */
-// @ts-expect-error
 const puppeteer = require("puppeteer");
 const {
 	env,
