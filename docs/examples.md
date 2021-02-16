@@ -129,8 +129,6 @@ jobs:
           # Publish to w3.org/TR as a Working Draft (WD) under a different shortName.
           W3C_BUILD_OVERRIDE: |
             specStatus: WD
-            previousMaturity: LC
-            previousPublishDate: 2014-05-01
             shortName: my-custom-shortname
 ```
 

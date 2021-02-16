@@ -62,9 +62,13 @@ Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.
 
 **Default:** None.
 
+Note that, you need to use Bikeshed-specific metadata (e.g. `status`) when using Bikeshed, and ReSpec-specific config (e.g. `specStatus`) when using ReSpec.
+
 ## `W3C_BUILD_OVERRIDE`
 
 Override Bikeshed metadata or ReSpec config for the W3C Deployment and validators.
+
+The Action will try to make use of metadata/config from previously published version, if available. For example, you do not need to manually provide `respecConfig.previousPublishDate` (or, `Previous Version` in case of Bikeshed) when publishing to W3C.
 
 **Possible values:** Same as [`GH_PAGES_BUILD_OVERRIDE`](#gh_pages_build_override).
 
@@ -78,8 +82,6 @@ Override Bikeshed metadata or ReSpec config for the W3C Deployment and validator
     W3C_BUILD_OVERRIDE: |
       specStatus: WD
       shortName: my-custom-shortname
-      previousMaturity: LC
-      previousPublishDate: 2014-05-01
     # Warning: The content in W3C_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
     # GitHub Actions allow only strings as input.
     #
