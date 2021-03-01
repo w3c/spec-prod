@@ -18,7 +18,7 @@ jobs:
       - uses: w3c/spec-prod@v2
 ```
 
-### Selectivly enable/disable validators
+### Selectively enable/disable validators
 
 By default, both hyperlink and markup validators are enabled.
 
