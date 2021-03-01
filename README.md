@@ -40,4 +40,4 @@ View all [**Available options** in docs](docs/options.md).
 
 ## [Examples of Usage](docs/examples.md)
 
-Read usage examples in [docs/options.md](docs/options.md).
+Read usage examples in [docs/examples.md](docs/examples.md).
