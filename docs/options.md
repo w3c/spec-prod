@@ -149,12 +149,3 @@ A URL to the working group decision to use auto-publish, usually from a w3c mail
 Comma separated list of email addresses to CC. This field is optional.
 
 **Default:** None.
-
----
-
-| Value Type | Possible values               |
-| :--------- | :---------------------------- |
-| Truthy     | y, yes, true, 1, on           |
-| Falsy      | n, no, false, 0, off          |
-| Boolean    | Truthy or Falsy               |
-| None       | Indicates absence of a value. |
