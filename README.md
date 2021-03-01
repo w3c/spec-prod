@@ -35,4 +35,9 @@ jobs:
           GH_PAGES_BRANCH: gh-pages
 ```
 
-Read more about [the available options](docs/options.md) and learn from [usage examples](docs/examples.md).
+
+View all [**Available options** in docs](docs/options.md).
+
+## [Examples of Usage](docs/examples.md)
+
+Read usage examples in [docs/options.md](docs/options.md).
