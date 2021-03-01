@@ -93,7 +93,7 @@ The Action will try to make use of metadata/config from previously published ver
 
 Whether or not to check for broken hyperlinks.
 
-**Possible values:** Boolean (see end of page)
+**Possible values:** true, false
 
 **Default:** true
 
@@ -101,7 +101,7 @@ Whether or not to check for broken hyperlinks.
 
 Whether or not to validate markup using the [Nu Html Checker](https://github.com/validator/validator).
 
-**Possible values:** Boolean (see end of page)
+**Possible values:** true, false
 
 **Default:** true
 
@@ -109,7 +109,7 @@ Whether or not to validate markup using the [Nu Html Checker](https://github.com
 
 Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or provide a Git branch name to push to. You would need to enable GitHub pages publish source in repository settings manually.
 
-**Possible values:**: Falsy (see end of page) or a git branch name.
+**Possible values:**: None, or a git branch name.
 
 **Default:** None
 
@@ -149,12 +149,3 @@ A URL to the working group decision to use auto-publish, usually from a w3c mail
 Comma separated list of email addresses to CC. This field is optional.
 
 **Default:** None.
-
----
-
-| Value Type | Possible values               |
-| :--------- | :---------------------------- |
-| Truthy     | y, yes, true, 1, on           |
-| Falsy      | n, no, false, 0, off          |
-| Boolean    | Truthy or Falsy               |
-| None       | Indicates absence of a value. |
