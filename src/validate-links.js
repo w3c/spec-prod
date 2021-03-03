@@ -7,6 +7,8 @@ if (module === require.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_LINKS")) === false) {
 		exit("Skipped", 0);
 	}
+	exit("Link validator is currently disabled due to some bugs.", 0);
+
 	const outputDir = env("OUTPUT_DIR");
 	main(outputDir).catch(err => exit(err.message || "Failed", err.code));
 }
