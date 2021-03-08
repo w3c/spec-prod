@@ -33,7 +33,7 @@ Define exit behaviour on build errors or warnings.
 | --------------- | ---------------------- | ---------------------- |
 | nothing         | `--die-on=nothing`     | Absent.                |
 | fatal           | `--die-on=fatal `      | `--haltonerror` (`-e`) |
-| link-error      | `--die-on=error `      | `--haltonerror` (`-e`) |
+| link-error      | `--die-on=link-error`  | `--haltonerror` (`-e`) |
 | warning         | `--die-on=warning `    | `--haltonwarn` (`-w`)  |
 | everything      | `--die-on=everything ` | `-e -w`                |
 
