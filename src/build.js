@@ -103,11 +103,14 @@ async function buildReSpec(source, outputFile, additionalFlags, conf) {
  * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
  */
 async function buildBikeshed(source, outputFile, additionalFlags, conf) {
-	const metadataFlags = Object.entries(conf || {}).map(
-		([key, val]) => `--md-${key.replace(/\s+/g, "-")}="${val}"`,
+	const metadataFlags = Object.entries(conf || {})
+		.map(([key, val]) => `--md-${key.replace(/\s+/g, "-")}="${val}"`)
+		.join(" ");
+	const flags = additionalFlags.join(" ");
+	await sh(
+		`bikeshed ${flags} spec "${source}" "${outputFile}" ${metadataFlags}`,
+		"stream",
 	);
-	const flags = additionalFlags.concat(metadataFlags).join(" ");
-	await sh(`bikeshed spec "${source}" "${outputFile}" ${flags}`, "stream");
 }
 
 /**
