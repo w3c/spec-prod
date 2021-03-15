@@ -2,7 +2,6 @@
 const { env, exit, install, sh, yesOrNo } = require("./utils.js");
 const { PUPPETEER_ENV } = require("./constants.js");
 
-// @ts-expect-error
 if (module === require.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_LINKS")) === false) {
 		exit("Skipped", 0);

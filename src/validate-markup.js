@@ -1,7 +1,6 @@
 // @ts-check
 const { env, exit, install, sh, yesOrNo } = require("./utils.js");
 
-// @ts-expect-error
 if (module === require.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_MARKUP")) === false) {
 		exit("Skipped", 0);

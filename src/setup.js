@@ -6,7 +6,6 @@ const { ACTION_DIR, PUPPETEER_ENV } = require("./constants.js");
 
 const PYTHONUSERBASE = path.join(ACTION_DIR, "python_modules");
 
-// @ts-expect-error
 if (module === require.main) {
 	const toolchain = env("INPUTS_TOOLCHAIN");
 	main(toolchain).catch(err => exit(err.message || "Failed", err.code));

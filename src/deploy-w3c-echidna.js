@@ -5,7 +5,6 @@ const { env, exit, pprint, sh } = require("./utils.js");
 const MAILING_LIST = `https://lists.w3.org/Archives/Public/public-tr-notifications/`;
 const API_URL = "https://labs.w3.org/echidna/api/request";
 
-// @ts-expect-error
 if (module === require.main) {
 	/** @type {import("./prepare.js").W3CDeployOptions} */
 	const inputs = JSON.parse(env("INPUTS_DEPLOY"));

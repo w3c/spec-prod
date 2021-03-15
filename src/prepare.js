@@ -19,7 +19,6 @@ const FAIL_ON_OPTIONS = [
 	"everything",
 ];
 
-// @ts-expect-error
 if (module === require.main) {
 	/** @type {Inputs} */
 	const inputs = JSON.parse(env("INPUTS_USER"));

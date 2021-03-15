@@ -8,7 +8,6 @@ const { env, exit, install, setOutput, sh } = require("./utils.js");
 const { StaticServer } = require("./utils.js");
 const { PUPPETEER_ENV } = require("./constants.js");
 
-// @ts-expect-error
 if (module === require.main) {
 	/** @type {BuildInput} */
 	const { toolchain, source, flags, configOverride } = JSON.parse(
