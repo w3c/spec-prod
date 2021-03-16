@@ -58,3 +58,15 @@ Promise.resolve()
 		console.error(err);
 		process.exit(1);
 	});
+
+/**
+ * @template T
+ * @typedef {T extends PromiseLike<infer U> ? U : T} ThenArg
+ */
+
+/**
+ * @typedef {object} Output
+ * @property {Partial<ThenArg<ReturnType<import("../src/prepare.js")>>>} Output.prepare
+ * @property {ThenArg<ReturnType<import("../src/setup.js")>>} Output.setup
+ * @property {ThenArg<ReturnType<import("../src/build.js")>>} Output.build
+ */

@@ -3,6 +3,8 @@ const path = require("path");
 const { readFileSync, readdirSync } = require("fs");
 const yaml = require("yaml");
 
+const main = require("../src/prepare.js");
+
 module.exports = prepare;
 async function prepare() {
 	/** @type { import("../src/prepare.js").Inputs } */
@@ -17,7 +19,7 @@ async function prepare() {
 		sha: "HEAD^",
 		actor: "GITHUB_ACTOR",
 	};
-	return await require("../src/prepare.js")(INPUTS_USER, INPUTS_GITHUB);
+	return await main(INPUTS_USER, INPUTS_GITHUB);
 }
 
 /** @returns { Partial<import("../src/prepare.js").Inputs> } */

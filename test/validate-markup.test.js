@@ -1,14 +1,15 @@
 // @ts-check
+const main = require("../src/validate-markup.js");
 
 module.exports = validateMarkup;
-async function validateMarkup(outputs = {}) {
-	const validate = outputs?.prepare?.validate;
-	if (validate && validate.markup === false) {
+/** @param {import("./index.test.js").Output} outputs */
+async function validateMarkup(outputs) {
+	const { markup: shouldValidate = false } = outputs?.prepare?.validate || {};
+	if (shouldValidate === false) {
 		return;
 	}
 
-	const build = outputs?.build?.w3c || {};
-	const outputDir = build.dir || ".";
+	const { dir: outputDir = "." } = outputs?.build?.w3c || {};
 
-	return await require("../src/validate-markup.js")(outputDir);
+	return await main(outputDir);
 }

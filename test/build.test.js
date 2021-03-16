@@ -1,17 +1,15 @@
 // @ts-check
+const main = require("../src/build.js");
 
 module.exports = build;
-async function build(outputs = {}) {
-	const build = outputs?.prepare?.build || {};
-	const toolchain = build.toolchain || "respec";
-	const source = build.source || "index.html";
-	const flags = build.flags || ["-e"];
-	const configOverride = build.configOverride || { w3c: null, gh: null };
+/** @param {import("./index.test.js").Output} outputs */
+async function build(outputs) {
+	const {
+		toolchain = "respec",
+		source = "index.html",
+		flags = ["-e"],
+		configOverride = { w3c: null, gh: null },
+	} = outputs?.prepare?.build || {};
 
-	return await require("../src/build.js")(
-		toolchain,
-		source,
-		flags,
-		configOverride,
-	);
+	return await main(toolchain, source, flags, configOverride);
 }
