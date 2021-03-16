@@ -8,22 +8,27 @@ const API_URL = "https://labs.w3.org/echidna/api/request";
 if (module === require.main) {
 	/** @type {import("./prepare.js").W3CDeployOptions} */
 	const inputs = JSON.parse(env("INPUTS_DEPLOY"));
-	const outputDir = env("OUTPUT_DIR");
 	if (inputs === false) {
 		exit("Skipped.", 0);
 	}
-	main(outputDir, inputs).catch(err => exit(err.message || "Failed", err.code));
+	/** @type {BuildOutput} */
+	const destination = JSON.parse(env("OUT_DESTINATION"));
+
+	main(destination, inputs).catch(err => {
+		exit(err.message || "Failed", err.code);
+	});
 }
 
 module.exports = main;
 /**
  * @typedef {Exclude<import("./prepare.js").W3CDeployOptions, false>} W3CDeployOptions
+ * @typedef {import("./build.js").BuildOutput} BuildOutput
+ * @param {BuildOutput} destination
  * @param {W3CDeployOptions} inputs
- * @param {string} outputDir
  */
-async function main(outputDir, inputs) {
+async function main(destination, inputs) {
 	console.log(`📣 If it fails, check ${MAILING_LIST}`);
-	const id = await publish(outputDir, inputs);
+	const id = await publish(destination, inputs);
 
 	console.group("Getting publish status...");
 	const result = await getPublishStatus(id);
@@ -52,22 +57,22 @@ async function main(outputDir, inputs) {
 }
 
 /**
+ * @param {BuildOutput} destination
  * @param {object} input
  * @param {string} input.wgDecisionURL
  * @param {string} input.token
  * @param {string} [input.cc]
- * @param {string} outputDir
  * @returns {Promise<string>}
  */
-async function publish(outputDir, input) {
+async function publish(destination, input) {
 	const { wgDecisionURL: decision, token, cc } = input;
 	const tarFileName = "/tmp/echidna.tar";
-	await sh("mv index.html Overview.html", { cwd: outputDir });
+	await sh(`mv ${destination.file} Overview.html`, { cwd: destination.dir });
 	await sh(`tar cvf ${tarFileName} *`, {
 		output: "stream",
-		cwd: outputDir,
+		cwd: destination.dir,
 	});
-	await sh("mv Overview.html index.html", { cwd: outputDir });
+	await sh(`mv Overview.html ${destination.file}`, { cwd: destination.dir });
 
 	let command = `curl '${API_URL}'`;
 	// command += ` -F "dry-run=true"`;

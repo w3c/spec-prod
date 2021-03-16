@@ -8,11 +8,14 @@ if (module === require.main) {
 	/** @type {import("./prepare.js").GithubPagesDeployOptions} */
 	const inputs = JSON.parse(env("INPUTS_DEPLOY"));
 	const outputDir = env("OUTPUT_DIR");
+	const outputDirName = env("OUTPUT_DIRNAME");
 
 	if (inputs === false) {
 		exit("Skipped.", 0);
 	}
-	main(inputs, outputDir).catch(err => exit(err.message || "Failed", err.code));
+	main(inputs, outputDir, outputDirName).catch(err => {
+		exit(err.message || "Failed", err.code);
+	});
 }
 
 module.exports = main;
@@ -20,15 +23,13 @@ module.exports = main;
  * @typedef {Exclude<import("./prepare.js").GithubPagesDeployOptions, false>} GithubPagesDeployOptions
  * @param {GithubPagesDeployOptions} inputs
  * @param {string} outputDir
+ * @param {string} outputDirName
  */
-async function main(inputs, outputDir) {
-	if (!outputDir.endsWith(path.sep)) {
-		outputDir += path.sep;
-	}
+async function main(inputs, outputDir, outputDirName) {
 	let error = null;
 	await fs.copyFile(".git/config", "/tmp/spec-prod-git-config");
 	try {
-		await prepare(inputs, outputDir);
+		await prepare(inputs, outputDir, outputDirName);
 		const committed = await commit(inputs);
 		if (!committed) {
 			await cleanUp();
@@ -51,10 +52,11 @@ async function main(inputs, outputDir) {
 /**
  * @param {Pick<GithubPagesDeployOptions, "targetBranch" | "repository">} opts
  * @param {string} outputDir
+ * @param {string} outputDirName
  */
-async function prepare(opts, outputDir) {
+async function prepare(opts, outputDir, outputDirName) {
 	if (!outputDir.endsWith(path.sep)) {
-		throw new Error("outputDir must end with a trailing slash.");
+		outputDir += path.sep;
 	}
 	const { targetBranch, repository } = opts;
 
@@ -69,9 +71,9 @@ async function prepare(opts, outputDir) {
 		await sh(`git reset --hard`, "stream");
 	}
 
-	await sh(`rsync -av ${outputDir} .`, "stream");
+	await sh(`rsync -av ${outputDir} ${outputDirName}`, "stream");
 	await sh(`git add -A --verbose`, "stream");
-	await sh(`git status`, "buffer");
+	await sh(`git status`, "stream");
 }
 
 /**
@@ -118,6 +120,8 @@ async function push({ repository, targetBranch, token }) {
 
 async function cleanUp() {
 	try {
+		await sh(`git reset`);
+		await sh(`git clean -fd`);
 		await sh(`git checkout -`);
 		await sh(`git checkout -- .`);
 		await fs.copyFile("/tmp/spec-prod-git-config", ".git/config");

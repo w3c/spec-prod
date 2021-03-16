@@ -1,4 +1,5 @@
 // @ts-check
+const path = require("path");
 const { existsSync } = require("fs");
 const puppeteer = require("puppeteer");
 const {
@@ -56,6 +57,7 @@ async function main(inputs, githubContext) {
  * @typedef {object} Inputs
  * @property {"respec" | "bikeshed"} [inputs.TOOLCHAIN]
  * @property {string} [inputs.SOURCE]
+ * @property {string} [inputs.DESTINATION]
  * @property {string} [inputs.BUILD_FAIL_ON]
  * @property {string} [inputs.VALIDATE_LINKS]
  * @property {string} [inputs.VALIDATE_MARKUP]
@@ -99,7 +101,7 @@ async function processInputs(inputs, githubContext) {
  * @param {Inputs} inputs
  */
 async function buildOptions(inputs) {
-	const { toolchain, source } = getBasicBuildOptions(inputs);
+	const { toolchain, source, destination } = getBasicBuildOptions(inputs);
 
 	const configOverride = {
 		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
@@ -112,16 +114,21 @@ async function buildOptions(inputs) {
 	const flags = [];
 	flags.push(...getFailOnFlags(toolchain, inputs.BUILD_FAIL_ON));
 
-	return { toolchain, source, flags, configOverride };
+	return { toolchain, source, destination, flags, configOverride };
 }
 
 /**
  * @param {Inputs} inputs
- * @returns {{ toolchain: "respec" | "bikeshed", source: string }}
+ * @typedef {object} BasicBuildOptions
+ * @property {"respec" | "bikeshed"} BasicBuildOptions.toolchain
+ * @property {string} BasicBuildOptions.source
+ * @property {{ dir: string, file: string }} BasicBuildOptions.destination
+ * @returns {BasicBuildOptions}
  */
 function getBasicBuildOptions(inputs) {
 	let toolchain = inputs.TOOLCHAIN;
 	let source = inputs.SOURCE;
+	let destination = inputs.DESTINATION || "index.html";
 
 	if (toolchain) {
 		switch (toolchain) {
@@ -167,7 +174,16 @@ function getBasicBuildOptions(inputs) {
 		}
 	}
 
-	return { toolchain, source };
+	const dest = path.parse(path.join(process.cwd(), destination));
+	if (!dest.base) {
+		dest.base = "index.html";
+	} else if (!dest.ext) {
+		dest.dir = dest.base;
+		dest.base = "index.html";
+	}
+	dest.dir = path.relative(process.cwd(), dest.dir);
+
+	return { toolchain, source, destination: { dir: dest.dir, file: dest.base } };
 }
 
 /** @param {string} confStr */
@@ -189,7 +205,7 @@ function getConfigOverride(confStr) {
 
 /**
  * @param {ReturnType<getConfigOverride>} conf
- * @param {ReturnType<typeof getBasicBuildOptions>} basicBuildOptions
+ * @param {Pick<BasicBuildOptions, "toolchain" | "source">} basicBuildOptions
  */
 async function extendW3CBuildConfig(conf, { toolchain, source }) {
 	/** Get present date in YYYY-MM-DD format */

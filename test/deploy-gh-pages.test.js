@@ -18,8 +18,12 @@ async function deployGhPages(outputs = {}) {
 		actor: ghPages.actor || "sidvishnoi",
 	};
 
-	const build = outputs?.build?.gh || {};
-	const outputDir = build.dir || path.resolve(process.cwd() + ".built");
+	const outputDir = outputs?.build?.w3c?.dir || process.cwd();
+	const outputDirName = outputs?.prepare?.build?.destination.dir || "";
 
-	return await require("../src/deploy-gh-pages.js")(inputs, outputDir);
+	return await require("../src/deploy-gh-pages.js")(
+		inputs,
+		outputDir,
+		outputDirName,
+	);
 }

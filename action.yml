@@ -11,6 +11,9 @@ inputs:
     description: Possible values - 'respec', 'bikeshed'
   SOURCE:
     description: Source file path.
+  DESTINATION:
+    description: Destination path, relative to repository root.
+    default: index.html
   BUILD_FAIL_ON:
     description: Exit behaviour on errors.
     default: fatal
@@ -77,7 +80,7 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_LINKS: ${{ fromJson(steps.prepare.outputs.validate).links }}
-        OUTPUT_DIR: ${{ fromJson(steps.build.outputs.w3c).dir }}
+        OUT_DESTINATION: ${{ toJSON(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Validate markup
       run: |
@@ -87,7 +90,7 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_MARKUP: ${{ fromJson(steps.prepare.outputs.validate).markup }}
-        OUTPUT_DIR: ${{ fromJson(steps.build.outputs.w3c).dir }}
+        OUT_DESTINATION: ${{ toJSON(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Deploy to GitHub pages
       run: |
@@ -98,6 +101,7 @@ runs:
       env:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.deploy).ghPages) }}
         OUTPUT_DIR: ${{ fromJson(steps.build.outputs.gh).dir }}
+        OUTPUT_DIRNAME: ${{ fromJson(steps.prepare.outputs.build).destination.dir }}
 
     - name: Deploy to W3C
       run: |
@@ -107,4 +111,4 @@ runs:
       shell: bash
       env:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.deploy).w3c) }}
-        OUTPUT_DIR: ${{ fromJson(steps.build.outputs.w3c).dir }}
+        OUT_DESTINATION: ${{ toJSON(fromJson(steps.build.outputs.w3c)) }}

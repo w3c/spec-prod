@@ -1,4 +1,5 @@
 // @ts-check
+const path = require("path");
 const { env, exit, install, sh, yesOrNo } = require("./utils.js");
 
 if (module === require.main) {
@@ -6,23 +7,25 @@ if (module === require.main) {
 		exit("Skipped", 0);
 	}
 
-	const outputDir = env("OUTPUT_DIR");
-	main(outputDir).catch(err => exit(err.message || "Failed", err.code));
+	/** @type {BuildOutput} */
+	const destination = JSON.parse(env("OUT_DESTINATION"));
+	main(destination).catch(err => exit(err.message || "Failed", err.code));
 }
 
 module.exports = main;
 /**
- * @param {string} outputDir
+ * @typedef {import("./build.js").BuildOutput} BuildOutput
+ * @param {BuildOutput} destination
  */
-async function main(outputDir) {
-	console.log(`Validating ${outputDir}/index.html...`);
+async function main({ dir, file }) {
+	console.log(`Validating ${dir}/${file}...`);
 	await install("vnu-jar");
 	const vnuJar = require("vnu-jar");
 
 	try {
-		await sh(`java -jar "${vnuJar}" --also-check-css index.html`, {
+		await sh(`java -jar "${vnuJar}" --also-check-css ${file}`, {
 			output: "stream",
-			cwd: outputDir,
+			cwd: dir,
 		});
 		exit("✅  Looks good! No HTML validation errors!", 0);
 	} catch {

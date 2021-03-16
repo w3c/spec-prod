@@ -8,19 +8,21 @@ if (module === require.main) {
 	}
 	exit("Link validator is currently disabled due to some bugs.", 0);
 
-	const outputDir = env("OUTPUT_DIR");
-	main(outputDir).catch(err => exit(err.message || "Failed", err.code));
+	/** @type {BuildOutput} */
+	const destination = JSON.parse(env("OUT_DESTINATION"));
+	main(destination).catch(err => exit(err.message || "Failed", err.code));
 }
 
 module.exports = main;
 /**
- * @param {string} outputDir
+ * @typedef {import("./build.js").BuildOutput} BuildOutput
+ * @param {BuildOutput} destination
  */
-async function main(outputDir) {
+async function main({ dir, file }) {
 	await install(`href-checker`, PUPPETEER_ENV);
-	await sh(`href-checker index.html --no-same-site`, {
+	await sh(`href-checker ${file} --no-same-site`, {
 		output: "stream",
-		cwd: outputDir,
+		cwd: dir,
 		env: PUPPETEER_ENV,
 	});
 }

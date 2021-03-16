@@ -7,8 +7,10 @@ async function validateMarkup(outputs = {}) {
 		return;
 	}
 
-	const build = outputs?.build?.w3c || {};
-	const outputDir = build.dir || ".";
+	const build = outputs?.build?.w3c || {
+		dir: process.cwd(),
+		file: "index.html",
+	};
 
-	return await require("../src/validate-markup.js")(outputDir);
+	return await require("../src/validate-markup.js")(build);
 }
