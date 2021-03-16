@@ -1,14 +1,17 @@
 // @ts-check
 const path = require("path");
+const main = require("../src/deploy-gh-pages.js");
 
 module.exports = deployGhPages;
-async function deployGhPages(outputs = {}) {
-	const deploy = outputs?.prepare?.deploy;
-	if (deploy && deploy.ghPages === false) {
+/** @param {import("./index.test.js").Output} outputs */
+async function deployGhPages(outputs) {
+	const { ghPages = false } = outputs?.prepare?.deploy || {};
+	if (ghPages === false) {
 		return;
 	}
-
-	const ghPages = deploy?.ghPages || {};
+	if (ghPages === true) {
+		throw new Error("Unexpected.");
+	}
 	const inputs = {
 		targetBranch: ghPages.targetBranch || "gh-pages",
 		token: ghPages.token || "TOKEN",
@@ -18,12 +21,10 @@ async function deployGhPages(outputs = {}) {
 		actor: ghPages.actor || "sidvishnoi",
 	};
 
-	const outputDir = outputs?.build?.w3c?.dir || process.cwd();
-	const outputDirName = outputs?.prepare?.build?.destination.dir || "";
+	const { dir: outputDir = path.resolve(process.cwd() + ".gh") } =
+		outputs?.build?.gh || {};
+	const { dir: outputDirName = "" } =
+		outputs?.prepare?.build?.destination || {};
 
-	return await require("../src/deploy-gh-pages.js")(
-		inputs,
-		outputDir,
-		outputDirName,
-	);
+	return await main(inputs, outputDir, outputDirName);
 }

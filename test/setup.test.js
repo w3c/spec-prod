@@ -1,9 +1,9 @@
 // @ts-check
+const main = require("../src/setup.js");
 
 module.exports = setup;
-async function setup(outputs = {}) {
-	const build = outputs?.prepare?.build || {};
-	const toolchain = build.toolchain || "respec";
-
-	return await require("../src/setup.js")(toolchain);
+/** @param {import("./index.test.js").Output} outputs */
+async function setup(outputs) {
+	const { toolchain = "respec" } = outputs?.prepare?.build || {};
+	return await main(toolchain);
 }
