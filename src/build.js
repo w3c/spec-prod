@@ -8,6 +8,8 @@ const { env, exit, install, setOutput, sh } = require("./utils.js");
 const { StaticServer } = require("./utils.js");
 const { PUPPETEER_ENV } = require("./constants.js");
 
+const OUT_FILE = "index.built.html";
+
 if (module === require.main) {
 	/** @type {BuildInput} */
 	const { toolchain, source, flags, configOverride } = JSON.parse(
@@ -49,33 +51,30 @@ async function main(toolchain, source, flags, configOverride) {
  * @param {"common" | "gh" | "w3c"} suffix
  */
 async function build(toolchain, source, additionalFlags, conf, suffix) {
-	const outputFile = source + ".built.html";
-
 	console.group(`[INFO] Build ${toolchain} document "${source}" (${suffix})…`);
 	switch (toolchain) {
 		case "respec":
-			await buildReSpec(source, outputFile, additionalFlags, conf);
+			await buildReSpec(source, additionalFlags, conf);
 			break;
 		case "bikeshed":
-			await buildBikeshed(source, outputFile, additionalFlags, conf);
+			await buildBikeshed(source, additionalFlags, conf);
 			break;
 		default:
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
 
 	const destDir = path.resolve(process.cwd() + `.${suffix}`);
-	const res = await copyRelevantAssets(outputFile, destDir);
+	const res = await copyRelevantAssets(destDir);
 	console.groupEnd();
 	return res;
 }
 
 /**
  * @param {BuildInput["source"]} source
- * @param {string} outputFile
  * @param {BuildInput["flags"]} additionalFlags
  * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
  */
-async function buildReSpec(source, outputFile, additionalFlags, conf) {
+async function buildReSpec(source, additionalFlags, conf) {
 	const flags = additionalFlags.join(" ");
 	const server = await new StaticServer(process.cwd()).start();
 	const src = new URL(source, server.url);
@@ -83,7 +82,7 @@ async function buildReSpec(source, outputFile, additionalFlags, conf) {
 		src.searchParams.set(key, val);
 	}
 	try {
-		await sh(`respec -s "${src}" -o "${outputFile}" --verbose -t 20 ${flags}`, {
+		await sh(`respec -s "${src}" -o "${OUT_FILE}" --verbose -t 20 ${flags}`, {
 			output: "stream",
 			env: PUPPETEER_ENV,
 		});
@@ -94,33 +93,31 @@ async function buildReSpec(source, outputFile, additionalFlags, conf) {
 
 /**
  * @param {BuildInput["source"]} source
- * @param {string} outputFile
  * @param {BuildInput["flags"]} additionalFlags
  * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
  */
-async function buildBikeshed(source, outputFile, additionalFlags, conf) {
+async function buildBikeshed(source, additionalFlags, conf) {
 	const metadataFlags = Object.entries(conf || {})
 		.map(([key, val]) => `--md-${key.replace(/\s+/g, "-")}="${val}"`)
 		.join(" ");
 	const flags = additionalFlags.join(" ");
 	await sh(
-		`bikeshed ${flags} spec "${source}" "${outputFile}" ${metadataFlags}`,
+		`bikeshed ${flags} spec "${source}" "${OUT_FILE}" ${metadataFlags}`,
 		"stream",
 	);
 }
 
 /**
- * @param {string} outputFile
  * @param {string} destinationDir
  */
-async function copyRelevantAssets(outputFile, destinationDir) {
+async function copyRelevantAssets(destinationDir) {
 	if (!destinationDir.endsWith(path.sep)) {
 		destinationDir += path.sep;
 	}
 
 	// Copy local dependencies of outputFile to a "ready to publish" directory
 	await install("local-assets@1", PUPPETEER_ENV);
-	await sh(`local-assets "${outputFile}" -o ${destinationDir}`, {
+	await sh(`local-assets "${OUT_FILE}" -o ${destinationDir}`, {
 		output: "stream",
 		env: { VERBOSE: "1", ...PUPPETEER_ENV },
 	});
@@ -128,9 +125,9 @@ async function copyRelevantAssets(outputFile, destinationDir) {
 	// Move outputFile to the publish directory.
 	const rel = p => path.relative(process.cwd(), p);
 	const destinationFile = path.join(destinationDir, "index.html");
-	console.log(`[INFO] [COPY] ${rel(outputFile)} >>> ${rel(destinationFile)}`);
-	await copyFile(outputFile, destinationFile);
-	await unlink(outputFile);
+	console.log(`[INFO] [COPY] ${rel(OUT_FILE)} >>> ${rel(destinationFile)}`);
+	await copyFile(OUT_FILE, destinationFile);
+	await unlink(OUT_FILE);
 
 	// List all files in output directory
 	await sh(`ls -R`, { output: "buffer", cwd: destinationDir });
