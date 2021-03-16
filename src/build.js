@@ -28,19 +28,15 @@ module.exports = main;
 async function main(toolchain, source, flags, configOverride) {
 	// TODO: compare equal objects also
 	if (configOverride.gh === configOverride.w3c) {
-		let destDir = path.resolve(process.cwd() + ".built");
-		const out = await build(toolchain, source, destDir, flags, null);
-
+		const out = await build(toolchain, source, flags, null, "common");
 		return { ...setOutput("gh", out), ...setOutput("w3c", out) };
 	}
 
-	let destDirGh = path.resolve(process.cwd() + ".gh");
 	const confGh = configOverride.gh;
-	const outGh = await build(toolchain, source, destDirGh, flags, confGh);
+	const outGh = await build(toolchain, source, flags, confGh, "gh");
 
-	let destDirW3C = path.resolve(process.cwd() + ".w3c");
 	const confW3C = configOverride.w3c;
-	const outW3C = await build(toolchain, source, destDirW3C, flags, confW3C);
+	const outW3C = await build(toolchain, source, flags, confW3C, "w3c");
 
 	return { ...setOutput("gh", outGh), ...setOutput("w3c", outW3C) };
 }
@@ -48,14 +44,14 @@ async function main(toolchain, source, flags, configOverride) {
 /**
  * @param {BuildInput["toolchain"]} toolchain
  * @param {BuildInput["source"]} source
- * @param {string} destDir
  * @param {BuildInput["flags"]} additionalFlags
  * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
+ * @param {"common" | "gh" | "w3c"} suffix
  */
-async function build(toolchain, source, destDir, additionalFlags, conf) {
+async function build(toolchain, source, additionalFlags, conf, suffix) {
 	const outputFile = source + ".built.html";
 
-	console.group(`[INFO] Build ${toolchain} document "${source}"…`);
+	console.group(`[INFO] Build ${toolchain} document "${source}" (${suffix})…`);
 	switch (toolchain) {
 		case "respec":
 			await buildReSpec(source, outputFile, additionalFlags, conf);
@@ -67,6 +63,7 @@ async function build(toolchain, source, destDir, additionalFlags, conf) {
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
 
+	const destDir = path.resolve(process.cwd() + `.${suffix}`);
 	const res = await copyRelevantAssets(outputFile, destDir);
 	console.groupEnd();
 	return res;
