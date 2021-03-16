@@ -6,8 +6,8 @@ module.exports = build;
 async function build(outputs) {
 	const {
 		toolchain = "respec",
-		source = "index.html",
-		destination = { dir: process.cwd(), file: "index.html" },
+		source = { dir: ".", file: "index.html" },
+		destination = { dir: ".", file: "index.html" },
 		flags = ["-e"],
 		configOverride = { w3c: null, gh: null },
 	} = outputs?.prepare?.build || {};

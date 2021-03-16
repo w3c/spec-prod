@@ -121,7 +121,7 @@ async function buildOptions(inputs) {
  * @param {Inputs} inputs
  * @typedef {object} BasicBuildOptions
  * @property {"respec" | "bikeshed"} BasicBuildOptions.toolchain
- * @property {string} BasicBuildOptions.source
+ * @property {{ dir: string, file: string }} BasicBuildOptions.source
  * @property {{ dir: string, file: string }} BasicBuildOptions.destination
  * @returns {BasicBuildOptions}
  */
@@ -174,6 +174,9 @@ function getBasicBuildOptions(inputs) {
 		}
 	}
 
+	const src = path.parse(path.join(process.cwd(), source));
+	src.dir = path.relative(process.cwd(), src.dir);
+
 	const dest = path.parse(path.join(process.cwd(), destination));
 	if (!dest.base) {
 		dest.base = "index.html";
@@ -183,7 +186,11 @@ function getBasicBuildOptions(inputs) {
 	}
 	dest.dir = path.relative(process.cwd(), dest.dir);
 
-	return { toolchain, source, destination: { dir: dest.dir, file: dest.base } };
+	return {
+		toolchain,
+		source: { dir: src.dir, file: src.base },
+		destination: { dir: dest.dir, file: dest.base },
+	};
 }
 
 /** @param {string} confStr */
@@ -220,8 +227,9 @@ async function extendW3CBuildConfig(conf, { toolchain, source }) {
 
 	let shortName = conf.shortName || conf.shortname;
 	if (!shortName) {
+		const src = path.resolve(path.join(process.cwd(), source.dir, source.file));
 		if (toolchain === "respec") {
-			shortName = await getShortnameForRespec(source);
+			shortName = await getShortnameForRespec(src);
 		} // TODO: do same for Bikeshed
 	}
 	if (shortName) {

@@ -3,10 +3,12 @@
  * @typedef {import("./prepare.js").ProcessedInput["build"]} BuildInput
  */
 const path = require("path");
-const { copyFile, unlink } = require("fs").promises;
+const { copyFile, mkdir, unlink } = require("fs").promises;
 const { env, exit, install, setOutput, sh } = require("./utils.js");
 const { StaticServer } = require("./utils.js");
 const { PUPPETEER_ENV } = require("./constants.js");
+
+const OUT_FILE = "index.built.html";
 
 if (module === require.main) {
 	/** @type {BuildInput} */
@@ -54,42 +56,42 @@ async function main(tool, source, destination, flags, configOverride) {
  */
 async function build(tool, source, destination, additionalFlags, conf, suffix) {
 	const toolchain = tool;
-	const outputFile = source + ".built.html";
-
-	console.group(`[INFO] Build ${toolchain} document "${source}" (${suffix})…`);
+	console.group(
+		`[INFO] Build ${toolchain} document "${source.dir}/${source.file}" (${suffix})…`,
+	);
 	switch (toolchain) {
 		case "respec":
-			await buildReSpec(source, outputFile, additionalFlags, conf);
+			await buildReSpec(source, additionalFlags, conf);
 			break;
 		case "bikeshed":
-			await buildBikeshed(source, outputFile, additionalFlags, conf);
+			await buildBikeshed(source, additionalFlags, conf);
 			break;
 		default:
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
 
-	const res = await copyRelevantAssets(outputFile, destination, suffix);
+	const res = await copyRelevantAssets(source, destination, suffix);
 	console.groupEnd();
 	return res;
 }
 
 /**
  * @param {BuildInput["source"]} source
- * @param {string} outputFile
  * @param {BuildInput["flags"]} additionalFlags
  * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
  */
-async function buildReSpec(source, outputFile, additionalFlags, conf) {
+async function buildReSpec(source, additionalFlags, conf) {
 	const flags = additionalFlags.join(" ");
-	const server = await new StaticServer(process.cwd()).start();
-	const src = new URL(source, server.url);
+	const server = await new StaticServer(source.dir).start();
+	const src = new URL(source.file, server.url);
 	for (const [key, val] of Object.entries(conf || {})) {
 		src.searchParams.set(key, val);
 	}
 	try {
-		await sh(`respec -s "${src}" -o "${outputFile}" --verbose -t 20 ${flags}`, {
+		await sh(`respec -s "${src}" -o "${OUT_FILE}" --verbose -t 20 ${flags}`, {
 			output: "stream",
 			env: PUPPETEER_ENV,
+			cwd: source.dir,
 		});
 	} finally {
 		await server.stop();
@@ -98,44 +100,46 @@ async function buildReSpec(source, outputFile, additionalFlags, conf) {
 
 /**
  * @param {BuildInput["source"]} source
- * @param {string} outputFile
  * @param {BuildInput["flags"]} additionalFlags
  * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
  */
-async function buildBikeshed(source, outputFile, additionalFlags, conf) {
+async function buildBikeshed(source, additionalFlags, conf) {
 	const metadataFlags = Object.entries(conf || {})
 		.map(([key, val]) => `--md-${key.replace(/\s+/g, "-")}="${val}"`)
 		.join(" ");
 	const flags = additionalFlags.join(" ");
 	await sh(
-		`bikeshed ${flags} spec "${source}" "${outputFile}" ${metadataFlags}`,
-		"stream",
+		`bikeshed ${flags} spec "${source}" "${OUT_FILE}" ${metadataFlags}`,
+		{ output: "stream", cwd: source.dir },
 	);
 }
 
 /**
- * @param {string} outputFile
+ * @param {BuildInput["source"]} source
  * @param {BuildInput["destination"]} destination
  * @param {string} suffix
  * @returns {Promise<BuildOutput>}
  */
-async function copyRelevantAssets(outputFile, destination, suffix) {
+async function copyRelevantAssets(source, destination, suffix) {
 	let destinationDir = path.join(`${process.cwd()}.${suffix}`, destination.dir);
+	const destinationFile = path.join(destinationDir, destination.file);
+
+	// Copy local dependencies of the output file to the publish directory.
 	if (!destinationDir.endsWith(path.sep)) {
 		destinationDir += path.sep;
 	}
-
-	// Copy local dependencies of outputFile to a "ready to publish" directory
 	await install("local-assets@1", PUPPETEER_ENV);
-	await sh(`local-assets "${outputFile}" -o ${destinationDir}`, {
+	await sh(`local-assets "${OUT_FILE}" -o ${destinationDir}`, {
 		output: "stream",
 		env: { VERBOSE: "1", ...PUPPETEER_ENV },
+		cwd: source.dir,
 	});
 
-	// Move outputFile to the publish directory.
+	// Move output file to the publish directory.
 	const rel = p => path.relative(process.cwd(), p);
-	const destinationFile = path.join(destinationDir, destination.file);
+	const outputFile = path.resolve(path.join(source.dir, OUT_FILE));
 	console.log(`[INFO] [COPY] ${rel(outputFile)} >>> ${rel(destinationFile)}`);
+	await mkdir(destinationDir, { recursive: true });
 	await copyFile(outputFile, destinationFile);
 	await unlink(outputFile);
 
