@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- Build: [`TOOLCHAIN`](#toolchain), [`SOURCE`](#source), [`BUILD_FAIL_ON`](#build_fail_on), [`GH_PAGES_BUILD_OVERRIDE`](#gh_pages_build_override), [`W3C_BUILD_OVERRIDE`](#w3c_build_override)
+- Build: [`TOOLCHAIN`](#toolchain), [`SOURCE`](#source), [`DESTINATION`](#destination), [`BUILD_FAIL_ON`](#build_fail_on), [`GH_PAGES_BUILD_OVERRIDE`](#gh_pages_build_override), [`W3C_BUILD_OVERRIDE`](#w3c_build_override)
 - Validation: [`VALIDATE_LINKS`](#validate_links), [`VALIDATE_MARKUP`](#validate_markup)
 - GitHub Pages: [`GH_PAGES_BRANCH`](#gh_pages_branch), [`GH_PAGES_TOKEN`](#gh_pages_token)
 - W3C Publish: [`W3C_ECHIDNA_TOKEN`](#w3c_echidna_token), [`W3C_WG_DECISION_URL`](#w3c_wg_decision_url), [`W3C_NOTIFICATIONS_CC`](#w3c_notifications_cc)
@@ -22,6 +22,20 @@ Source file path.
 **Possible values:** Any valid POSIX file path relative to repository root.
 
 **Default:** None. Inferred from `TOOLCHAIN`: `index.html`/`index.bs` if exists.
+
+## `DESTINATION`
+
+Destination for built HTML and other assets.
+
+**Possible values:** Any valid POSIX file path relative to repository root.
+
+**Default:** `index.html`
+
+| `DESTINATION`       | Location of generated spec | Assets copied to directory |
+| ------------------- | -------------------------- | -------------------------- |
+| `my-spec/spec.html` | `./my-spec/spec.html`      | `./my-spec/`               |
+| `my-spec`           | `./my-spec/index.html`     | `./my-spec/`               |
+| `index.html`        | `./index.html`             | `./`                       |
 
 ## `BUILD_FAIL_ON`
 
