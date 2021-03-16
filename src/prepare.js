@@ -88,10 +88,10 @@ async function processInputs(inputs, githubContext) {
 	return {
 		build: await buildOptions(inputs),
 		validate: validation(inputs),
-		deploy: {
-			ghPages: githubPagesDeployment(inputs, githubContext),
-			w3c: await w3cEchidnaDeployment(inputs, githubContext),
-		},
+		// deploy: {
+		// 	ghPages: githubPagesDeployment(inputs, githubContext),
+		// 	w3c: await w3cEchidnaDeployment(inputs, githubContext),
+		// },
 	};
 }
 
@@ -103,7 +103,7 @@ async function processInputs(inputs, githubContext) {
 async function buildOptions(inputs) {
 	const { toolchain, source, destination } = getBasicBuildOptions(inputs);
 
-	const configOverride = {
+	const configOverride = {} || {
 		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
 		w3c: await extendW3CBuildConfig(
 			getConfigOverride(inputs.W3C_BUILD_OVERRIDE) || {},
