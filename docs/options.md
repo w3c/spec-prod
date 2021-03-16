@@ -25,7 +25,7 @@ Source file path.
 
 ## `DESTINATION`
 
-Location of generated HTML document and other assets.
+Location of generated HTML document and other assets. This is useful when you've multiple specs in same repository.
 
 **Possible values:** Any valid POSIX file path relative to repository root.
 
