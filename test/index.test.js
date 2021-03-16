@@ -46,9 +46,9 @@ Promise.resolve()
 	.then(run(require("./prepare.test.js")))
 	.then(run(require("./setup.test.js")))
 	.then(run(require("./build.test.js")))
-	// .then(run(require("./validate-links.test.js")))
-	// .then(run(require("./validate-markup.test.js")))
-	// .then(run(require("./deploy-gh-pages.test.js")))
+	.then(run(require("./validate-links.test.js")))
+	.then(run(require("./validate-markup.test.js")))
+	.then(run(require("./deploy-gh-pages.test.js")))
 	.then(() => {
 		console.log();
 		console.log(formatAsHeading("OUTPUTS", "#"));

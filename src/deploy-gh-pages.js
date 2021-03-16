@@ -73,7 +73,7 @@ async function prepare(opts, outputDir, outputDirName) {
 
 	await sh(`rsync -av ${outputDir} ${outputDirName}`, "stream");
 	await sh(`git add -A --verbose`, "stream");
-	await sh(`git status`, "stream");
+	await sh(`git status`, "buffer");
 }
 
 /**
