@@ -100,11 +100,11 @@ async function sh(command, options = {}) {
 			});
 			child.stdout.pipe(split()).on("data", chunk => {
 				if (output === "stream") console.log(chunk);
-				stdout += chunk;
+				stdout += chunk + "\n";
 			});
 			child.stderr.pipe(split()).on("data", chunk => {
 				if (output === "stream") console.log(chunk);
-				stderr += chunk;
+				stderr += chunk + "\n";
 			});
 			child.on("exit", code => {
 				stdout = stdout.trim();
