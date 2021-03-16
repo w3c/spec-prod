@@ -82,7 +82,7 @@ async function build(tool, source, destination, additionalFlags, conf, suffix) {
  */
 async function buildReSpec(source, additionalFlags, conf) {
 	const flags = additionalFlags.join(" ");
-	const server = await new StaticServer(source.dir).start();
+	const server = await new StaticServer(source.dir || process.cwd()).start();
 	const src = new URL(source.file, server.url);
 	for (const [key, val] of Object.entries(conf || {})) {
 		src.searchParams.set(key, val);
