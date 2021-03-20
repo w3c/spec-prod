@@ -40,7 +40,7 @@ runs:
   steps:
     - name: Set up action
       run: |
-        echo "::group::Setup action"
+        echo "::group::Set up action"
         yarn --cwd ${{ github.action_path }}
         echo "::endgroup::"
       shell: bash
