@@ -1,32 +1,23 @@
-// @ts-check
-const { inspect } = require("util");
-const { exec } = require("child_process");
-const { createServer } = require("http");
+import { inspect } from "util";
+import { exec } from "child_process";
+import { createServer } from "http";
 
-const core = require("@actions/core");
-const split = require("split2");
-const serveStatic = require("serve-static");
-const finalhandler = require("finalhandler");
+import core = require("@actions/core");
+import split = require("split2");
+import serveStatic = require("serve-static");
+import finalhandler = require("finalhandler");
 
-const { ACTION_DIR } = require("./constants.js");
+import { ACTION_DIR } from "./constants.js";
+import { ExecOptions } from "node:child_process";
+import { Server } from "node:http";
 
-/**
- * Get env variable value
- * @param {string} name name of env variable
- * @throws if env variable is not set
- */
-function env(name) {
+export function env(name: string) {
 	const value = process.env[name];
 	if (value) return value;
 	exit(`env variable \`${name}\` is not set.`);
 }
 
-/**
- * @param {string} message
- * @param {number} [code]
- * @returns {never}
- */
-function exit(message, code = 1) {
+export function exit(message: string, code = 1): never {
 	if (code === 0) {
 		console.log(message);
 	} else {
@@ -35,20 +26,15 @@ function exit(message, code = 1) {
 	process.exit(code);
 }
 
-/**
- * @param {string} text
- */
-function formatAsHeading(text, symbol = "=") {
+export function formatAsHeading(text: string, symbol = "=") {
 	const marker = symbol.repeat(Math.max(50, text.length));
 	return `${marker}\n${text}:\n${marker}`;
 }
 
 /**
  * Locally install a npm package using Yarn.
- * @param {string | string[]} name
- * @param {import("child_process").ExecOptions["env"]} env
  */
-function install(name, env = {}) {
+export function install(name: string | string[], env: ExecOptions["env"] = {}) {
 	if (Array.isArray(name)) {
 		name = name.join(" ");
 	}
@@ -57,29 +43,26 @@ function install(name, env = {}) {
 
 /**
  * Print print using util.inspect
- * @param {any} obj
  */
-function pprint(obj) {
+export function pprint(obj: any) {
 	console.log(inspect(obj, false, Infinity, true));
 }
 
-/** @type {<K extends string, V>(key: K, value: V) => { [k in K]: V }} */
-function setOutput(key, value) {
+export function setOutput<K extends string, V>(key: K, value: V) {
 	core.setOutput(key, value);
-	// @ts-expect-error
-	return { [key]: value };
+	return { [key]: value } as { [k in K]: V };
 }
 
+type ShOutput = "buffer" | "stream" | "silent";
+interface ShOptions extends ExecOptions {
+	output?: string;
+}
 /**
  * Asynchronously run a shell command get its result.
- * @param {string} command
- * @param {Output | Options} [options]
- * @typedef {"buffer" | "stream" | "silent"} Output
- * @typedef {{output?: Output} & import("child_process").ExecOptions} Options
- * @returns {Promise<string>} stdout
+ * @returns stdout
  * @throws {Promise<{ stdout: string, stderr: string, code: number }>}
  */
-async function sh(command, options = {}) {
+export async function sh(command: string, options: ShOptions | ShOutput = {}) {
 	const { output, ...execOptions } =
 		typeof options === "string" ? { output: options } : options;
 
@@ -90,7 +73,7 @@ async function sh(command, options = {}) {
 	}
 
 	try {
-		return await new Promise((resolve, reject) => {
+		return await new Promise<string>((resolve, reject) => {
 			let stdout = "";
 			let stderr = "";
 			const child = exec(command, {
@@ -98,11 +81,11 @@ async function sh(command, options = {}) {
 				env: { ...process.env, ...execOptions.env },
 				encoding: "utf-8",
 			});
-			child.stdout.pipe(split()).on("data", chunk => {
+			child.stdout!.pipe(split()).on("data", chunk => {
 				if (output === "stream") console.log(chunk);
 				stdout += chunk + "\n";
 			});
-			child.stderr.pipe(split()).on("data", chunk => {
+			child.stderr!.pipe(split()).on("data", chunk => {
 				if (output === "stream") console.log(chunk);
 				stderr += chunk + "\n";
 			});
@@ -123,20 +106,22 @@ async function sh(command, options = {}) {
 	}
 }
 
-function yesOrNo(value) {
+export function yesOrNo(value: string | number | boolean): boolean | undefined {
 	const str = String(value).trim();
 	if (/^(?:y|yes|true|1|on)$/i.test(str)) {
 		return true;
 	}
-	if (/^(?:n|no|false|0|off)$/i.test(value)) {
+	if (/^(?:n|no|false|0|off)$/i.test(str)) {
 		return false;
 	}
 }
 
 /** A simple HTTP server without all the fancy things. */
-class StaticServer {
-	/** @param {string} dir */
-	constructor(dir) {
+export class StaticServer {
+	private _server: Server;
+	private _port: number = 3000;
+
+	constructor(dir: string) {
 		const serve = serveStatic(dir);
 		this._server = createServer((req, res) => {
 			// @ts-expect-error
@@ -159,18 +144,14 @@ class StaticServer {
 		throw new Error("Failed to start static server.");
 	}
 
-	/**
-	 * @private
-	 * @param {number} port
-	 */
-	_tryStart(port) {
+	private _tryStart(port: number) {
 		return new Promise((resolve, reject) => {
 			this._server.listen(port).on("error", reject).on("listening", resolve);
 		});
 	}
 
 	stop() {
-		return new Promise(resolve => this._server.close(err => resolve()));
+		return new Promise<void>(resolve => this._server.close(err => resolve()));
 	}
 
 	get url() {
@@ -178,14 +159,4 @@ class StaticServer {
 	}
 }
 
-module.exports = {
-	env,
-	exit,
-	formatAsHeading,
-	install,
-	pprint,
-	setOutput,
-	sh,
-	yesOrNo,
-	StaticServer,
-};
+export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;

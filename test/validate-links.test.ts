@@ -1,9 +1,7 @@
-// @ts-check
-const main = require("../src/validate-links.js");
+import main from "../src/validate-links.js";
+import { Outputs } from "./index.test.js";
 
-module.exports = validateLinks;
-/** @param {import("./index.test.js").Output} outputs */
-async function validateLinks(outputs) {
+export default async function validateLinks(outputs: Outputs) {
 	const { links: shouldValidate = false } = outputs?.prepare?.validate || {};
 	if (shouldValidate === false) {
 		return;

@@ -1,6 +1,5 @@
-// @ts-check
-const { env, exit, install, sh, yesOrNo } = require("./utils.js");
-const { PUPPETEER_ENV } = require("./constants.js");
+import { env, exit, install, sh, yesOrNo } from "./utils.js";
+import { PUPPETEER_ENV } from "./constants.js";
 
 if (module === require.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_LINKS")) === false) {
@@ -12,11 +11,7 @@ if (module === require.main) {
 	main(outputDir).catch(err => exit(err.message || "Failed", err.code));
 }
 
-module.exports = main;
-/**
- * @param {string} outputDir
- */
-async function main(outputDir) {
+export default async function main(outputDir: string) {
 	await install(`href-checker`, PUPPETEER_ENV);
 	await sh(`href-checker index.html --no-same-site`, {
 		output: "stream",

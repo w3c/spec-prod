@@ -1,9 +1,7 @@
-// @ts-check
-const main = require("../src/validate-markup.js");
+import main from "../src/validate-markup.js";
+import { Outputs } from "./index.test.js";
 
-module.exports = validateMarkup;
-/** @param {import("./index.test.js").Output} outputs */
-async function validateMarkup(outputs) {
+export default async function validateMarkup(outputs: Outputs) {
 	const { markup: shouldValidate = false } = outputs?.prepare?.validate || {};
 	if (shouldValidate === false) {
 		return;
