@@ -3,7 +3,7 @@ import * as os from "os";
 import * as fs from "fs/promises";
 import { env, exit, sh } from "./utils.js";
 
-import { GithubPagesDeployOptions } from "./prepare.js";
+import { GithubPagesDeployOptions } from "./prepare-deploy.js";
 type Input = Exclude<GithubPagesDeployOptions, false>;
 
 if (module === require.main) {

@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import { env, exit, pprint, sh } from "./utils.js";
 
-import { W3CDeployOptions } from "./prepare.js";
+import { W3CDeployOptions } from "./prepare-deploy.js";
 type Input = Exclude<W3CDeployOptions, false>;
 
 const MAILING_LIST = `https://lists.w3.org/Archives/Public/public-tr-notifications/`;
