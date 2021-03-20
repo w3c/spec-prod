@@ -1,17 +1,21 @@
-// @ts-check
-const path = require("path");
-const { readFileSync, readdirSync } = require("fs");
-const yaml = require("yaml");
+import * as path from "path";
+import { readFileSync, readdirSync } from "fs";
+import * as yaml from "yaml";
 
-const main = require("../src/prepare.js");
+import main, { Inputs, GitHubContext } from "../src/prepare.js";
 
-module.exports = prepare;
-async function prepare() {
-	/** @type { import("../src/prepare.js").Inputs } */
-	const INPUTS_USER = { ...getDefaultInputs(), ...getInputsFromWorkflow() };
+type Job = { steps: { uses?: string; with: object }[] };
+type Workflow = {
+	inputs: { [inputName: string]: { default?: string } };
+	jobs: { [jobId: string]: Job };
+};
 
-	/** @type { import("../src/prepare.js").GitHubContext } */
-	const INPUTS_GITHUB = {
+export default async function prepare() {
+	const INPUTS_USER = {
+		...getDefaultInputs(),
+		...getInputsFromWorkflow(),
+	} as Inputs;
+	const INPUTS_GITHUB: GitHubContext = {
 		event_name: "push",
 		repository: "sidvishnoi/w3c-deploy-test",
 		event: { repository: { default_branch: "main", has_pages: false } },
@@ -22,14 +26,14 @@ async function prepare() {
 	return await main(INPUTS_USER, INPUTS_GITHUB);
 }
 
-/** @returns { Partial<import("../src/prepare.js").Inputs> } */
-function getInputsFromWorkflow() {
+function getInputsFromWorkflow(): Partial<Inputs> {
 	try {
 		const workflowDir = path.join(process.cwd(), ".github", "workflows");
 		const workflow = readdirSync(workflowDir).find(f => /\.ya?ml$/.test(f));
+		if (!workflow) throw new Error("No workflow found.");
 		const text = readFileSync(path.join(workflowDir, workflow), "utf8");
 		const parsed = yaml.parse(text);
-		for (const job of Object.values(parsed.jobs)) {
+		for (const job of Object.values(parsed.jobs) as Job[]) {
 			const step = job.steps.find(step => step.uses?.includes("w3c/spec-prod"));
 			if (!step) continue;
 			return step.with;
@@ -41,14 +45,13 @@ function getInputsFromWorkflow() {
 	return {};
 }
 
-/** @returns { Partial<import("../src/prepare.js").Inputs> } */
-function getDefaultInputs() {
+function getDefaultInputs(): Partial<Inputs> {
 	const action = path.join(__dirname, "..", "action.yml");
 	const text = readFileSync(action, "utf8");
-	const parsed = yaml.parse(text);
+	const parsed = yaml.parse(text) as Workflow;
 	return Object.fromEntries(
 		Object.entries(parsed.inputs)
-			.filter(([name, info]) => info.default)
-			.map(([name, info]) => [name, info.default]),
+			.filter(([_inputName, inp]) => inp.default)
+			.map(([inputName, inp]) => [inputName, inp.default as string]),
 	);
 }

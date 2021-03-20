@@ -1,8 +1,7 @@
-// @ts-check
-const path = require("path");
-const { addPath, exportVariable } = require("@actions/core");
-const { env, exit, install, sh } = require("./utils.js");
-const { ACTION_DIR, PUPPETEER_ENV } = require("./constants.js");
+import * as path from "path";
+import { addPath, exportVariable } from "@actions/core";
+import { env, exit, install, sh } from "./utils.js";
+import { ACTION_DIR, PUPPETEER_ENV } from "./constants.js";
 
 const PYTHONUSERBASE = path.join(ACTION_DIR, "python_modules");
 
@@ -11,11 +10,7 @@ if (module === require.main) {
 	main(toolchain).catch(err => exit(err.message || "Failed", err.code));
 }
 
-module.exports = main;
-/**
- * @param {"respec" | "bikeshed" | string} toolchain
- */
-async function main(toolchain) {
+export default async function main(toolchain: "respec" | "bikeshed" | string) {
 	addPath(path.join(ACTION_DIR, "node_modules", ".bin"));
 	addPath(path.join(PYTHONUSERBASE, "bin"));
 

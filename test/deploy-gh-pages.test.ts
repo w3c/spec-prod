@@ -1,10 +1,8 @@
-// @ts-check
-const path = require("path");
-const main = require("../src/deploy-gh-pages.js");
+import * as path from "path";
+import main from "../src/deploy-gh-pages.js";
+import { Outputs } from "./index.test.js";
 
-module.exports = deployGhPages;
-/** @param {import("./index.test.js").Output} outputs */
-async function deployGhPages(outputs) {
+export default async function deployGhPages(outputs: Outputs) {
 	const { ghPages = false } = outputs?.prepare?.deploy || {};
 	if (ghPages === false) {
 		return;

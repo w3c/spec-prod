@@ -38,11 +38,18 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Set up action
+      run: |
+        echo "::group::Setup action"
+        yarn --cwd ${{ github.action_path }}
+        echo "::endgroup::"
+      shell: bash
+      env:
+        FORCE_COLOR: true
     - name: Prepare
       id: prepare
       run: |
         echo "::group::Prepare"
-        yarn --prod --cwd ${{ github.action_path }}
         node ${{ github.action_path }}/src/prepare.js
         echo "::endgroup::"
       shell: bash

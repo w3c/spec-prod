@@ -1,12 +1,13 @@
-// @ts-check
-const path = require("path");
-const os = require("os");
-const fs = require("fs").promises;
-const { env, exit, sh } = require("./utils.js");
+import * as path from "path";
+import * as os from "os";
+import * as fs from "fs/promises";
+import { env, exit, sh } from "./utils.js";
+
+import { GithubPagesDeployOptions } from "./prepare.js";
+type Input = Exclude<GithubPagesDeployOptions, false>;
 
 if (module === require.main) {
-	/** @type {import("./prepare.js").GithubPagesDeployOptions} */
-	const inputs = JSON.parse(env("INPUTS_DEPLOY"));
+	const inputs: GithubPagesDeployOptions = JSON.parse(env("INPUTS_DEPLOY"));
 	const outputDir = env("OUTPUT_DIR");
 
 	if (inputs === false) {
@@ -15,13 +16,7 @@ if (module === require.main) {
 	main(inputs, outputDir).catch(err => exit(err.message || "Failed", err.code));
 }
 
-module.exports = main;
-/**
- * @typedef {Exclude<import("./prepare.js").GithubPagesDeployOptions, false>} GithubPagesDeployOptions
- * @param {GithubPagesDeployOptions} inputs
- * @param {string} outputDir
- */
-async function main(inputs, outputDir) {
+export default async function main(inputs: Input, outputDir: string) {
 	if (!outputDir.endsWith(path.sep)) {
 		outputDir += path.sep;
 	}
@@ -48,11 +43,10 @@ async function main(inputs, outputDir) {
 	}
 }
 
-/**
- * @param {Pick<GithubPagesDeployOptions, "targetBranch" | "repository">} opts
- * @param {string} outputDir
- */
-async function prepare(opts, outputDir) {
+async function prepare(
+	opts: Pick<Input, "targetBranch" | "repository">,
+	outputDir: string,
+) {
 	if (!outputDir.endsWith(path.sep)) {
 		throw new Error("outputDir must end with a trailing slash.");
 	}
@@ -74,10 +68,11 @@ async function prepare(opts, outputDir) {
 	await sh(`git status`, "buffer");
 }
 
-/**
- * @param {Pick<GithubPagesDeployOptions, "sha" | "event" | "actor">} opts
- */
-async function commit({ sha, event, actor }) {
+async function commit({
+	sha,
+	event,
+	actor,
+}: Pick<Input, "sha" | "event" | "actor">) {
 	const GITHUB_ACTIONS_BOT = `github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>`;
 
 	const author = await sh(`git show -s --format='%an | %ae' ${sha}`);
@@ -107,10 +102,11 @@ async function commit({ sha, event, actor }) {
 	}
 }
 
-/**
- * @param {Pick<GithubPagesDeployOptions, "repository" | "targetBranch" | "token">} opts
- */
-async function push({ repository, targetBranch, token }) {
+async function push({
+	repository,
+	targetBranch,
+	token,
+}: Pick<Input, "repository" | "targetBranch" | "token">) {
 	const repoURI = `https://x-access-token:${token}@github.com/${repository}.git/`;
 	await sh(`git remote set-url origin "${repoURI}"`);
 	await sh(`git push --force-with-lease origin "${targetBranch}"`, "stream");

@@ -1,27 +1,64 @@
-// @ts-check
-const fetch = require("node-fetch").default;
-const { env, exit, pprint, sh } = require("./utils.js");
+import fetch from "node-fetch";
+import { env, exit, pprint, sh } from "./utils.js";
+
+import { W3CDeployOptions } from "./prepare.js";
+type Input = Exclude<W3CDeployOptions, false>;
 
 const MAILING_LIST = `https://lists.w3.org/Archives/Public/public-tr-notifications/`;
 const API_URL = "https://labs.w3.org/echidna/api/request";
 
 if (module === require.main) {
-	/** @type {import("./prepare.js").W3CDeployOptions} */
-	const inputs = JSON.parse(env("INPUTS_DEPLOY"));
+	const inputs: W3CDeployOptions = JSON.parse(env("INPUTS_DEPLOY"));
 	const outputDir = env("OUTPUT_DIR");
 	if (inputs === false) {
 		exit("Skipped.", 0);
 	}
-	main(outputDir, inputs).catch(err => exit(err.message || "Failed", err.code));
+	main(inputs, outputDir).catch(err => exit(err.message || "Failed", err.code));
 }
 
-module.exports = main;
-/**
- * @typedef {Exclude<import("./prepare.js").W3CDeployOptions, false>} W3CDeployOptions
- * @param {W3CDeployOptions} inputs
- * @param {string} outputDir
- */
-async function main(outputDir, inputs) {
+interface PublishState {
+	id: string;
+	status: "success" | "failure" | "pending";
+	details: string;
+	deploymentURL?: string;
+	response?: string | EchidnaResponse | { message: string; [x: string]: any };
+}
+
+interface EchidnaJobs
+	extends Record<
+		| "token-checker"
+		| "third-party-checker"
+		| "update-tr-shortlink"
+		| "tr-install"
+		| "publish"
+		| "ip-checker"
+		| "metadata",
+		{ errors: any[] }
+	> {
+	specberus: {
+		errors: {
+			key: string;
+			detailMessage: string;
+			type: { name: string; section: string; rule: string };
+			extra?: { message: string; link: string };
+		}[];
+	};
+}
+
+interface EchidnaResponse {
+	id: string;
+	decision: string;
+	results: {
+		status: PublishState["status"];
+		metadata: {
+			thisVersion: string;
+			previousVersion: string;
+		};
+		jobs: EchidnaJobs;
+	};
+}
+
+export default async function main(inputs: Input, outputDir: string) {
 	console.log(`📣 If it fails, check ${MAILING_LIST}`);
 	const id = await publish(outputDir, inputs);
 
@@ -51,15 +88,7 @@ async function main(outputDir, inputs) {
 	exit("💥 Echidna publish has failed.");
 }
 
-/**
- * @param {object} input
- * @param {string} input.wgDecisionURL
- * @param {string} input.token
- * @param {string} [input.cc]
- * @param {string} outputDir
- * @returns {Promise<string>}
- */
-async function publish(outputDir, input) {
+async function publish(outputDir: string, input: Input) {
 	const { wgDecisionURL: decision, token, cc } = input;
 	const tarFileName = "/tmp/echidna.tar";
 	await sh("mv index.html Overview.html", { cwd: outputDir });
@@ -80,18 +109,7 @@ async function publish(outputDir, input) {
 	return id.trim();
 }
 
-/**
- * @typedef {object} PublishState
- * @property {string} PublishState.id
- * @property {"success" | "failure" | "pending"} PublishState.status
- * @property {string} PublishState.details
- * @property {string} [PublishState.deploymentURL]
- * @property {Record<string, any>} [PublishState.response]
- *
- * @param {string} id
- * @returns {Promise<PublishState>}
- */
-async function getPublishStatus(id) {
+async function getPublishStatus(id: string) {
 	// How many seconds to wait before retrying job status check?
 	// The numbers are based on "experience", so are somewhat random.
 	const RETRY_DURATIONS = [6, 3, 2, 8, 2, 5, 10, 6];
@@ -99,8 +117,7 @@ async function getPublishStatus(id) {
 	let url = new URL("https://labs.w3.org/echidna/api/status");
 	url.searchParams.set("id", id);
 
-	/** @type {PublishState} */
-	const state = {
+	const state: PublishState = {
 		id,
 		status: "pending",
 		details: url.href,
@@ -111,13 +128,14 @@ async function getPublishStatus(id) {
 	let response;
 	do {
 		const wait = RETRY_DURATIONS.shift();
+		if (!wait) break;
 		console.log(`⏱️ Wait ${wait}s for job to finish...`);
 		await new Promise(res => setTimeout(res, wait * 1000));
 
 		console.log(`📡 Request: ${url}`);
 		const res = await fetch(url);
-		if (res.headers.get("content-type").includes("json")) {
-			response = await res.json();
+		if (res.headers.get("content-type")?.includes("json")) {
+			response = (await res.json()) as EchidnaResponse;
 		} else {
 			response = await res.text();
 			state.response = { message: response };
@@ -139,8 +157,11 @@ async function getPublishStatus(id) {
 	return state;
 }
 
-function showErrors(jobs) {
-	const loggers = {
+function showErrors(jobs: EchidnaJobs) {
+	type ErrorLoggers = {
+		[k in keyof EchidnaJobs]?: (errors: EchidnaJobs[k]["errors"]) => void;
+	};
+	const loggers: ErrorLoggers = {
 		"token-checker"(errors) {
 			console.group("Token Checker Errors:");
 			for (const error of errors) {
@@ -151,9 +172,10 @@ function showErrors(jobs) {
 		specberus(errors) {
 			console.group("Specberus Errors:");
 			for (const error of errors) {
+				const { detailMessage } = error;
 				const { message, link } = error.extra || {};
 				const { key, type } = error;
-				console.group(message || key);
+				console.group(detailMessage || message || key);
 				if (type) console.log(type);
 				if (link) console.log(link);
 				console.groupEnd();
@@ -161,7 +183,10 @@ function showErrors(jobs) {
 			console.groupEnd();
 		},
 	};
-	for (const [type, logger] of Object.entries(loggers)) {
+
+	type AvailableErrorLoggers = keyof ErrorLoggers;
+	for (const type of Object.keys(loggers) as AvailableErrorLoggers[]) {
+		const logger = loggers[type]!;
 		if (jobs[type] && jobs[type].errors.length) {
 			console.log();
 			logger(jobs[type].errors);

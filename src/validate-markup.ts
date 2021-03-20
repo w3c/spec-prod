@@ -1,5 +1,4 @@
-// @ts-check
-const { env, exit, install, sh, yesOrNo } = require("./utils.js");
+import { env, exit, install, sh, yesOrNo } from "./utils.js";
 
 if (module === require.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_MARKUP")) === false) {
@@ -10,11 +9,7 @@ if (module === require.main) {
 	main(outputDir).catch(err => exit(err.message || "Failed", err.code));
 }
 
-module.exports = main;
-/**
- * @param {string} outputDir
- */
-async function main(outputDir) {
+export default async function main(outputDir: string) {
 	console.log(`Validating ${outputDir}/index.html...`);
 	await install("vnu-jar");
 	const vnuJar = require("vnu-jar");

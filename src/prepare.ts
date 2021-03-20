@@ -1,15 +1,15 @@
-// @ts-check
-const { existsSync } = require("fs");
-const puppeteer = require("puppeteer");
-const {
+import { existsSync } from "fs";
+import * as puppeteer from "puppeteer";
+import { PUPPETEER_ENV } from "./constants.js";
+import {
 	env,
 	exit,
 	formatAsHeading,
 	pprint,
 	setOutput,
 	yesOrNo,
-} = require("./utils.js");
-const { PUPPETEER_ENV } = require("./constants.js");
+	ThenArg,
+} from "./utils.js";
 
 const FAIL_ON_OPTIONS = [
 	"nothing",
@@ -19,22 +19,44 @@ const FAIL_ON_OPTIONS = [
 	"everything",
 ];
 
+export interface Inputs {
+	TOOLCHAIN: "respec" | "bikeshed" | string;
+	SOURCE: string;
+	BUILD_FAIL_ON: string;
+	VALIDATE_LINKS: string;
+	VALIDATE_MARKUP: string;
+	GH_PAGES_BRANCH: string;
+	GH_PAGES_TOKEN: string;
+	GH_PAGES_BUILD_OVERRIDE: string;
+	W3C_ECHIDNA_TOKEN: string;
+	W3C_BUILD_OVERRIDE: string;
+	W3C_WG_DECISION_URL: string;
+	W3C_NOTIFICATIONS_CC: string;
+}
+
+export interface GitHubContext {
+	token: string;
+	event_name: string;
+	repository: `${string}/${string}`;
+	sha: string;
+	actor: string;
+	event: {
+		repository: { default_branch: string; has_pages: boolean };
+	};
+}
+
 if (module === require.main) {
-	/** @type {Inputs} */
-	const inputs = JSON.parse(env("INPUTS_USER"));
-	/** @type {GitHubContext} */
-	const githubContext = JSON.parse(env("INPUTS_GITHUB"));
+	const inputs: Inputs = JSON.parse(env("INPUTS_USER"));
+	const githubContext: GitHubContext = JSON.parse(env("INPUTS_GITHUB"));
 	main(inputs, githubContext).catch(err =>
 		exit(err.message || "Failed", err.code),
 	);
 }
 
-module.exports = main;
-/**
- * @param {Inputs} inputs
- * @param {GitHubContext} githubContext
- */
-async function main(inputs, githubContext) {
+export default async function main(
+	inputs: Inputs,
+	githubContext: GitHubContext,
+) {
 	console.log(formatAsHeading("Provided input"));
 	pprint(inputs);
 	console.log();
@@ -52,37 +74,8 @@ async function main(inputs, githubContext) {
 	};
 }
 
-/**
- * @typedef {object} Inputs
- * @property {"respec" | "bikeshed"} [inputs.TOOLCHAIN]
- * @property {string} [inputs.SOURCE]
- * @property {string} [inputs.BUILD_FAIL_ON]
- * @property {string} [inputs.VALIDATE_LINKS]
- * @property {string} [inputs.VALIDATE_MARKUP]
- * @property {string} [inputs.GH_PAGES_BRANCH]
- * @property {string} [inputs.GH_PAGES_TOKEN]
- * @property {string} [inputs.GH_PAGES_BUILD_OVERRIDE]
- * @property {string} [inputs.W3C_ECHIDNA_TOKEN]
- * @property {string} [inputs.W3C_BUILD_OVERRIDE]
- * @property {string} [inputs.W3C_WG_DECISION_URL]
- * @property {string} [inputs.W3C_NOTIFICATIONS_CC]
- *
- * @typedef {{ default_branch: string, has_pages: boolean }} Repository
- *
- * @typedef {object} GitHubContext
- * @property {string} GitHubContext.token
- * @property {string} GitHubContext.event_name
- * @property {string} GitHubContext.repository
- * @property {string} GitHubContext.sha
- * @property {string} GitHubContext.actor
- * @property {{ repository: Repository }} GitHubContext.event
- *
- * @param {Inputs} inputs
- * @param {GitHubContext} githubContext
- *
- * @typedef {ThenArg<ReturnType<processInputs>>} ProcessedInput
- */
-async function processInputs(inputs, githubContext) {
+export type ProcessedInput = ThenArg<ReturnType<typeof processInputs>>;
+async function processInputs(inputs: Inputs, githubContext: GitHubContext) {
 	return {
 		build: await buildOptions(inputs),
 		validate: validation(inputs),
@@ -93,12 +86,7 @@ async function processInputs(inputs, githubContext) {
 	};
 }
 
-/**
- * Figure out "toolchain" and input "source".
- * // TODO: refactor this to remove duplicate logic.
- * @param {Inputs} inputs
- */
-async function buildOptions(inputs) {
+async function buildOptions(inputs: Inputs) {
 	const { toolchain, source } = getBasicBuildOptions(inputs);
 
 	const configOverride = {
@@ -115,11 +103,11 @@ async function buildOptions(inputs) {
 	return { toolchain, source, flags, configOverride };
 }
 
-/**
- * @param {Inputs} inputs
- * @returns {{ toolchain: "respec" | "bikeshed", source: string }}
- */
-function getBasicBuildOptions(inputs) {
+export type BasicBuildOptions = {
+	toolchain: "respec" | "bikeshed";
+	source: string;
+};
+function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 	let toolchain = inputs.TOOLCHAIN;
 	let source = inputs.SOURCE;
 
@@ -167,17 +155,15 @@ function getBasicBuildOptions(inputs) {
 		}
 	}
 
-	return { toolchain, source };
+	return { toolchain, source } as BasicBuildOptions;
 }
 
-/** @param {string} confStr */
-function getConfigOverride(confStr) {
+function getConfigOverride(confStr: string) {
 	if (!confStr) {
 		return null;
 	}
 
-	/** @type {Record<string, string>} */
-	const config = {};
+	const config: Record<string, string> = {};
 	for (const line of confStr.trim().split("\n")) {
 		const idx = line.indexOf(":");
 		const key = line.slice(0, idx).trim();
@@ -187,11 +173,10 @@ function getConfigOverride(confStr) {
 	return config;
 }
 
-/**
- * @param {ReturnType<getConfigOverride>} conf
- * @param {ReturnType<typeof getBasicBuildOptions>} basicBuildOptions
- */
-async function extendW3CBuildConfig(conf, { toolchain, source }) {
+async function extendW3CBuildConfig(
+	conf: NonNullable<ReturnType<typeof getConfigOverride>>,
+	{ toolchain, source }: BasicBuildOptions,
+) {
 	/** Get present date in YYYY-MM-DD format */
 	const getShortIsoDate = () => new Date().toISOString().slice(0, 10);
 
@@ -202,7 +187,7 @@ async function extendW3CBuildConfig(conf, { toolchain, source }) {
 		conf.date = publishDate = conf.date || publishDate;
 	}
 
-	let shortName = conf.shortName || conf.shortname;
+	let shortName: string | undefined = conf.shortName || conf.shortname;
 	if (!shortName) {
 		if (toolchain === "respec") {
 			shortName = await getShortnameForRespec(source);
@@ -225,8 +210,7 @@ async function extendW3CBuildConfig(conf, { toolchain, source }) {
 	return conf;
 }
 
-/** @param {string} source */
-async function getShortnameForRespec(source) {
+async function getShortnameForRespec(source: string) {
 	console.group(`[INFO] Finding shortName for ReSpec document: ${source}`);
 	const browser = await puppeteer.launch({
 		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
@@ -240,9 +224,9 @@ async function getShortnameForRespec(source) {
 		await page.waitForFunction(() => window.hasOwnProperty("respecConfig"), {
 			timeout: 10000,
 		});
-		/** @type {string} */
-		const shortName = await page.evaluate(
-			() => window["respecConfig"].shortName,
+		const shortName: string = await page.evaluate(
+			// @ts-ignore
+			() => window.respecConfig.shortName as string,
 		);
 		console.log("[INFO] shortName:", shortName);
 		return shortName;
@@ -254,11 +238,7 @@ async function getShortnameForRespec(source) {
 	}
 }
 
-/**
- * @param {string} shortName
- * @param {string} publishDate
- */
-async function getPreviousVersionInfo(shortName, publishDate) {
+async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 	console.group(`[INFO] Finding previous version details...`);
 	const url = "https://www.w3.org/TR/" + shortName + "/";
 
@@ -276,13 +256,14 @@ async function getPreviousVersionInfo(shortName, publishDate) {
 		}
 
 		const thisURI = await page.$$eval("body div.head dl dt", elems => {
-			const thisVersion = elems.find(el =>
-				/this (?:published )?version/i.test(el.textContent.trim()),
+			const thisVersion = (elems as HTMLElement[]).find(el =>
+				/this (?:published )?version/i.test(el.textContent!.trim()),
 			);
 			if (thisVersion) {
-				const dd = thisVersion.nextElementSibling;
+				const dd = thisVersion.nextElementSibling as HTMLElement | null;
 				if (dd && dd.localName === "dd") {
-					return dd.querySelector("a").href;
+					const link = dd.querySelector("a");
+					if (link) return link.href;
 				}
 			}
 			return null;
@@ -290,13 +271,14 @@ async function getPreviousVersionInfo(shortName, publishDate) {
 		console.log("[INFO] thisURI:", thisURI);
 
 		const previousURI = await page.$$eval("body div.head dl dt", elems => {
-			const previousVersion = elems.find(el =>
-				/previous (?:published )?version/i.test(el.textContent.trim()),
+			const thisVersion = (elems as HTMLElement[]).find(el =>
+				/previous (?:published )?version/i.test(el.textContent!.trim()),
 			);
-			if (previousVersion) {
-				const dd = previousVersion.nextElementSibling;
+			if (thisVersion) {
+				const dd = thisVersion.nextElementSibling as HTMLElement | null;
 				if (dd && dd.localName === "dd") {
-					return dd.querySelector("a").href;
+					const link = dd.querySelector("a");
+					if (link) return link.href;
 				}
 			}
 			return null;
@@ -309,14 +291,15 @@ async function getPreviousVersionInfo(shortName, publishDate) {
 			);
 		}
 
-		const thisDate = thisURI.match(/[1-2][0-9]{7}/)[0];
+		const thisDate = thisURI.match(/[1-2][0-9]{7}/)![0];
 		const targetPublishDate = publishDate.replace(/\-/g, "");
-		const currentURI = thisDate === targetPublishDate ? previousURI : thisURI;
+		const currentURI =
+			thisDate === targetPublishDate && previousURI ? previousURI : thisURI;
 
-		const previousMaturity = currentURI.match(/\/TR\/[0-9]{4}\/([A-Z]+)/)[1];
+		const previousMaturity = currentURI.match(/\/TR\/[0-9]{4}\/([A-Z]+)/)![1];
 
 		const previousPublishDate = currentURI
-			.match(/[1-2][0-9]{7}/)[0]
+			.match(/[1-2][0-9]{7}/)![0]
 			.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
 
 		return {
@@ -330,11 +313,10 @@ async function getPreviousVersionInfo(shortName, publishDate) {
 	}
 }
 
-/**
- * @param {"respec" | "bikeshed" | string} toolchain
- * @param {string} failOn
- */
-function getFailOnFlags(toolchain, failOn) {
+function getFailOnFlags(
+	toolchain: BasicBuildOptions["toolchain"],
+	failOn: string,
+) {
 	if (failOn && !FAIL_ON_OPTIONS.includes(failOn)) {
 		exit(
 			`BUILD_FAIL_ON must be one of [${FAIL_ON_OPTIONS.join(", ")}]. ` +
@@ -356,32 +338,19 @@ function getFailOnFlags(toolchain, failOn) {
 		case "bikeshed": {
 			return [`--die-on=${failOn}`];
 		}
+		default:
+			throw new Error("Unreachable");
 	}
-	return [];
 }
 
-/**
- * Figure out validation requests.
- * @param {Inputs} inputs
- */
-function validation(inputs) {
+function validation(inputs: Inputs) {
 	const links = yesOrNo(inputs.VALIDATE_LINKS) || false;
 	const markup = yesOrNo(inputs.VALIDATE_MARKUP) || false;
 	return { links, markup };
 }
 
-/**
- * @template T
- * @typedef {T extends PromiseLike<infer U> ? U : T} ThenArg<T>
- */
-
-/**
- * Figure out GitHub pages deployment.
- * @param {Inputs} inputs
- * @param {GitHubContext} githubContext
- * @typedef {ReturnType<typeof githubPagesDeployment>} GithubPagesDeployOptions
- */
-function githubPagesDeployment(inputs, githubContext) {
+export type GithubPagesDeployOptions = ReturnType<typeof githubPagesDeployment>;
+function githubPagesDeployment(inputs: Inputs, githubContext: GitHubContext) {
 	const { event_name: event, sha, repository, actor } = githubContext;
 	const {
 		default_branch: defaultBranch,
@@ -401,7 +370,9 @@ function githubPagesDeployment(inputs, githubContext) {
 	const targetBranch = yesOrNo(ghPagesBranch) ? "gh-pages" : ghPagesBranch;
 
 	if (defaultBranch === targetBranch) {
-		exit(`Default branch and "ghPages": "${targetBranch}" cannot be same.`);
+		exit(
+			`Default branch and "GH_PAGES_BRANCH": "${targetBranch}" cannot be same.`,
+		);
 	}
 
 	if (!hasGitHubPagesEnabled) {
@@ -416,13 +387,11 @@ function githubPagesDeployment(inputs, githubContext) {
 	return { targetBranch, token, event, sha, repository, actor };
 }
 
-/**
- * Figure out GitHub pages deployment.
- * @param {Inputs} inputs
- * @param {GitHubContext} githubContext
- * @typedef {ThenArg<ReturnType<typeof w3cEchidnaDeployment>>} W3CDeployOptions
- */
-async function w3cEchidnaDeployment(inputs, githubContext) {
+export type W3CDeployOptions = ThenArg<ReturnType<typeof w3cEchidnaDeployment>>;
+async function w3cEchidnaDeployment(
+	inputs: Inputs,
+	githubContext: GitHubContext,
+) {
 	const { event_name: event } = githubContext;
 	if (!shouldTryDeploy(event)) {
 		return false;
@@ -442,9 +411,6 @@ async function w3cEchidnaDeployment(inputs, githubContext) {
 	return { wgDecisionURL, cc, token: token };
 }
 
-/**
- * @param {string} githubEvent
- */
-function shouldTryDeploy(githubEvent) {
+function shouldTryDeploy(githubEvent: GitHubContext["event_name"]) {
 	return githubEvent === "push";
 }

@@ -1,33 +1,28 @@
-// @ts-check
-/**
- * @typedef {import("./prepare.js").ProcessedInput["build"]} BuildInput
- */
-const path = require("path");
-const { copyFile, unlink } = require("fs").promises;
-const { env, exit, install, setOutput, sh } = require("./utils.js");
-const { StaticServer } = require("./utils.js");
-const { PUPPETEER_ENV } = require("./constants.js");
+import * as path from "path";
+import { copyFile, unlink } from "fs/promises";
+import { env, exit, install, setOutput, sh } from "./utils.js";
+import { StaticServer } from "./utils.js";
+import { PUPPETEER_ENV } from "./constants.js";
+
+import { ProcessedInput } from "./prepare.js";
+type Input = ProcessedInput["build"];
+type ConfigOverride = Input["configOverride"]["gh" | "w3c"];
+type BuildSuffix = "common" | "gh" | "w3c";
+type BuildResult = { dir: string; file: string };
 
 const OUT_FILE = "index.built.html";
 
 if (module === require.main) {
-	/** @type {BuildInput} */
-	const { toolchain, source, flags, configOverride } = JSON.parse(
-		env("INPUTS_BUILD"),
-	);
-	main(toolchain, source, flags, configOverride).catch(err =>
-		exit(err.message || "Failed", err.code),
-	);
+	const input: Input = JSON.parse(env("INPUTS_BUILD"));
+	main(input).catch(err => exit(err.message || "Failed", err.code));
 }
 
-module.exports = main;
-/**
- * @param {BuildInput["toolchain"]} toolchain
- * @param {BuildInput["source"]} source
- * @param {BuildInput["flags"]} flags
- * @param {BuildInput["configOverride"]} configOverride
- */
-async function main(toolchain, source, flags, configOverride) {
+export default async function main({
+	toolchain,
+	source,
+	flags,
+	configOverride,
+}: Input) {
 	// TODO: compare equal objects also
 	if (configOverride.gh === configOverride.w3c) {
 		const out = await build(toolchain, source, flags, null, "common");
@@ -43,14 +38,13 @@ async function main(toolchain, source, flags, configOverride) {
 	return { ...setOutput("gh", outGh), ...setOutput("w3c", outW3C) };
 }
 
-/**
- * @param {BuildInput["toolchain"]} toolchain
- * @param {BuildInput["source"]} source
- * @param {BuildInput["flags"]} additionalFlags
- * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
- * @param {"common" | "gh" | "w3c"} suffix
- */
-async function build(toolchain, source, additionalFlags, conf, suffix) {
+async function build(
+	toolchain: Input["toolchain"],
+	source: Input["source"],
+	additionalFlags: Input["flags"],
+	conf: ConfigOverride,
+	suffix: BuildSuffix,
+): Promise<BuildResult> {
 	console.group(`[INFO] Build ${toolchain} document "${source}" (${suffix})…`);
 	switch (toolchain) {
 		case "respec":
@@ -69,12 +63,11 @@ async function build(toolchain, source, additionalFlags, conf, suffix) {
 	return res;
 }
 
-/**
- * @param {BuildInput["source"]} source
- * @param {BuildInput["flags"]} additionalFlags
- * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
- */
-async function buildReSpec(source, additionalFlags, conf) {
+async function buildReSpec(
+	source: Input["source"],
+	additionalFlags: Input["flags"],
+	conf: ConfigOverride,
+) {
 	const flags = additionalFlags.join(" ");
 	const server = await new StaticServer(process.cwd()).start();
 	const src = new URL(source, server.url);
@@ -91,12 +84,11 @@ async function buildReSpec(source, additionalFlags, conf) {
 	}
 }
 
-/**
- * @param {BuildInput["source"]} source
- * @param {BuildInput["flags"]} additionalFlags
- * @param {BuildInput["configOverride"]["gh" | "w3c"]} conf
- */
-async function buildBikeshed(source, additionalFlags, conf) {
+async function buildBikeshed(
+	source: Input["source"],
+	additionalFlags: Input["flags"],
+	conf: ConfigOverride,
+) {
 	const metadataFlags = Object.entries(conf || {})
 		.map(([key, val]) => `--md-${key.replace(/\s+/g, "-")}="${val}"`)
 		.join(" ");
@@ -107,10 +99,9 @@ async function buildBikeshed(source, additionalFlags, conf) {
 	);
 }
 
-/**
- * @param {string} destinationDir
- */
-async function copyRelevantAssets(destinationDir) {
+async function copyRelevantAssets(
+	destinationDir: string,
+): Promise<BuildResult> {
 	if (!destinationDir.endsWith(path.sep)) {
 		destinationDir += path.sep;
 	}
@@ -123,7 +114,7 @@ async function copyRelevantAssets(destinationDir) {
 	});
 
 	// Move outputFile to the publish directory.
-	const rel = p => path.relative(process.cwd(), p);
+	const rel = (p: string) => path.relative(process.cwd(), p);
 	const destinationFile = path.join(destinationDir, "index.html");
 	console.log(`[INFO] [COPY] ${rel(OUT_FILE)} >>> ${rel(destinationFile)}`);
 	await copyFile(OUT_FILE, destinationFile);
