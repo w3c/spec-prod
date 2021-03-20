@@ -5,6 +5,7 @@
     "moduleResolution": "Node",
     "module": "CommonJS",
     "removeComments": false,
+    "sourceMap": true,
     "strict": true
   }
 }
