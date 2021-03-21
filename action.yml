@@ -11,6 +11,8 @@ inputs:
     description: Possible values - 'respec', 'bikeshed'
   SOURCE:
     description: Source file path.
+  DESTINATION:
+    description: Destination path, relative to repository root.
   BUILD_FAIL_ON:
     description: Exit behaviour on errors.
     default: fatal
