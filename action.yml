@@ -16,7 +16,7 @@ inputs:
     default: fatal
   VALIDATE_LINKS:
     description: Validate hyperlinks
-    default: true
+    default: false
   VALIDATE_MARKUP:
     description: Validate markup
     default: true
