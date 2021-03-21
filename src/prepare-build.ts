@@ -1,3 +1,4 @@
+import * as path from "path";
 import { existsSync } from "fs";
 import * as puppeteer from "puppeteer";
 import { PUPPETEER_ENV } from "./constants.js";
@@ -24,9 +25,10 @@ export async function buildOptions(inputs: Inputs) {
 	return { toolchain, source, flags, configOverride };
 }
 
+type NormalizedPath = { dir: string; file: string; path: string };
 export type BasicBuildOptions = {
 	toolchain: "respec" | "bikeshed";
-	source: string;
+	source: NormalizedPath;
 };
 function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 	let toolchain = inputs.TOOLCHAIN;
@@ -76,7 +78,24 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 		}
 	}
 
-	return { toolchain, source } as BasicBuildOptions;
+	const getNormalizedPath = (p: string): NormalizedPath => {
+		const cwd = process.cwd();
+		const parsed = path.parse(path.join(cwd, p));
+		if (!parsed.base) {
+			parsed.base = "index.html";
+		} else if (!parsed.ext) {
+			parsed.dir = parsed.base;
+			parsed.base = "index.html";
+		}
+		parsed.dir = path.relative(cwd, parsed.dir);
+		const { dir, base: file } = parsed;
+		return { dir, file, path: path.join(dir, file) };
+	};
+
+	return {
+		toolchain,
+		source: getNormalizedPath(source),
+	} as BasicBuildOptions;
 }
 
 function getConfigOverride(confStr: string) {
@@ -131,15 +150,15 @@ async function extendW3CBuildConfig(
 	return conf;
 }
 
-async function getShortnameForRespec(source: string) {
-	console.group(`[INFO] Finding shortName for ReSpec document: ${source}`);
+async function getShortnameForRespec(source: BasicBuildOptions["source"]) {
+	console.group(`[INFO] Finding shortName for ReSpec document: ${source.path}`);
 	const browser = await puppeteer.launch({
 		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
 	});
 
 	try {
 		const page = await browser.newPage();
-		const url = new URL(source, `file://${process.cwd()}/`).href;
+		const url = new URL(source.path, `file://${process.cwd()}/`).href;
 		console.log("[INFO] Navigating to", url);
 		await page.goto(url);
 		await page.waitForFunction(() => window.hasOwnProperty("respecConfig"), {

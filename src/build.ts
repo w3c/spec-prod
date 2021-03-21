@@ -45,7 +45,9 @@ async function build(
 	conf: ConfigOverride,
 	suffix: BuildSuffix,
 ): Promise<BuildResult> {
-	console.group(`[INFO] Build ${toolchain} document "${source}" (${suffix})…`);
+	console.group(
+		`[INFO] Build ${toolchain} document "${source.path}" (${suffix})…`,
+	);
 	switch (toolchain) {
 		case "respec":
 			await buildReSpec(source, additionalFlags, conf);
@@ -70,7 +72,7 @@ async function buildReSpec(
 ) {
 	const flags = additionalFlags.join(" ");
 	const server = await new StaticServer(process.cwd()).start();
-	const src = new URL(source, server.url);
+	const src = new URL(source.path, server.url);
 	for (const [key, val] of Object.entries(conf || {})) {
 		src.searchParams.set(key, val);
 	}
@@ -94,7 +96,7 @@ async function buildBikeshed(
 		.join(" ");
 	const flags = additionalFlags.join(" ");
 	await sh(
-		`bikeshed ${flags} spec "${source}" "${OUT_FILE}" ${metadataFlags}`,
+		`bikeshed ${flags} spec "${source.path}" "${OUT_FILE}" ${metadataFlags}`,
 		"stream",
 	);
 }
