@@ -4,6 +4,7 @@ import { env, exit, install, setOutput, sh } from "./utils.js";
 import { StaticServer } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
 
+import { BasicBuildOptions } from "./prepare-build.js";
 import { ProcessedInput } from "./prepare.js";
 type Input = ProcessedInput["build"];
 type ConfigOverride = Input["configOverride"]["gh" | "w3c"];
@@ -20,31 +21,33 @@ if (module === require.main) {
 export default async function main({
 	toolchain,
 	source,
+	destination,
 	flags,
 	configOverride,
 }: Input) {
+	const input: BasicBuildOptions = { toolchain, source, destination };
 	// TODO: compare equal objects also
 	if (configOverride.gh === configOverride.w3c) {
-		const out = await build(toolchain, source, flags, null, "common");
+		const out = await build(input, flags, null, "common");
 		return { ...setOutput("gh", out), ...setOutput("w3c", out) };
 	}
 
 	const confGh = configOverride.gh;
-	const outGh = await build(toolchain, source, flags, confGh, "gh");
+	const outGh = await build(input, flags, confGh, "gh");
 
 	const confW3C = configOverride.w3c;
-	const outW3C = await build(toolchain, source, flags, confW3C, "w3c");
+	const outW3C = await build(input, flags, confW3C, "w3c");
 
 	return { ...setOutput("gh", outGh), ...setOutput("w3c", outW3C) };
 }
 
 async function build(
-	toolchain: Input["toolchain"],
-	source: Input["source"],
+	input: BasicBuildOptions,
 	additionalFlags: Input["flags"],
 	conf: ConfigOverride,
 	suffix: BuildSuffix,
 ): Promise<BuildResult> {
+	const { toolchain, source, destination } = input;
 	console.group(
 		`[INFO] Build ${toolchain} document "${source.path}" (${suffix})…`,
 	);
@@ -59,8 +62,7 @@ async function build(
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
 
-	const destDir = path.join(process.cwd() + `.${suffix}`, source.dir);
-	const res = await copyRelevantAssets(source, destDir);
+	const res = await copyRelevantAssets(source, destination, suffix);
 	console.groupEnd();
 	return res;
 }
@@ -105,8 +107,10 @@ async function buildBikeshed(
 
 async function copyRelevantAssets(
 	source: Input["source"],
-	destinationDir: string,
+	destination: Input["destination"],
+	suffix: BuildSuffix,
 ): Promise<BuildResult> {
+	let destinationDir = path.join(process.cwd() + `.${suffix}`, destination.dir);
 	if (!destinationDir.endsWith(path.sep)) {
 		destinationDir += path.sep;
 	}
@@ -121,13 +125,13 @@ async function copyRelevantAssets(
 
 	// Move outputFile to the publish directory.
 	const rel = (p: string) => path.relative(process.cwd(), p);
-	const destinationFile = path.join(destinationDir, "index.html");
+	const destinationFile = path.join(destinationDir, destination.file);
 	console.log(`[INFO] [COPY] ${rel(outFile)} >>> ${rel(destinationFile)}`);
 	await copyFile(outFile, destinationFile);
 	await unlink(outFile);
 
 	// List all files in output directory
-	await sh(`ls -R`, { output: "buffer", cwd: destinationDir });
+	await sh(`ls -R ${rel(destinationDir)}`, { output: "buffer" });
 
 	return { dir: destinationDir, file: destinationFile };
 }
