@@ -8,7 +8,6 @@
     "split2": "^3.2.2"
   },
   "scripts": {
-    "prepare": "yarn build",
     "build": "tsc -p tsconfig.json"
   },
   "devDependencies": {
