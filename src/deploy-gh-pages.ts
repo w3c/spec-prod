@@ -24,7 +24,9 @@ export default async function main(inputs: Input, outputDir: string) {
 	await fs.copyFile(".git/config", "/tmp/spec-prod-git-config");
 	try {
 		await prepare(inputs, outputDir);
-		const committed = await commit(inputs);
+		const gitStatus = await sh(`git status`, "stream");
+		const hasChanges = !gitStatus.includes("nothing to commit");
+		const committed = hasChanges && (await commit(inputs));
 		if (!committed) {
 			await cleanUp();
 			exit(`Nothing to commit. Skipping deploy.`, 0);
@@ -65,7 +67,6 @@ async function prepare(
 
 	await sh(`rsync -av ${outputDir} .`, "stream");
 	await sh(`git add -A --verbose`, "stream");
-	await sh(`git status`, "buffer");
 }
 
 async function commit({
