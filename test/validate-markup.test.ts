@@ -1,3 +1,4 @@
+import * as path from "path";
 import main from "../src/validate-markup.js";
 import { Outputs } from "./index.test.js";
 
@@ -7,7 +8,9 @@ export default async function validateMarkup(outputs: Outputs) {
 		return;
 	}
 
-	const { dir: outputDir = "." } = outputs?.build?.w3c || {};
+	const cwd = process.cwd();
+	const { dir = cwd, file = path.join(cwd, "index.html") } =
+		outputs?.build?.w3c || {};
 
-	return await main(outputDir);
+	return await main({ dir, file });
 }
