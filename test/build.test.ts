@@ -4,7 +4,7 @@ import { Outputs } from "./index.test.js";
 export default async function build(outputs: Outputs) {
 	const {
 		toolchain = "respec",
-		source = "index.html",
+		source = { dir: "", file: "index.html", path: "index.html" },
 		flags = ["-e"],
 		configOverride = { w3c: { dir: "", file: "" }, gh: null },
 	} = outputs?.prepare?.build || {};
