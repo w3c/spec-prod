@@ -9,7 +9,7 @@ import { ProcessedInput } from "./prepare.js";
 type Input = ProcessedInput["build"];
 type ConfigOverride = Input["configOverride"]["gh" | "w3c"];
 type BuildSuffix = "common" | "gh" | "w3c";
-type BuildResult = { dir: string; file: string };
+export type BuildResult = { dir: string; file: string };
 
 const tmpOutputFile = (source: Input["source"]) => source.path + ".built.html";
 

@@ -1,23 +1,26 @@
+import * as path from "path";
 import { env, exit, install, sh, yesOrNo } from "./utils.js";
+import { BuildResult } from "./build.js";
 
 if (module === require.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_MARKUP")) === false) {
 		exit("Skipped", 0);
 	}
 
-	const outputDir = env("OUTPUT_DIR");
-	main(outputDir).catch(err => exit(err.message || "Failed", err.code));
+	const input: BuildResult = JSON.parse(env("OUTPUTS_BUILD"));
+	main(input).catch(err => exit(err.message || "Failed", err.code));
 }
 
-export default async function main(outputDir: string) {
-	console.log(`Validating ${outputDir}/index.html...`);
+export default async function main({ dir, file }: BuildResult) {
+	console.log(`Validating ${file}...`);
 	await install("vnu-jar");
 	const vnuJar = require("vnu-jar");
 
 	try {
-		await sh(`java -jar "${vnuJar}" --also-check-css index.html`, {
+		const relFile = path.relative(dir, file);
+		await sh(`java -jar "${vnuJar}" --also-check-css ${relFile}`, {
 			output: "stream",
-			cwd: outputDir,
+			cwd: dir,
 		});
 		exit("✅  Looks good! No HTML validation errors!", 0);
 	} catch {
