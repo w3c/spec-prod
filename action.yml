@@ -117,4 +117,4 @@ runs:
       shell: bash
       env:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.deploy).w3c) }}
-        OUTPUT_DIR: ${{ fromJson(steps.build.outputs.w3c).dir }}
+        OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
