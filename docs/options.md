@@ -95,7 +95,7 @@ Whether or not to check for broken hyperlinks.
 
 **Possible values:** true, false
 
-**Default:** true
+**Default:** false
 
 ## `VALIDATE_MARKUP`
 
