@@ -1,7 +1,9 @@
+import * as path from "path";
 import fetch from "node-fetch";
 import { env, exit, pprint, sh } from "./utils.js";
 
 import { W3CDeployOptions } from "./prepare-deploy.js";
+import { BuildResult } from "./build.js";
 type Input = Exclude<W3CDeployOptions, false>;
 
 const MAILING_LIST = `https://lists.w3.org/Archives/Public/public-tr-notifications/`;
@@ -9,11 +11,13 @@ const API_URL = "https://labs.w3.org/echidna/api/request";
 
 if (module === require.main) {
 	const inputs: W3CDeployOptions = JSON.parse(env("INPUTS_DEPLOY"));
-	const outputDir = env("OUTPUT_DIR");
+	const buildOutput: BuildResult = JSON.parse(env("OUTPUTS_BUILD"));
 	if (inputs === false) {
 		exit("Skipped.", 0);
 	}
-	main(inputs, outputDir).catch(err => exit(err.message || "Failed", err.code));
+	main(inputs, buildOutput).catch(err => {
+		exit(err.message || "Failed", err.code);
+	});
 }
 
 interface PublishState {
@@ -58,9 +62,9 @@ interface EchidnaResponse {
 	};
 }
 
-export default async function main(inputs: Input, outputDir: string) {
+export default async function main(inputs: Input, buildOutput: BuildResult) {
 	console.log(`📣 If it fails, check ${MAILING_LIST}`);
-	const id = await publish(outputDir, inputs);
+	const id = await publish(inputs, buildOutput);
 
 	console.group("Getting publish status...");
 	const result = await getPublishStatus(id);
@@ -88,15 +92,18 @@ export default async function main(inputs: Input, outputDir: string) {
 	exit("💥 Echidna publish has failed.");
 }
 
-async function publish(outputDir: string, input: Input) {
+async function publish(input: Input, buildOutput: BuildResult) {
+	const { dir: outputDir } = buildOutput;
+	const file = path.relative(outputDir, buildOutput.file);
+
 	const { wgDecisionURL: decision, token, cc } = input;
 	const tarFileName = "/tmp/echidna.tar";
-	await sh("mv index.html Overview.html", { cwd: outputDir });
+	await sh(`mv ${file} Overview.html`, { cwd: outputDir });
 	await sh(`tar cvf ${tarFileName} *`, {
 		output: "stream",
 		cwd: outputDir,
 	});
-	await sh("mv Overview.html index.html", { cwd: outputDir });
+	await sh(`mv Overview.html ${file}`, { cwd: outputDir });
 
 	let command = `curl '${API_URL}'`;
 	// command += ` -F "dry-run=true"`;
