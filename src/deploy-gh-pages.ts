@@ -115,11 +115,15 @@ async function push({
 }
 
 async function cleanUp() {
+	console.group("Cleanup");
 	try {
 		await sh(`git reset`);
 		await sh(`git clean -fd`);
 		await sh(`git checkout -`);
 		await sh(`git checkout -- .`);
 		await fs.copyFile("/tmp/spec-prod-git-config", ".git/config");
-	} catch {}
+	} catch {
+	} finally {
+		console.groupEnd();
+	}
 }
