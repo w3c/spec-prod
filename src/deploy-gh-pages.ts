@@ -66,7 +66,7 @@ async function prepare(
 	}
 
 	await sh(`rsync -av ${outputDir} .`, "stream");
-	await sh(`git add -A --verbose`, "stream");
+	await sh(`git add -A`, "stream");
 }
 
 async function commit({
