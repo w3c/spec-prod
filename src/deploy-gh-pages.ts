@@ -96,7 +96,7 @@ async function commit({
 
 	try {
 		await sh(`git commit --file "${COMMIT_MESSAGE_FILE}"`);
-		await sh(`git log -p -1 --color --word-diff`, "stream");
+		// await sh(`git log -p -1 --color --word-diff`, "stream");
 		return true;
 	} catch (error) {
 		return false;

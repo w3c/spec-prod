@@ -131,7 +131,7 @@ async function copyRelevantAssets(
 	await unlink(outFile);
 
 	// List all files in output directory
-	await sh(`ls -R ${rel(destinationDir)}`, { output: "buffer" });
+	// await sh(`ls -R ${rel(destinationDir)}`, { output: "buffer" });
 
 	return { dir: destinationDir, file: destinationFile };
 }
