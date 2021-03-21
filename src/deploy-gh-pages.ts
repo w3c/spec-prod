@@ -4,26 +4,26 @@ import * as fs from "fs/promises";
 import { env, exit, sh } from "./utils.js";
 
 import { GithubPagesDeployOptions } from "./prepare-deploy.js";
+import { BuildResult } from "./build.js";
 type Input = Exclude<GithubPagesDeployOptions, false>;
 
 if (module === require.main) {
 	const inputs: GithubPagesDeployOptions = JSON.parse(env("INPUTS_DEPLOY"));
-	const outputDir = env("OUTPUT_DIR");
+	const buildResult: BuildResult = JSON.parse(env("OUTPUTS_BUILD"));
 
 	if (inputs === false) {
 		exit("Skipped.", 0);
 	}
-	main(inputs, outputDir).catch(err => exit(err.message || "Failed", err.code));
+	main(inputs, buildResult).catch(err => {
+		exit(err.message || "Failed", err.code);
+	});
 }
 
-export default async function main(inputs: Input, outputDir: string) {
-	if (!outputDir.endsWith(path.sep)) {
-		outputDir += path.sep;
-	}
+export default async function main(inputs: Input, buildResult: BuildResult) {
 	let error = null;
 	await fs.copyFile(".git/config", "/tmp/spec-prod-git-config");
 	try {
-		await prepare(inputs, outputDir);
+		await prepare(inputs, buildResult);
 		const gitStatus = await sh(`git status`, "stream");
 		const hasChanges = !gitStatus.includes("nothing to commit");
 		const committed = hasChanges && (await commit(inputs));
@@ -47,11 +47,11 @@ export default async function main(inputs: Input, outputDir: string) {
 
 async function prepare(
 	opts: Pick<Input, "targetBranch" | "repository">,
-	outputDir: string,
+	buildResult: BuildResult,
 ) {
-	if (!outputDir.endsWith(path.sep)) {
-		throw new Error("outputDir must end with a trailing slash.");
-	}
+	const outputDir = buildResult.root.endsWith(path.sep)
+		? buildResult.root
+		: `${buildResult.root}${path.sep}`;
 	const { targetBranch, repository } = opts;
 
 	// Check if target branch remote exists on remote.

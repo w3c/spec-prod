@@ -8,9 +8,8 @@ export default async function validateMarkup(outputs: Outputs) {
 		return;
 	}
 
-	const cwd = process.cwd();
-	const { dir = cwd, file = path.join(cwd, "index.html") } =
+	const { root = process.cwd(), dir = "", file = "index.html" } =
 		outputs?.build?.w3c || {};
 
-	return await main({ dir, file });
+	return await main({ root, dir, file });
 }

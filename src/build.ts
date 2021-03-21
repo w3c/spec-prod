@@ -9,7 +9,7 @@ import { ProcessedInput } from "./prepare.js";
 type Input = ProcessedInput["build"];
 type ConfigOverride = Input["configOverride"]["gh" | "w3c"];
 type BuildSuffix = "common" | "gh" | "w3c";
-export type BuildResult = { dir: string; file: string };
+export type BuildResult = { root: string; dir: string; file: string };
 
 const tmpOutputFile = (source: Input["source"]) => source.path + ".built.html";
 
@@ -110,7 +110,8 @@ async function copyRelevantAssets(
 	destination: Input["destination"],
 	suffix: BuildSuffix,
 ): Promise<BuildResult> {
-	let destinationDir = path.join(process.cwd() + `.${suffix}`, destination.dir);
+	const rootDir = path.join(process.cwd() + `.${suffix}`);
+	let destinationDir = path.join(rootDir, destination.dir);
 	if (!destinationDir.endsWith(path.sep)) {
 		destinationDir += path.sep;
 	}
@@ -133,5 +134,5 @@ async function copyRelevantAssets(
 	// List all files in output directory
 	// await sh(`ls -R ${rel(destinationDir)}`, { output: "buffer" });
 
-	return { dir: destinationDir, file: destinationFile };
+	return { root: rootDir, dir: destination.dir, file: destination.file };
 }

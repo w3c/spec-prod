@@ -19,8 +19,8 @@ export default async function deployGhPages(outputs: Outputs) {
 		actor: ghPages.actor || "sidvishnoi",
 	};
 
-	const { dir: outputDir = path.resolve(process.cwd() + ".built") } =
-		outputs?.build?.gh || {};
+	const { root = process.cwd() + ".built", dir = "", file = "index.html" } =
+		outputs?.build?.w3c || {};
 
-	return await main(inputs, outputDir);
+	return await main(inputs, { root, dir, file });
 }
