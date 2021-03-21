@@ -65,7 +65,7 @@ async function prepare(
 		await sh(`git reset --hard`, "stream");
 	}
 
-	await sh(`rsync -av ${outputDir} .`, "stream");
+	await sh(`rsync -a ${outputDir} .`, "stream");
 	await sh(`git add -A`, "stream");
 }
 
