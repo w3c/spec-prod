@@ -65,8 +65,8 @@ async function prepare(
 		await sh(`git reset --hard`, "stream");
 	}
 
-	await sh(`rsync -av ${outputDir} .`, "stream");
-	await sh(`git add -A --verbose`, "stream");
+	await sh(`rsync -a ${outputDir} .`, "stream");
+	await sh(`git add -A`, "stream");
 }
 
 async function commit({
@@ -96,7 +96,6 @@ async function commit({
 
 	try {
 		await sh(`git commit --file "${COMMIT_MESSAGE_FILE}"`);
-		await sh(`git log -p -1 --color --word-diff`, "stream");
 		return true;
 	} catch (error) {
 		return false;
