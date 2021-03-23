@@ -10,21 +10,21 @@ type Input = Exclude<GithubPagesDeployOptions, false>;
 
 if (module === require.main) {
 	const inputs: GithubPagesDeployOptions = JSON.parse(env("INPUTS_DEPLOY"));
-	const buildResult: BuildResult = JSON.parse(env("OUTPUTS_BUILD"));
+	const outputDir: BuildResult["root"] = env("OUTPUTS_BUILD");
 
 	if (inputs === false) {
 		exit("Skipped.", 0);
 	}
-	main(inputs, buildResult).catch(err => {
+	main(inputs, outputDir).catch(err => {
 		exit(err.message || "Failed", err.code);
 	});
 }
 
-export default async function main(inputs: Input, buildResult: BuildResult) {
+export default async function main(inputs: Input, outputDir: string) {
 	let error = null;
 	await fs.copyFile(".git/config", "/tmp/spec-prod-git-config");
 	try {
-		await prepare(inputs, buildResult);
+		await prepare(inputs, outputDir);
 		const gitStatus = await sh(`git status`, "stream");
 		const hasChanges = !gitStatus.includes("nothing to commit");
 		const committed = hasChanges && (await commit(inputs));
@@ -48,11 +48,9 @@ export default async function main(inputs: Input, buildResult: BuildResult) {
 
 async function prepare(
 	opts: Pick<Input, "targetBranch" | "repository">,
-	buildResult: BuildResult,
+	outputDir: string,
 ) {
-	const outputDir = buildResult.root.endsWith(path.sep)
-		? buildResult.root
-		: `${buildResult.root}${path.sep}`;
+	if (!outputDir.endsWith(path.sep)) outputDir += path.sep;
 	const { targetBranch, repository } = opts;
 
 	// Check if target branch remote exists on remote.

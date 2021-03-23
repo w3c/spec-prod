@@ -107,7 +107,7 @@ runs:
       shell: bash
       env:
         INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.deploy).ghPages) }}
-        OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.gh)) }}
+        OUTPUT_DIR: ${{ fromJson(steps.build.outputs.gh).root }}
 
     - name: Deploy to W3C
       run: |
