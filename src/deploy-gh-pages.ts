@@ -100,6 +100,7 @@ async function commit({
 		await sh(`git commit --file "${COMMIT_MESSAGE_FILE}"`);
 		return true;
 	} catch (error) {
+		console.error(error);
 		return false;
 	}
 }
@@ -115,9 +116,16 @@ async function push({
 }
 
 async function cleanUp() {
+	console.group("Cleanup");
 	try {
+		await sh(`git reset`);
+		await sh(`git clean -fd`);
 		await sh(`git checkout -`);
 		await sh(`git checkout -- .`);
+	} catch (error) {
+		console.error(error);
+	} finally {
 		await fs.copyFile("/tmp/spec-prod-git-config", ".git/config");
-	} catch {}
+		console.groupEnd();
+	}
 }
