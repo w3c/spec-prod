@@ -1,4 +1,3 @@
-import * as path from "path";
 import main from "../src/validate-links.js";
 import { Outputs } from "./index.test.js";
 
@@ -8,8 +7,8 @@ export default async function validateLinks(outputs: Outputs) {
 		return;
 	}
 
-	const { root = process.cwd(), dir = "", file = "index.html" } =
+	const { dest = process.cwd() + ".common", file = "index.html" } =
 		outputs?.build?.w3c || {};
 
-	return await main({ root, dir, file });
+	return await main({ dest, file });
 }

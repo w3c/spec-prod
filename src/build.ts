@@ -9,7 +9,23 @@ import { ProcessedInput } from "./prepare.js";
 type Input = ProcessedInput["build"];
 type ConfigOverride = Input["configOverride"]["gh" | "w3c"];
 type BuildSuffix = "common" | "gh" | "w3c";
-export type BuildResult = { root: string; dir: string; file: string };
+
+/**
+ * @example
+ * ```js
+ * let destination = "my-spec/index.html"; // then:
+ * root = process.cwd() + BuildSuffix
+ * dir = "my-spec"
+ * file = "index.html"
+ * dest = path.join(process.cwd() + BuildSuffix, "my-spec")
+ * ```
+ */
+export interface BuildResult {
+	root: string;
+	dir: string;
+	file: string;
+	dest: string;
+}
 
 const tmpOutputFile = (source: Input["source"]) => source.path + ".built.html";
 
@@ -134,5 +150,10 @@ async function copyRelevantAssets(
 	// List all files in output directory
 	// await sh(`ls -R ${rel(destinationDir)}`, { output: "buffer" });
 
-	return { root: rootDir, dir: destination.dir, file: destination.file };
+	return {
+		root: rootDir,
+		dest: destinationDir,
+		dir: destination.dir,
+		file: destination.file,
+	};
 }
