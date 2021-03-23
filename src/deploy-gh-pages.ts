@@ -18,9 +18,6 @@ if (module === require.main) {
 }
 
 export default async function main(inputs: Input, outputDir: string) {
-	if (!outputDir.endsWith(path.sep)) {
-		outputDir += path.sep;
-	}
 	let error = null;
 	await fs.copyFile(".git/config", "/tmp/spec-prod-git-config");
 	try {
@@ -48,9 +45,7 @@ export default async function main(inputs: Input, outputDir: string) {
 
 type PrepareInputs = Pick<Input, "targetBranch" | "repository">;
 async function prepare(opts: PrepareInputs, outputDir: string) {
-	if (!outputDir.endsWith(path.sep)) {
-		throw new Error("outputDir must end with a trailing slash.");
-	}
+	if (!outputDir.endsWith(path.sep)) outputDir += path.sep;
 	const { targetBranch, repository } = opts;
 
 	// Check if target branch remote exists on remote.
