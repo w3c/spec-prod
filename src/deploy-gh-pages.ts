@@ -5,19 +5,16 @@ import { setSecret } from "@actions/core";
 import { env, exit, sh } from "./utils.js";
 
 import { GithubPagesDeployOptions } from "./prepare-deploy.js";
-import { BuildResult } from "./build.js";
 type Input = Exclude<GithubPagesDeployOptions, false>;
 
 if (module === require.main) {
 	const inputs: GithubPagesDeployOptions = JSON.parse(env("INPUTS_DEPLOY"));
-	const outputDir: BuildResult["root"] = env("OUTPUTS_BUILD");
+	const outputDir = env("OUTPUT_DIR");
 
 	if (inputs === false) {
 		exit("Skipped.", 0);
 	}
-	main(inputs, outputDir).catch(err => {
-		exit(err.message || "Failed", err.code);
-	});
+	main(inputs, outputDir).catch(err => exit(err.message || "Failed", err.code));
 }
 
 export default async function main(inputs: Input, outputDir: string) {
