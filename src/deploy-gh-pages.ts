@@ -81,9 +81,9 @@ async function commit({
 	await sh(`git config user.name "${name}"`);
 	await sh(`git config user.email "${email}"`);
 
-	const originalCommmitMessage = await sh(`git log --format=%B -n1 ${sha}`);
+	const commitHeadline = await sh(`git show -s --format=%s ${sha}`);
 	const commitMessage = [
-		`chore(rebuild): ${originalCommmitMessage}`,
+		commitHeadline,
 		"",
 		`SHA: ${sha}`,
 		`Reason: ${event}, by @${actor}`,
