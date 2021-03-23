@@ -93,7 +93,7 @@ export default async function main(inputs: Input, buildOutput: BuildResult) {
 }
 
 async function publish(input: Input, buildOutput: BuildResult) {
-	const { dir: outputDir } = buildOutput;
+	const outputDir = path.join(buildOutput.root, buildOutput.dir);
 	const file = path.relative(outputDir, buildOutput.file);
 
 	const { wgDecisionURL: decision, token, cc } = input;
