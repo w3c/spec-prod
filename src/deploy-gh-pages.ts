@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as os from "os";
 import * as fs from "fs/promises";
+import { setSecret } from "@actions/core";
 import { env, exit, sh } from "./utils.js";
 
 import { GithubPagesDeployOptions } from "./prepare-deploy.js";
@@ -78,12 +79,13 @@ async function commit({
 
 	const author = await sh(`git show -s --format='%an | %ae' ${sha}`);
 	const [name, email] = author.split(" | ");
+	setSecret(email);
 	await sh(`git config user.name "${name}"`);
 	await sh(`git config user.email "${email}"`);
 
-	const originalCommmitMessage = await sh(`git log --format=%B -n1 ${sha}`);
+	const commitHeadline = await sh(`git show -s --format=%s ${sha}`);
 	const commitMessage = [
-		`chore(rebuild): ${originalCommmitMessage}`,
+		commitHeadline,
 		"",
 		`SHA: ${sha}`,
 		`Reason: ${event}, by @${actor}`,
@@ -96,7 +98,6 @@ async function commit({
 
 	try {
 		await sh(`git commit --file "${COMMIT_MESSAGE_FILE}"`);
-		// await sh(`git log -p -1 --color --word-diff`, "stream");
 		return true;
 	} catch (error) {
 		return false;
