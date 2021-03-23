@@ -88,6 +88,7 @@ async function commit({ sha, event, actor }: CommitInputs) {
 
 	try {
 		await sh(`git commit --file "${COMMIT_MESSAGE_FILE}"`);
+		await sh(`git show --stat --format=""`);
 		return true;
 	} catch (error) {
 		console.error(error);
