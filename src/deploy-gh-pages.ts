@@ -46,10 +46,8 @@ export default async function main(inputs: Input, outputDir: string) {
 	}
 }
 
-async function prepare(
-	opts: Pick<Input, "targetBranch" | "repository">,
-	outputDir: string,
-) {
+type PrepareInputs = Pick<Input, "targetBranch" | "repository">;
+async function prepare(opts: PrepareInputs, outputDir: string) {
 	if (!outputDir.endsWith(path.sep)) {
 		throw new Error("outputDir must end with a trailing slash.");
 	}
@@ -70,11 +68,8 @@ async function prepare(
 	await sh(`git add -A`, "stream");
 }
 
-async function commit({
-	sha,
-	event,
-	actor,
-}: Pick<Input, "sha" | "event" | "actor">) {
+type CommitInputs = Pick<Input, "sha" | "event" | "actor">;
+async function commit({ sha, event, actor }: CommitInputs) {
 	const GITHUB_ACTIONS_BOT = `github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>`;
 
 	const author = await sh(`git show -s --format='%an | %ae' ${sha}`);
@@ -105,11 +100,8 @@ async function commit({
 	}
 }
 
-async function push({
-	repository,
-	targetBranch,
-	token,
-}: Pick<Input, "repository" | "targetBranch" | "token">) {
+type PushInputs = Pick<Input, "repository" | "targetBranch" | "token">;
+async function push({ repository, targetBranch, token }: PushInputs) {
 	const repoURI = `https://x-access-token:${token}@github.com/${repository}.git/`;
 	await sh(`git remote set-url origin "${repoURI}"`);
 	await sh(`git push --force-with-lease origin "${targetBranch}"`, "stream");
