@@ -18,7 +18,8 @@ export default async function deployGhPages(outputs: Outputs) {
 		actor: ghPages.actor || "sidvishnoi",
 	};
 
-	const { root = process.cwd() + ".built" } = outputs?.build?.w3c || {};
+	const { root: outputDir = process.cwd() + ".common" } =
+		outputs?.build?.w3c || {};
 
-	return await main(inputs, root);
+	return await main(inputs, outputDir);
 }
