@@ -1,6 +1,5 @@
 node_modules
 python_modules
 .vscode
-yarn.lock
 *.js
 *.map
