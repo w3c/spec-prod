@@ -163,8 +163,6 @@ See [`W3C_BUILD_OVERRIDE`](options.md#w3c_build_override) and [`GH_PAGES_BUILD_O
 
 If you've multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.
 
-**Note:** At present, each source might create its own commit in `GH_PAGES_BRANCH` even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when [#8](https://github.com/w3c/spec-prod/issues/8) and [#14](https://github.com/w3c/spec-prod/issues/14) are fixed.
-
 ```yaml
 name: CI
 on:
@@ -190,6 +188,58 @@ jobs:
         with:
           SOURCE: ${{ matrix.source }}
           DESTINATION: ${{ matrix.destination }}
+          GH_PAGES_BRANCH: gh-pages
+          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
+          W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
+```
+
+**Note:** At present, each source might create its own commit in `GH_PAGES_BRANCH` even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when [#8](https://github.com/w3c/spec-prod/issues/8) and [#14](https://github.com/w3c/spec-prod/issues/14) are fixed.
+
+As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' [`on.<push|pull_request>.paths`](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths) as:
+
+```yaml
+# .github/workflows/pr-push-spec-1.yml
+name: CI (spec-1)
+on:
+  pull_request:
+    paths: ["spec-1/**"]
+  push:
+    branches: [main]
+    paths: ["spec-1/**"]
+
+jobs:
+  main:
+    name: Build, Validate and Deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          SOURCE: spec-1
+          DESTINATION: the-spec
+          GH_PAGES_BRANCH: gh-pages
+          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
+          W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
+
+# .github/workflows/pr-push-spec-2.yml
+name: CI (spec-2)
+on:
+  pull_request:
+    paths: ["spec-2/**"]
+  push:
+    branches: [main]
+    paths: ["spec-2/**"]
+
+jobs:
+  main:
+    name: Build, Validate and Deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          SOURCE: spec-2/spec.bs
+          DESTINATION: spec-2/index.html
           GH_PAGES_BRANCH: gh-pages
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
           W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
