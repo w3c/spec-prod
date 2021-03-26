@@ -1,0 +1,32 @@
+name: Node CI (PR)
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "test/**"
+      - "tsconfig.json"
+      - "package.json"
+      - "yarn.lock"
+      - ".github/workflows/**"
+
+env:
+  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+  PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome
+
+jobs:
+  lint:
+    name: Check linting issues
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: yarn
+      - run: yarn build --noEmit
