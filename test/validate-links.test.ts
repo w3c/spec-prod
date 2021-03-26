@@ -7,7 +7,8 @@ export default async function validateLinks(outputs: Outputs) {
 		return;
 	}
 
-	const { dir: outputDir = "." } = outputs?.build?.w3c || {};
+	const { dest = process.cwd() + ".common", file = "index.html" } =
+		outputs?.build?.w3c || {};
 
-	return await main(outputDir);
+	return await main({ dest, file });
 }

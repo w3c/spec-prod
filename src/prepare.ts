@@ -17,6 +17,7 @@ import { validation } from "./prepare-validate.js";
 export interface Inputs {
 	TOOLCHAIN: "respec" | "bikeshed" | string;
 	SOURCE: string;
+	DESTINATION: string;
 	BUILD_FAIL_ON: string;
 	VALIDATE_LINKS: string;
 	VALIDATE_MARKUP: string;

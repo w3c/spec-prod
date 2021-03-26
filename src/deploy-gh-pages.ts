@@ -100,6 +100,7 @@ type PushInputs = Pick<Input, "repository" | "targetBranch" | "token">;
 async function push({ repository, targetBranch, token }: PushInputs) {
 	const repoURI = `https://x-access-token:${token}@github.com/${repository}.git/`;
 	await sh(`git remote set-url origin "${repoURI}"`);
+	await sh(`git pull origin "${targetBranch}" --rebase`).catch(() => {});
 	await sh(`git push --force-with-lease origin "${targetBranch}"`, "stream");
 }
 

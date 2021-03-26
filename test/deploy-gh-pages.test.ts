@@ -1,4 +1,3 @@
-import * as path from "path";
 import main from "../src/deploy-gh-pages.js";
 import { Outputs } from "./index.test.js";
 
@@ -19,8 +18,8 @@ export default async function deployGhPages(outputs: Outputs) {
 		actor: ghPages.actor || "sidvishnoi",
 	};
 
-	const { dir: outputDir = path.resolve(process.cwd() + ".built") } =
-		outputs?.build?.gh || {};
+	const { root: outputDir = process.cwd() + ".common" } =
+		outputs?.build?.w3c || {};
 
 	return await main(inputs, outputDir);
 }
