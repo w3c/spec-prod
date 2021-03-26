@@ -180,6 +180,8 @@ async function findAssetsToCopy(source: Input["source"]) {
 		(url: URL) => url.origin === "https://user-images.githubusercontent.com",
 	];
 
+	process.env["PUPPETEER_EXECUTABLE_PATH"] =
+		PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH;
 	for await (const res of getAllSubResources(rootUrl)) {
 		const url = new URL(res.url);
 		if (isLocalAsset(url)) {
