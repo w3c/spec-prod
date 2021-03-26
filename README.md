@@ -41,7 +41,7 @@ jobs:
 Learn from [usage examples](docs/examples.md), including:
  
  * [Run as a validator on pull requests](docs/examples.md#run-as-a-validator-on-pull-requests)
- * [Selectively enable/disable validators](docs/examples.md#selectively-enabledisable-validators)
+ * [Deploy to GitHub pages](docs/examples.md#deploy-to-github-pages)
  * And more...
 
 ## Options
