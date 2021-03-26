@@ -1,6 +1,8 @@
 import * as path from "path";
-import { copyFile, unlink } from "fs/promises";
-import { env, exit, install, setOutput, sh } from "./utils.js";
+import { copyFile, mkdir, readFile, writeFile, unlink } from "fs/promises";
+import fetch from "node-fetch";
+import { getAllSubResources, ResourceType } from "subresources";
+import { env, exit, setOutput, sh } from "./utils.js";
 import { StaticServer } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
 
@@ -27,6 +29,7 @@ export interface BuildResult {
 	dest: string;
 }
 
+const rel = (p: string) => path.relative(process.cwd(), p);
 const tmpOutputFile = (source: Input["source"]) => source.path + ".built.html";
 
 if (module === require.main) {
@@ -89,7 +92,7 @@ async function buildReSpec(
 	conf: ConfigOverride,
 ) {
 	const flags = additionalFlags.join(" ");
-	const server = await new StaticServer(process.cwd()).start();
+	const server = await new StaticServer().start();
 	const src = new URL(source.path, server.url);
 	for (const [key, val] of Object.entries(conf || {})) {
 		src.searchParams.set(key, val);
@@ -127,25 +130,31 @@ async function copyRelevantAssets(
 	suffix: BuildSuffix,
 ): Promise<BuildResult> {
 	const rootDir = path.join(process.cwd() + `.${suffix}`);
-	let destinationDir = path.join(rootDir, destination.dir);
-	if (!destinationDir.endsWith(path.sep)) {
-		destinationDir += path.sep;
+	const destinationDir = path.join(rootDir, destination.dir);
+	const destinationFile = path.join(destinationDir, destination.file);
+	const tmpOutFile = tmpOutputFile(source);
+
+	const assets = await findAssetsToCopy(source);
+	await copyLocalAssets(assets.local, rootDir);
+	const newRemoteURLs = await downloadRemoteAssets(
+		assets.remote,
+		destinationDir,
+	);
+
+	// Copy output file to the publish directory
+	if (!newRemoteURLs.length) {
+		await copy(tmpOutFile, destinationFile);
+	} else {
+		console.log(`Replacing instances of remote URLs with download asset URLs…`);
+		let text = await readFile(tmpOutFile, "utf8");
+		for (const urls of newRemoteURLs) {
+			text = replaceAll(urls.old, urls.new, text);
+		}
+		await mkdir(path.dirname(destinationFile), { recursive: true });
+		await writeFile(destinationFile, text, "utf8");
 	}
 
-	// Copy local dependencies of outputFile to a "ready to publish" directory
-	await install("local-assets@1", PUPPETEER_ENV);
-	const outFile = tmpOutputFile(source);
-	await sh(`local-assets "${outFile}" -o ${destinationDir}`, {
-		output: "stream",
-		env: { VERBOSE: "1", ...PUPPETEER_ENV },
-	});
-
-	// Move outputFile to the publish directory.
-	const rel = (p: string) => path.relative(process.cwd(), p);
-	const destinationFile = path.join(destinationDir, destination.file);
-	console.log(`[INFO] [COPY] ${rel(outFile)} >>> ${rel(destinationFile)}`);
-	await copyFile(outFile, destinationFile);
-	await unlink(outFile);
+	await unlink(tmpOutFile);
 
 	// List all files in output directory
 	await sh(`ls -R`, { output: "buffer", cwd: destinationDir });
@@ -156,4 +165,108 @@ async function copyRelevantAssets(
 		dir: destination.dir,
 		file: destination.file,
 	};
+}
+
+async function findAssetsToCopy(source: Input["source"]) {
+	console.groupCollapsed(`[INFO] Finding relevant assets…`);
+	const localAssets: string[] = [];
+	const remoteAssets: URL[] = [];
+
+	const server = await new StaticServer().start();
+	const rootUrl = new URL(tmpOutputFile(source), server.url);
+
+	const isLocalAsset = (url: URL) => url.origin === server.url.origin;
+	const remoteAssetRules: ((url: URL, type: ResourceType) => boolean)[] = [
+		(url: URL) => url.origin === "https://user-images.githubusercontent.com",
+	];
+
+	for await (const res of getAllSubResources(rootUrl)) {
+		const url = new URL(res.url);
+		if (isLocalAsset(url)) {
+			localAssets.push(url.pathname);
+		} else if (remoteAssetRules.some(matcher => matcher(url, res.type))) {
+			remoteAssets.push(url);
+		}
+	}
+
+	console.log("Local assets to be copied:", trimList(localAssets));
+	console.log(
+		"Remote assets to be downloaded:",
+		trimList(remoteAssets.map(u => u.href)),
+	);
+	console.groupEnd();
+
+	await server.stop();
+	return { local: localAssets.sort(), remote: remoteAssets.sort() };
+}
+
+async function copyLocalAssets(assets: string[], destinationDir: string) {
+	console.groupCollapsed(`Copying ${assets.length} local files…`);
+	await Promise.all(
+		assets.map(asset => copy(asset, path.join(destinationDir, asset))),
+	);
+	console.groupEnd();
+}
+
+async function downloadRemoteAssets(urls: URL[], destinationDir: string) {
+	console.groupCollapsed(`Downloading ${urls.length} remote files…`);
+	const result = await Promise.all(
+		urls.map(url => download(url, destinationDir)),
+	);
+	console.groupEnd();
+	return result;
+}
+
+// ///////////////////////
+// Utils
+// ///////////////////////
+
+async function copy(src: string, dst: string) {
+	src = path.join(process.cwd(), src);
+	try {
+		await mkdir(path.dirname(dst), { recursive: true });
+		await copyFile(src, dst);
+	} catch (error) {
+		const msg = `Copy: ${rel(src)} ➡ ${rel(dst)}`;
+		console.log("[WARNING]", msg, error.message);
+	}
+}
+
+async function download(url: URL, destinationDir: string) {
+	const href = `downloaded-assets/${url.host}${url.pathname}`;
+	const destination = path.join(destinationDir, href.replace(/\//g, path.sep));
+
+	try {
+		const res = await fetch(url);
+		if (!res.ok) {
+			throw new Error(`Status: ${res.status}`);
+		}
+		const text = await res.buffer();
+		await mkdir(path.dirname(destination), { recursive: true });
+		await writeFile(destination, text, "utf8");
+	} catch (error) {
+		const msg = `Download: ${url.href} ➡ ${rel(destination)}`;
+		console.log("[WARNING]", msg, error.message);
+	}
+	return { old: url.href, new: href };
+}
+
+// https://www.npmjs.com/package/replaceall
+function replaceAll(replaceThis: string, withThis: string, inThis: string) {
+	withThis = withThis.replace(/\$/g, "$$$$");
+	return inThis.replace(
+		new RegExp(
+			replaceThis.replace(
+				/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|<>\-\&])/g,
+				"\\$&",
+			),
+			"g",
+		),
+		withThis,
+	);
+}
+
+function trimList(list: string[], len = 8) {
+	if (list.length < len) return list;
+	return list.slice(0, len).concat([`${list.length - len} more..`]);
 }

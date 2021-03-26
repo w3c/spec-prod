@@ -49,6 +49,7 @@ runs:
       shell: bash
       env:
         FORCE_COLOR: true
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
     - name: Prepare
       id: prepare
       run: |

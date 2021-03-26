@@ -121,7 +121,7 @@ export class StaticServer {
 	private _server: Server;
 	private _port: number = 3000;
 
-	constructor(dir: string) {
+	constructor(dir = process.cwd()) {
 		const serve = serveStatic(dir);
 		this._server = createServer((req, res) => {
 			// @ts-expect-error
@@ -155,7 +155,7 @@ export class StaticServer {
 	}
 
 	get url() {
-		return `http://localhost:${this._port}`;
+		return new URL(`http://localhost:${this._port}`);
 	}
 }
 

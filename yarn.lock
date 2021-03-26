@@ -442,7 +442,7 @@ pump@^3.0.0:
     end-of-stream "^1.1.0"
     once "^1.3.1"
 
-puppeteer@^8.0.0:
+puppeteer@^8:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-8.0.0.tgz#a236669118aa795331c2d0ca19877159e7664705"
   integrity sha512-D0RzSWlepeWkxPPdK3xhTcefj8rjah1791GE82Pdjsri49sy11ci/JQsAO8K2NRukqvwEtcI+ImP5F4ZiMvtIQ==
@@ -538,6 +538,13 @@ string_decoder@^1.1.1:
   integrity sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA==
   dependencies:
     safe-buffer "~5.2.0"
+
+subresources@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/subresources/-/subresources-1.0.1.tgz#065f965a082b047929d99da441b36cdb68e9cb28"
+  integrity sha512-Hf6RqeH22tOys+XoBePUPXYYMF4zIajRzaAS0BYQBoFI1yFxvX7TJ0v7F06xPabKo2k6h1jLMDYKXnOZkWt3XA==
+  dependencies:
+    puppeteer "^8"
 
 tar-fs@^2.0.0:
   version "2.1.1"
