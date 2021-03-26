@@ -14,7 +14,7 @@ During a pull request, the action:
 - converts the ReSpec/Bikeshed source document to regular HTML
 - runs broken hyperlink checker, and validate markup using W3C nu validator
 
-Additionally, if a commit is pushed to the "main" branch, the action deploys the built specification to the "gh-pages" branch.
+Additionally, if a commit is pushed to the "main" branch, the action deploys the built specification to /TR/.
 
 ```yml
 # .github/workflows/pr-push.yml
@@ -23,7 +23,6 @@ on:
   pull_request: {}
   push:
     branches: [main]
-
 jobs:
   main:
     name: Build, Validate and Deploy
@@ -32,12 +31,19 @@ jobs:
       - uses: actions/checkout@v2
       - uses: w3c/spec-prod@v2
         with:
-          GH_PAGES_BRANCH: gh-pages
+          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
+          # Replace following with appropriate value. See options.md for details.
+          W3C_WG_DECISION_URL: https://lists.w3.org/Archives/Public/public-group/2014JulSep/1234.html
 ```
 
+## More examples
 
-View all [**Available options** in docs](docs/options.md).
+Learn from [usage examples](docs/examples.md), including:
+ 
+ * [Run as a validator on pull requests](docs/examples.md#run-as-a-validator-on-pull-requests)
+ * [Deploy to GitHub pages](docs/examples.md#deploy-to-github-pages)
+ * And more...
 
-## [Examples of Usage](docs/examples.md)
+## Options
 
-Read usage examples in [docs/examples.md](docs/examples.md).
+Read more about [the available options](docs/options.md)
