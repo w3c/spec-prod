@@ -3,7 +3,7 @@
     "@actions/core": "^1.2.6",
     "finalhandler": "^1.1.2",
     "node-fetch": "^2.6.1",
-    "puppeteer": "^7.1.0",
+    "puppeteer": "^8.0.0",
     "serve-static": "^1.14.1",
     "split2": "^3.2.2"
   },
@@ -12,11 +12,11 @@
   },
   "devDependencies": {
     "@types/finalhandler": "^1.1.0",
-    "@types/node": "^14.14.35",
+    "@types/node": "^14.14.36",
     "@types/node-fetch": "^2.5.8",
     "@types/serve-static": "^1.13.9",
     "@types/split2": "^2.1.6",
     "typescript": "^4.2.3",
-    "yaml": "^1.10.0"
+    "yaml": "^1.10.2"
   }
 }
