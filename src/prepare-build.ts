@@ -253,6 +253,7 @@ async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 			throw new Error(`Failed to fetch ${url}`);
 		}
 
+		// URL of latest published version.
 		const thisURI = await page.$$eval("body div.head dl dt", elems => {
 			const thisVersion = (elems as HTMLElement[]).find(el =>
 				/this (?:published )?version/i.test(el.textContent!.trim()),
@@ -268,6 +269,7 @@ async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 		});
 		console.log("[INFO] thisURI:", thisURI);
 
+		// URL of previous published version, if any.
 		const previousURI = await page.$$eval("body div.head dl dt", elems => {
 			const thisVersion = (elems as HTMLElement[]).find(el =>
 				/previous (?:published )?version/i.test(el.textContent!.trim()),
@@ -291,8 +293,19 @@ async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 
 		const thisDate = thisURI.match(/[1-2][0-9]{7}/)![0];
 		const targetPublishDate = publishDate.replace(/\-/g, "");
-		const currentURI =
-			thisDate === targetPublishDate && previousURI ? previousURI : thisURI;
+		const currentURI = (() => {
+			if (thisDate === targetPublishDate || !previousURI) {
+				console.log(
+					`[INFO] Document was published on same date (${publishDate}) earlier.`,
+				);
+				console.log(
+					`[INFO] Previously published version (${thisURI}) will be replaced on deployment.`,
+				);
+				return thisURI;
+			} else {
+				return previousURI;
+			}
+		})();
 
 		const previousMaturity = currentURI.match(/\/TR\/[0-9]{4}\/([A-Z]+)/)![1];
 
