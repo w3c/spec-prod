@@ -294,7 +294,7 @@ async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 		const thisDate = thisURI.match(/[1-2][0-9]{7}/)![0];
 		const targetPublishDate = publishDate.replace(/\-/g, "");
 		const currentURI = (() => {
-			if (thisDate === targetPublishDate || !previousURI) {
+			if (thisDate === targetPublishDate) {
 				console.log(
 					`[INFO] Document was published on same date (${publishDate}) earlier.`,
 				);
@@ -303,7 +303,7 @@ async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 				);
 				return thisURI;
 			} else {
-				return previousURI;
+				return previousURI || thisURI;
 			}
 		})();
 
