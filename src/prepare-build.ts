@@ -1,5 +1,6 @@
 import * as path from "path";
 import { existsSync } from "fs";
+import { readFile } from "fs/promises";
 import * as puppeteer from "puppeteer";
 import { PUPPETEER_ENV } from "./constants.js";
 import { exit } from "./utils.js";
@@ -142,7 +143,9 @@ async function extendW3CBuildConfig(
 	if (!shortName) {
 		if (toolchain === "respec") {
 			shortName = await getShortnameForRespec(source);
-		} // TODO: do same for Bikeshed
+		} else if (toolchain === "bikeshed") {
+			shortName = await getShortnameForBikeshed(source);
+		}
 	}
 	if (shortName) {
 		try {
@@ -179,6 +182,50 @@ async function getShortnameForRespec(source: BasicBuildOptions["source"]) {
 			// @ts-ignore
 			() => window.respecConfig.shortName as string,
 		);
+		console.log("[INFO] shortName:", shortName);
+		return shortName;
+	} catch (error) {
+		console.warn(`[WARN] ${error.message}`);
+	} finally {
+		console.groupEnd();
+		await browser.close();
+	}
+}
+
+// Parses `pre.metadata` in `source` and gets shortname from there.
+async function getShortnameForBikeshed(source: BasicBuildOptions["source"]) {
+	console.group(
+		`[INFO] Finding shortName for Bikeshed document: ${source.path}`,
+	);
+	const browser = await puppeteer.launch({
+		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
+	});
+
+	try {
+		console.log("[INFO] Parsing metadata from", source.path);
+		const page = await browser.newPage();
+		// Navigating to `source.path` then finding and parsing `pre.metadata` is
+		// not possible, as the content of .bs file gets escaped by the browser.
+		// Alternative is to not use puppeteer and use something like linkeddom, but
+		// then why add another dependency? So, we use DOMParser inside puppeteer.
+		const text = await readFile(source.path, "utf8");
+		const metadata = await page.evaluate((text: string) => {
+			const doc = new DOMParser().parseFromString(text, "text/html");
+			return doc.querySelector("pre.metadata")?.textContent || null;
+		}, text);
+		if (!metadata) {
+			throw new Error("Failed to read metadata");
+		}
+
+		const config = getConfigOverride(metadata)!;
+		// Bikeshed allows metadata keys to be in any case: Shortname/shortName etc.
+		const shortnameKey = Object.keys(config).find(
+			key => key.toLowerCase() === "shortname",
+		);
+		if (!shortnameKey || !config[shortnameKey]) {
+			throw new Error("No `shortname` found in metadata");
+		}
+		const shortName = config[shortnameKey];
 		console.log("[INFO] shortName:", shortName);
 		return shortName;
 	} catch (error) {
