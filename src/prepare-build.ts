@@ -99,6 +99,7 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 	destination = (() => {
 		const dest = path.parse(destination || source);
 		dest.ext = ".html";
+		dest.base = dest.base.replace(/\.bs$/, ".html");
 		return path.format(dest);
 	})();
 
