@@ -93,9 +93,7 @@ export default async function main(inputs: Input, buildOutput: BuildResult) {
 }
 
 async function publish(input: Input, buildOutput: BuildResult) {
-	const outputDir = path.join(buildOutput.root, buildOutput.dir);
-	const file = path.relative(outputDir, buildOutput.file);
-
+	const { dest: outputDir, file } = buildOutput;
 	const { wgDecisionURL: decision, token, cc } = input;
 	const tarFileName = "/tmp/echidna.tar";
 	await sh(`mv ${file} Overview.html`, { cwd: outputDir });
