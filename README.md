@@ -37,6 +37,7 @@ jobs:
           # Usually, you want the following set too...
           W3C_BUILD_OVERRIDE: |
              shortName: your-specs-shortname-here
+             ## Override for ReSpec specs
              specStatus: WD
 ```
 
