@@ -449,6 +449,6 @@ A URL to the working group decision to use auto-publish, usually from a w3c mail
 
 ### `W3C_NOTIFICATIONS_CC`
 
-Comma separated list of email addresses to CC. This field is optional.
+Comma separated list of email addresses to email (e.g., `foo@bar.com, x@y.com`). This field is optional.
 
 **Default:** None.
