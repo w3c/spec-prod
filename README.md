@@ -39,9 +39,10 @@ jobs:
              shortName: your-specs-shortname-here
              specStatus: WD
 ```
-# More Examples
 
-## Run as a validator on pull requests
+## More Examples
+
+### Run as a validator on pull requests
 
 If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (`index.html` or `index.bs`) and validates the output. It does not deploy the built document anywhere.
 
@@ -80,7 +81,7 @@ jobs:
           VALIDATE_MARKUP: true
 ```
 
-## Specify toolchain: Bikeshed or ReSpec
+### Specify toolchain: Bikeshed or ReSpec
 
 Specify `TOOLCHAIN` if the action cannot figure out the toolchain itself, or if you like to be explicit.
 
@@ -100,7 +101,7 @@ jobs:
           TOOLCHAIN: respec # or bikeshed
 ```
 
-## Deploy to GitHub pages
+### Deploy to GitHub pages
 
 Deployment is only done on `push` events. In this example:
 
@@ -150,7 +151,7 @@ jobs:
           # Deployment will be available at: https://<org>.github.io/<repo>/specification/
 ```
 
-## Deploy to W3C using Echidna
+### Deploy to W3C using Echidna
 
 ```yaml
 # .github/workflows/pr-push.yml
@@ -200,7 +201,7 @@ jobs:
 
 See [`W3C_BUILD_OVERRIDE`](#w3c_build_override) and [`GH_PAGES_BUILD_OVERRIDE`](#gh_pages_build_override) for details.
 
-## Multiple specs in same repository
+### Multiple specs in same repository
 
 If you've multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.
 
@@ -289,14 +290,12 @@ jobs:
 
 ## Options
 
-## Table of Contents
-
 - Build: [`TOOLCHAIN`](#toolchain), [`SOURCE`](#source), [`DESTINATION`](#destination), [`BUILD_FAIL_ON`](#build_fail_on), [`GH_PAGES_BUILD_OVERRIDE`](#gh_pages_build_override), [`W3C_BUILD_OVERRIDE`](#w3c_build_override)
 - Validation: [`VALIDATE_LINKS`](#validate_links), [`VALIDATE_MARKUP`](#validate_markup)
 - GitHub Pages: [`GH_PAGES_BRANCH`](#gh_pages_branch), [`GH_PAGES_TOKEN`](#gh_pages_token)
 - W3C Publish: [`W3C_ECHIDNA_TOKEN`](#w3c_echidna_token), [`W3C_WG_DECISION_URL`](#w3c_wg_decision_url), [`W3C_NOTIFICATIONS_CC`](#w3c_notifications_cc)
 
-## `TOOLCHAIN`
+### `TOOLCHAIN`
 
 Toolchain to use.
 
@@ -304,7 +303,7 @@ Toolchain to use.
 
 **Default:** None. Inferred from `SOURCE`: `respec` if an `index.html` exists, or `bikeshed` if an `index.bs` exists.
 
-## `SOURCE`
+### `SOURCE`
 
 Source file path.
 
@@ -312,7 +311,7 @@ Source file path.
 
 **Default:** None. Inferred from `TOOLCHAIN`: `index.html`/`index.bs` if exists.
 
-## `DESTINATION`
+### `DESTINATION`
 
 Location of generated HTML document and other assets. This is useful when you've multiple specs in same repository.
 
@@ -328,7 +327,7 @@ Location of generated HTML document and other assets. This is useful when you've
 | `my-spec-src`     | `my-spec-out` | `./my-spec-out/index.html` | `./my-spec-out/`           |
 | `index.html`      | `index.html`  | `./index.html`             | `./`                       |
 
-## `BUILD_FAIL_ON`
+### `BUILD_FAIL_ON`
 
 Define exit behaviour on build errors or warnings.
 
@@ -344,7 +343,7 @@ Define exit behaviour on build errors or warnings.
 
 **Default:** `"fatal"`.
 
-## `GH_PAGES_BUILD_OVERRIDE`
+### `GH_PAGES_BUILD_OVERRIDE`
 
 Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.
 
@@ -369,7 +368,7 @@ Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.
 
 Note that, you need to use Bikeshed-specific metadata (e.g. `status`) when using Bikeshed, and ReSpec-specific config (e.g. `specStatus`) when using ReSpec.
 
-## `W3C_BUILD_OVERRIDE`
+### `W3C_BUILD_OVERRIDE`
 
 Override Bikeshed metadata or ReSpec config for the W3C Deployment and validators.
 
@@ -394,7 +393,7 @@ The Action will try to make use of metadata/config from previously published ver
     # respec -s index.html?specStatus=WD&shortName=my-custom-shortname… -o OUTPUT
 ```
 
-## `VALIDATE_LINKS`
+### `VALIDATE_LINKS`
 
 Whether or not to check for broken hyperlinks.
 
@@ -402,7 +401,7 @@ Whether or not to check for broken hyperlinks.
 
 **Default:** false
 
-## `VALIDATE_MARKUP`
+### `VALIDATE_MARKUP`
 
 Whether or not to validate markup using the [Nu Html Checker](https://github.com/validator/validator).
 
@@ -410,7 +409,7 @@ Whether or not to validate markup using the [Nu Html Checker](https://github.com
 
 **Default:** true
 
-## `GH_PAGES_BRANCH`
+### `GH_PAGES_BRANCH`
 
 Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or provide a Git branch name to push to. You would need to enable GitHub pages publish source in repository settings manually.
 
@@ -418,7 +417,7 @@ Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or
 
 **Default:** None
 
-## `GH_PAGES_TOKEN`
+### `GH_PAGES_TOKEN`
 
 GitHub Personal access token. This field is required only if the default GitHub actions token doesn't have enough permissions, or you want to have more control. Make sure to [pass it as a secret](https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets).
 
@@ -426,7 +425,7 @@ GitHub Personal access token. This field is required only if the default GitHub 
 
 **Default:** [`GITHUB_TOKEN`](https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token)
 
-## `W3C_ECHIDNA_TOKEN`
+### `W3C_ECHIDNA_TOKEN`
 
 The automated publication workflow requires a [token](https://github.com/w3c/echidna/wiki/Token-creation) associated with the specification you want to publish. Working Group Chairs and W3C Team members can [request a token](https://www.w3.org/Web/publications/register) directly from the W3C. This can then be saved as `ECHIDNA_TOKEN` in your repository settings under ["Secrets"](https://user-images.githubusercontent.com/870154/81380287-f9579f80-914d-11ea-84bc-5707bff75dba.png).
 
@@ -434,7 +433,7 @@ The automated publication workflow requires a [token](https://github.com/w3c/ech
 
 **Default:** None.
 
-## `W3C_WG_DECISION_URL`
+### `W3C_WG_DECISION_URL`
 
 A URL to the working group decision to use auto-publish, usually from a w3c mailing list.
 
@@ -450,7 +449,7 @@ A URL to the working group decision to use auto-publish, usually from a w3c mail
 
 **Default:** None.
 
-## `W3C_NOTIFICATIONS_CC`
+### `W3C_NOTIFICATIONS_CC`
 
 Comma separated list of email addresses to CC. This field is optional.
 
