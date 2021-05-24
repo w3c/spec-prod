@@ -81,7 +81,7 @@ jobs:
 
 ### Specify toolchain: Bikeshed or ReSpec
 
-Specify `TOOLCHAIN` if the action cannot figure out the toolchain itself, or if you like to be explicit.
+Specify [`TOOLCHAIN`](#toolchain) if the action cannot figure out the toolchain itself, or if you like to be explicit.
 
 ```yaml
 # .github/workflows/pr.yml
@@ -126,7 +126,7 @@ jobs:
 
 ### Change output location for built files
 
-By default, output location is mapped to the `SOURCE`. You can change that by providing a [`DESTINATION`](#destination).
+By default, output location is mapped to the [`SOURCE`](#source). You can change that by providing a [`DESTINATION`](#destination).
 
 ```yaml
 # .github/workflows/push.yml
@@ -299,7 +299,7 @@ Toolchain to use.
 
 **Possible values:** `respec`, `bikeshed`.
 
-**Default:** None. Inferred from `SOURCE`: `respec` if an `index.html` exists, or `bikeshed` if an `index.bs` exists.
+**Default:** None. Inferred from [`SOURCE`](#source): `respec` if an `index.html` exists, or `bikeshed` if an `index.bs` exists.
 
 ### `SOURCE`
 
@@ -307,7 +307,7 @@ Source file path.
 
 **Possible values:** Any valid POSIX file path relative to repository root.
 
-**Default:** None. Inferred from `TOOLCHAIN`: `index.html`/`index.bs` if exists.
+**Default:** None. Inferred from [`TOOLCHAIN`](#toolchain): `index.html`/`index.bs` if exists.
 
 ### `DESTINATION`
 
