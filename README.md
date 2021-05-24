@@ -127,7 +127,7 @@ jobs:
 
 ### Change output location for built files
 
-By default, output location is mapped to the `SOURCE`. You can change that by providing a [`DESTINATION`](options.md#destination).
+By default, output location is mapped to the `SOURCE`. You can change that by providing a [`DESTINATION`](#destination).
 
 ```yaml
 # .github/workflows/push.yml
@@ -198,7 +198,7 @@ jobs:
             shortName: my-custom-shortname
 ```
 
-See [`W3C_BUILD_OVERRIDE`](options.md#w3c_build_override) and [`GH_PAGES_BUILD_OVERRIDE`](options.md#gh_pages_build_override) for details.
+See [`W3C_BUILD_OVERRIDE`](#w3c_build_override) and [`GH_PAGES_BUILD_OVERRIDE`](#gh_pages_build_override) for details.
 
 ## Multiple specs in same repository
 
