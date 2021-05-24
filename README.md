@@ -6,7 +6,7 @@ This GitHub Action lets you:
 - Validate generated document's markup and check for broken hyperlinks.
 - Publish generated spec to GitHub Pages and/or w3.org (using Echidna).
 
-## Basic Usage
+## Example .yml files
 
 During a pull request, the action:
 
@@ -39,8 +39,6 @@ jobs:
              shortName: your-specs-shortname-here
              specStatus: WD
 ```
-
-## More Examples
 
 ### Run as a validator on pull requests
 
