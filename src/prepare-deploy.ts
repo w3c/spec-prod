@@ -10,10 +10,8 @@ export function githubPagesDeployment(
 	githubContext: GitHubContext,
 ) {
 	const { event_name: event, sha, repository, actor } = githubContext;
-	const {
-		default_branch: defaultBranch,
-		has_pages: hasGitHubPagesEnabled,
-	} = githubContext.event.repository;
+	const { default_branch: defaultBranch, has_pages: hasGitHubPagesEnabled } =
+		githubContext.event.repository;
 	const ghPagesBranch = inputs.GH_PAGES_BRANCH;
 
 	if (!shouldTryDeploy(event)) {
