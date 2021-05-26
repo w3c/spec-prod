@@ -1,0 +1,25 @@
+name: Docs
+on:
+  pull_request:
+    paths: ["docs/**"]
+  push:
+    branches: ["main"]
+    paths: ["docs/**"]
+  workflow_dispatch: {}
+
+env:
+  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+  PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome
+
+jobs:
+  lint:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          SOURCE: docs/index.html
+          DESTINATION: index.html
+          TOOLCHAIN: respec
+          GH_PAGES_BRANCH: gh-pages
