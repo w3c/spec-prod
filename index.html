@@ -1,0 +1,706 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head>
+<meta charset="utf-8">
+<meta name="generator" content="ReSpec 26.8.3">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<style>
+dfn{cursor:pointer}
+.dfn-panel{position:absolute;z-index:35;min-width:300px;max-width:500px;padding:.5em .75em;margin-top:.6em;font:small Helvetica Neue,sans-serif,Droid Sans Fallback;background:#fff;color:#000;box-shadow:0 1em 3em -.4em rgba(0,0,0,.3),0 0 1px 1px rgba(0,0,0,.05);border-radius:2px}
+.dfn-panel:not(.docked)>.caret{position:absolute;top:-9px}
+.dfn-panel:not(.docked)>.caret::after,.dfn-panel:not(.docked)>.caret::before{content:"";position:absolute;border:10px solid transparent;border-top:0;border-bottom:10px solid #fff;top:0}
+.dfn-panel:not(.docked)>.caret::before{border-bottom:9px solid #a2a9b1}
+.dfn-panel *{margin:0}
+.dfn-panel b{display:block;color:#000;margin-top:.25em}
+.dfn-panel ul a[href]{color:#333}
+.dfn-panel>div{display:flex}
+.dfn-panel a.self-link{font-weight:700;margin-right:auto}
+.dfn-panel .marker{padding:.1em;margin-left:.5em;border-radius:.2em;text-align:center;white-space:nowrap;font-size:90%;color:#040b1c}
+.dfn-panel .marker.dfn-exported{background:#d1edfd;box-shadow:0 0 0 .125em #1ca5f940}
+.dfn-panel .marker.idl-block{background:#8ccbf2;box-shadow:0 0 0 .125em #0670b161}
+.dfn-panel a:not(:hover){text-decoration:none!important;border-bottom:none!important}
+.dfn-panel a[href]:hover{border-bottom-width:1px}
+.dfn-panel ul{padding:0}
+.dfn-panel li{margin-left:1em}
+.dfn-panel.docked{position:fixed;left:.5em;top:unset;bottom:2em;margin:0 auto;max-width:calc(100vw - .75em * 2 - .5em - .2em * 2);max-height:30vh;overflow:auto}
+</style>
+		
+		
+<title>Spec Prod Documentation</title>
+		
+		
+	
+<style id="respec-mainstyle">
+@keyframes pop{
+0%{transform:scale(1,1)}
+25%{transform:scale(1.25,1.25);opacity:.75}
+100%{transform:scale(1,1)}
+}
+.hljs{background:0 0!important}
+a abbr,h1 abbr,h2 abbr,h3 abbr,h4 abbr,h5 abbr,h6 abbr{border:none}
+dfn{font-weight:700}
+a.internalDFN{color:inherit;border-bottom:1px solid #99c;text-decoration:none}
+a.externalDFN{color:inherit;border-bottom:1px dotted #ccc;text-decoration:none}
+a.bibref{text-decoration:none}
+.respec-offending-element:target{animation:pop .25s ease-in-out 0s 1}
+.respec-offending-element,a[href].respec-offending-element{text-decoration:red wavy underline}
+@supports not (text-decoration:red wavy underline){
+.respec-offending-element:not(pre){display:inline-block}
+.respec-offending-element{background:url(data:image/gif;base64,R0lGODdhBAADAPEAANv///8AAP///wAAACwAAAAABAADAEACBZQjmIAFADs=) bottom repeat-x}
+}
+#references :target{background:#eaf3ff;animation:pop .4s ease-in-out 0s 1}
+cite .bibref{font-style:normal}
+code{color:#c63501}
+th code{color:inherit}
+a[href].orcid{padding-left:4px;padding-right:4px}
+a[href].orcid>svg{margin-bottom:-2px}
+.toc a,.tof a{text-decoration:none}
+a .figno,a .secno{color:#000}
+ol.tof,ul.tof{list-style:none outside none}
+.caption{margin-top:.5em;font-style:italic}
+table.simple{border-spacing:0;border-collapse:collapse;border-bottom:3px solid #005a9c}
+.simple th{background:#005a9c;color:#fff;padding:3px 5px;text-align:left}
+.simple th a{color:#fff;padding:3px 5px;text-align:left}
+.simple th[scope=row]{background:inherit;color:inherit;border-top:1px solid #ddd}
+.simple td{padding:3px 10px;border-top:1px solid #ddd}
+.simple tr:nth-child(even){background:#f0f6ff}
+.section dd>p:first-child{margin-top:0}
+.section dd>p:last-child{margin-bottom:0}
+.section dd{margin-bottom:1em}
+.section dl.attrs dd,.section dl.eldef dd{margin-bottom:0}
+#issue-summary>ul{column-count:2}
+#issue-summary li{list-style:none;display:inline-block}
+details.respec-tests-details{margin-left:1em;display:inline-block;vertical-align:top}
+details.respec-tests-details>*{padding-right:2em}
+details.respec-tests-details[open]{z-index:999999;position:absolute;border:thin solid #cad3e2;border-radius:.3em;background-color:#fff;padding-bottom:.5em}
+details.respec-tests-details[open]>summary{border-bottom:thin solid #cad3e2;padding-left:1em;margin-bottom:1em;line-height:2em}
+details.respec-tests-details>ul{width:100%;margin-top:-.3em}
+details.respec-tests-details>li{padding-left:1em}
+a[href].self-link:hover{opacity:1;text-decoration:none;background-color:transparent}
+h2,h3,h4,h5,h6{position:relative}
+aside.example .marker>a.self-link{color:inherit}
+h2>a.self-link,h3>a.self-link,h4>a.self-link,h5>a.self-link,h6>a.self-link{border:none;color:inherit;font-size:83%;height:2em;left:-1.6em;opacity:.5;position:absolute;text-align:center;text-decoration:none;top:0;transition:opacity .2s;width:2em}
+h2>a.self-link::before,h3>a.self-link::before,h4>a.self-link::before,h5>a.self-link::before,h6>a.self-link::before{content:"§";display:block}
+@media (max-width:767px){
+dd{margin-left:0}
+h2>a.self-link,h3>a.self-link,h4>a.self-link,h5>a.self-link,h6>a.self-link{left:auto;top:auto}
+}
+@media print{
+.removeOnSave{display:none}
+}
+</style>
+<meta name="description" content="The w3c/spec-prod GitHub Action lets you:">
+<link rel="canonical" href="https://www.w3.org/TR/spec-prod/">
+<style>
+.hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;background:#fafafa}
+.hljs-comment,.hljs-quote{color:#717277;font-style:italic}
+.hljs-doctag,.hljs-formula,.hljs-keyword{color:#a626a4}
+.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#ca4706;font-weight:700}
+.hljs-literal{color:#0b76c5}
+.hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#42803c}
+.hljs-built_in,.hljs-class .hljs-title{color:#9a6a01}
+.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#986801}
+.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#336ae3}
+.hljs-emphasis{font-style:italic}
+.hljs-strong{font-weight:700}
+.hljs-link{text-decoration:underline}
+</style>
+<style>
+var{position:relative;cursor:pointer}
+var[data-type]::after,var[data-type]::before{position:absolute;left:50%;top:-6px;opacity:0;transition:opacity .4s;pointer-events:none}
+var[data-type]::before{content:"";transform:translateX(-50%);border-width:4px 6px 0 6px;border-style:solid;border-color:transparent;border-top-color:#000}
+var[data-type]::after{content:attr(data-type);transform:translateX(-50%) translateY(-100%);background:#000;text-align:center;font-family:"Dank Mono","Fira Code",monospace;font-style:normal;padding:6px;border-radius:3px;color:#daca88;text-indent:0;font-weight:400}
+var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
+</style>
+<script id="initialUserConfig" type="application/json">{
+  "specStatus": "base",
+  "editors": [
+    {
+      "name": "Sid Vishnoi",
+      "url": "https://github.com/sidvishnoi"
+    }
+  ],
+  "github": {
+    "repoURL": "https://github.com/w3c/spec-prod",
+    "branch": "main"
+  },
+  "license": "cc0",
+  "tocIntroductory": true,
+  "postProcess": [
+    null,
+    null,
+    null
+  ],
+  "publishISODate": "2021-05-26T00:00:00.000Z",
+  "generatedSubtitle": " 26 May 2021"
+}</script>
+<link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/base.css"></head>
+	<body class="h-entry informative toc-inline"><div class="head">
+    <a class="logo" href="https://www.w3.org/"><img alt="W3C" width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C"></a> <h1 id="title" class="title">Spec Prod Documentation</h1>
+    
+    <h2>
+      
+      <time class="dt-published" datetime="2021-05-26">26 May 2021</time>
+    </h2>
+    <dl>
+      
+      <dt>Latest editor's draft:</dt><dd><a href="https://w3c.github.io/spec-prod/">https://w3c.github.io/spec-prod/</a></dd>
+      
+      
+      
+      
+      
+      <dt>Editor:</dt>
+      <dd class="editor p-author h-card vcard">
+    <a class="u-url url p-name fn" href="https://github.com/sidvishnoi">Sid Vishnoi</a>
+  </dd>
+      
+      
+      <dt>Participate:</dt><dd>
+    <a href="https://github.com/w3c/spec-prod/">GitHub w3c/spec-prod</a>
+  </dd><dd>
+    <a href="https://github.com/w3c/spec-prod/issues/">File a bug</a>
+  </dd><dd>
+    <a href="https://github.com/w3c/spec-prod/commits/main">Commit history</a>
+  </dd><dd>
+    <a href="https://github.com/w3c/spec-prod/pulls/">Pull requests</a>
+  </dd>
+    </dl>
+    
+    
+    
+    
+    <hr title="Separator for header">
+  </div>
+		
+		<section id="abstract" class="introductory"><h2>Abstract</h2>
+			<p>The w3c/spec-prod GitHub Action lets you:</p>
+			<ul>
+				<li>
+					Build <a href="https://github.com/w3c/respec">ReSpec</a> and
+					<a href="https://github.com/tabatkins/bikeshed">Bikeshed</a>
+					specs.
+				</li>
+				<li>
+					Validate generated document's markup and check for broken hyperlinks.
+				</li>
+				<li>
+					Publish generated spec to GitHub Pages and/or w3.org (using Echidna).
+				</li>
+			</ul>
+		</section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a class="tocxref" href="#abstract">Abstract</a></li><li class="tocline"><a class="tocxref" href="#examples"><bdi class="secno">1. </bdi>Examples</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#run-as-a-validator-on-pull-requests"><bdi class="secno">1.1 </bdi>Run as a validator on pull requests</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#selectively-enable-disable-validators"><bdi class="secno">1.1.1 </bdi>Selectively enable/disable validators</a></li></ol></li><li class="tocline"><a class="tocxref" href="#specify-toolchain-bikeshed-or-respec"><bdi class="secno">1.2 </bdi>Specify toolchain: Bikeshed or ReSpec</a></li><li class="tocline"><a class="tocxref" href="#deploy-to-github-pages"><bdi class="secno">1.3 </bdi>Deploy to GitHub pages</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#change-output-location-for-built-files"><bdi class="secno">1.3.1 </bdi>Change output location for built files</a></li></ol></li><li class="tocline"><a class="tocxref" href="#deploy-to-w3c-using-echidna"><bdi class="secno">1.4 </bdi>Deploy to W3C using Echidna</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#use-different-respecconfig-when-deploying-to-w3c"><bdi class="secno">1.4.1 </bdi>Use different <code>respecConfig</code> when deploying to W3C</a></li></ol></li><li class="tocline"><a class="tocxref" href="#multiple-specs-in-same-repository"><bdi class="secno">1.5 </bdi>Multiple specs in same repository</a></li></ol></li><li class="tocline"><a class="tocxref" href="#options"><bdi class="secno">2. </bdi>Options</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#toolchain"><bdi class="secno">2.1 </bdi><code>TOOLCHAIN</code></a></li><li class="tocline"><a class="tocxref" href="#source"><bdi class="secno">2.2 </bdi><code>SOURCE</code></a></li><li class="tocline"><a class="tocxref" href="#destination"><bdi class="secno">2.3 </bdi><code>DESTINATION</code></a></li><li class="tocline"><a class="tocxref" href="#build_fail_on"><bdi class="secno">2.4 </bdi><code>BUILD_FAIL_ON</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_build_override"><bdi class="secno">2.5 </bdi><code>GH_PAGES_BUILD_OVERRIDE</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_build_override"><bdi class="secno">2.6 </bdi><code>W3C_BUILD_OVERRIDE</code></a></li><li class="tocline"><a class="tocxref" href="#validate_links"><bdi class="secno">2.7 </bdi><code>VALIDATE_LINKS</code></a></li><li class="tocline"><a class="tocxref" href="#validate_markup"><bdi class="secno">2.8 </bdi><code>VALIDATE_MARKUP</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_branch"><bdi class="secno">2.9 </bdi><code>GH_PAGES_BRANCH</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_token"><bdi class="secno">2.10 </bdi><code>GH_PAGES_TOKEN</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_echidna_token"><bdi class="secno">2.11 </bdi><code>W3C_ECHIDNA_TOKEN</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_wg_decision_url"><bdi class="secno">2.12 </bdi><code>W3C_WG_DECISION_URL</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_notifications_cc"><bdi class="secno">2.13 </bdi><code>W3C_NOTIFICATIONS_CC</code></a></li></ol></li></ol></nav>
+		<section id="examples"><h2 id="x1-examples"><bdi class="secno">1. </bdi>Examples<a class="self-link" aria-label="§" href="#examples"></a></h2><section id="run-as-a-validator-on-pull-requests"><h3 id="x1-1-run-as-a-validator-on-pull-requests"><bdi class="secno">1.1 </bdi>Run as a validator on pull requests<a class="self-link" aria-label="§" href="#run-as-a-validator-on-pull-requests"></a></h3><p>If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (<code>index.html</code> or <code>index.bs</code>) and validates the output. It does not deploy the built document anywhere.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr.yml
+name: CI
+on:
+  pull_request: {}
+jobs:
+  main:
+    name: Build and Validate
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+</code></pre><section id="selectively-enable-disable-validators"><h4 id="x1-1-1-selectively-enable-disable-validators"><bdi class="secno">1.1.1 </bdi>Selectively enable/disable validators<a class="self-link" aria-label="§" href="#selectively-enable-disable-validators"></a></h4><p>By default, both hyperlink and markup validators are enabled.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr.yml
+name: CI
+on:
+  pull_request: {}
+jobs:
+  main:
+    name: Build and Validate
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          VALIDATE_LINKS: false
+          VALIDATE_MARKUP: true
+</code></pre></section></section><section id="specify-toolchain-bikeshed-or-respec"><h3 id="x1-2-specify-toolchain-bikeshed-or-respec"><bdi class="secno">1.2 </bdi>Specify toolchain: Bikeshed or ReSpec<a class="self-link" aria-label="§" href="#specify-toolchain-bikeshed-or-respec"></a></h3><p>Specify <code>TOOLCHAIN</code> if the action cannot figure out the toolchain itself, or if you like to be explicit.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr.yml
+name: CI
+on:
+  pull_request: {}
+jobs:
+  main:
+    name: Build and Validate
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          TOOLCHAIN: respec # or bikeshed
+</code></pre></section><section id="deploy-to-github-pages"><h3 id="x1-3-deploy-to-github-pages"><bdi class="secno">1.3 </bdi>Deploy to GitHub pages<a class="self-link" aria-label="§" href="#deploy-to-github-pages"></a></h3><p>Deployment is only done on <code>push</code> events. In this example:</p><ul>
+<li>the document is built and validated as a check in the pull request.</li>
+<li>the document is built and validated, and then deployed to <code>gh-pages</code> branch, when a commit is pushed to the <code>main</code> branch.</li>
+</ul><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr-push.yml
+name: CI
+on:
+  pull_request: {}
+  push:
+    branches: [main]
+jobs:
+  main:
+    name: Build, Validate and Deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          GH_PAGES_BRANCH: gh-pages
+</code></pre><section id="change-output-location-for-built-files"><h4 id="x1-3-1-change-output-location-for-built-files"><bdi class="secno">1.3.1 </bdi>Change output location for built files<a class="self-link" aria-label="§" href="#change-output-location-for-built-files"></a></h4><p>By default, output location is mapped to the <code>SOURCE</code>. You can change that by providing a <a href="http://localhost:3000/#destination"><code>DESTINATION</code></a>.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/push.yml
+name: CI
+on:
+  push:
+    branches: [main]
+jobs:
+  main:
+    name: Deploy to GitHub pages
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          GH_PAGES_BRANCH: gh-pages
+          TOOLCHAIN: bikeshed
+          SOURCE: src/spec.bs
+          DESTINATION: specification/index.html # `src/spec.html` if not provided.
+          # Deployment will be available at: https://&lt;org&gt;.github.io/&lt;repo&gt;/specification/
+</code></pre></section></section><section id="deploy-to-w3c-using-echidna"><h3 id="x1-4-deploy-to-w3c-using-echidna"><bdi class="secno">1.4 </bdi>Deploy to W3C using Echidna<a class="self-link" aria-label="§" href="#deploy-to-w3c-using-echidna"></a></h3><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr-push.yml
+name: CI
+on:
+  pull_request: {}
+  push:
+    branches: [main]
+jobs:
+  main:
+    name: Build, Validate and Deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
+          # Replace following with appropriate value. See options.md for details.
+          W3C_WG_DECISION_URL: https://lists.w3.org/Archives/Public/public-group/2014JulSep/1234.html
+</code></pre><section id="use-different-respecconfig-when-deploying-to-w3c"><h4 id="x1-4-1-use-different-respecconfig-when-deploying-to-w3c"><bdi class="secno">1.4.1 </bdi>Use different <code>respecConfig</code> when deploying to W3C<a class="self-link" aria-label="§" href="#use-different-respecconfig-when-deploying-to-w3c"></a></h4><pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override respecConfig for W3C deployment and validators.
+name: CI
+on:
+  pull_request: {}
+  push:
+    branches: [main]
+jobs:
+  main:
+    name: Build, Validate and Deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          TOOLCHAIN: respec
+          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
+          W3C_WG_DECISION_URL: https://WG_DECISION_URL_FOR_MY_SPEC.com
+          # Publish to w3.org/TR as a Working Draft (WD) under a different shortName.
+          W3C_BUILD_OVERRIDE: |
+            specStatus: WD
+            shortName: my-custom-shortname
+</code></pre><p>See <a href="http://localhost:3000/#w3c_build_override"><code>W3C_BUILD_OVERRIDE</code></a> and <a href="http://localhost:3000/#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a> for details.</p></section></section><section id="multiple-specs-in-same-repository"><h3 id="x1-5-multiple-specs-in-same-repository"><bdi class="secno">1.5 </bdi>Multiple specs in same repository<a class="self-link" aria-label="§" href="#multiple-specs-in-same-repository"></a></h3><p>If you've multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.</p><pre class="example"><code class="yaml hljs" aria-busy="false">name: CI
+on:
+  pull_request: {}
+  push:
+    branches: [main]
+jobs:
+  main:
+    name: Build, Validate and Deploy
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        include:
+          - source: spec.html
+            destination: index.html
+          - source: spec-1
+            destination: the-spec
+          - source: spec-2
+            # destination defaults to spec-2/index.html
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          SOURCE: ${{ matrix.source }}
+          DESTINATION: ${{ matrix.destination }}
+          GH_PAGES_BRANCH: gh-pages
+          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
+          W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
+</code></pre><p><strong>Note:</strong> At present, each source might create its own commit in <code>GH_PAGES_BRANCH</code> even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when <a href="https://github.com/w3c/spec-prod/issues/8">#8</a> and <a href="https://github.com/w3c/spec-prod/issues/14">#14</a> are fixed.</p><p>As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' <a href="https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths"><code>on.&lt;push|pull_request&gt;.paths</code></a> as:</p><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr-push-spec-1.yml
+name: CI (spec-1)
+on:
+  pull_request:
+    paths: ["spec-1/**"]
+  push:
+    branches: [main]
+    paths: ["spec-1/**"]
+
+jobs:
+  main:
+    name: Build, Validate and Deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          SOURCE: spec-1
+          DESTINATION: the-spec
+          GH_PAGES_BRANCH: gh-pages
+          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
+          W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
+
+# .github/workflows/pr-push-spec-2.yml
+name: CI (spec-2)
+on:
+  pull_request:
+    paths: ["spec-2/**"]
+  push:
+    branches: [main]
+    paths: ["spec-2/**"]
+
+jobs:
+  main:
+    name: Build, Validate and Deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: w3c/spec-prod@v2
+        with:
+          SOURCE: spec-2/spec.bs
+          DESTINATION: spec-2/index.html
+          GH_PAGES_BRANCH: gh-pages
+          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
+          W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
+</code></pre></section></section>
+		<section id="options"><h2 id="x2-options"><bdi class="secno">2. </bdi>Options<a class="self-link" aria-label="§" href="#options"></a></h2><section id="toolchain"><h3 id="x2-1-toolchain"><bdi class="secno">2.1 </bdi><code>TOOLCHAIN</code><a class="self-link" aria-label="§" href="#toolchain"></a></h3><p>Toolchain to use.</p><p><strong>Possible values:</strong> <code>respec</code>, <code>bikeshed</code>.</p><p><strong>Default:</strong> None. Inferred from <code>SOURCE</code>: <code>respec</code> if an <code>index.html</code> exists, or <code>bikeshed</code> if an <code>index.bs</code> exists.</p></section><section id="source"><h3 id="x2-2-source"><bdi class="secno">2.2 </bdi><code>SOURCE</code><a class="self-link" aria-label="§" href="#source"></a></h3><p>Source file path.</p><p><strong>Possible values:</strong> Any valid POSIX file path relative to repository root.</p><p><strong>Default:</strong> None. Inferred from <code>TOOLCHAIN</code>: <code>index.html</code>/<code>index.bs</code> if exists.</p></section><section id="destination"><h3 id="x2-3-destination"><bdi class="secno">2.3 </bdi><code>DESTINATION</code><a class="self-link" aria-label="§" href="#destination"></a></h3><p>Location of generated HTML document and other assets. This is useful when you've multiple specs in same repository.</p><p><strong>Possible values:</strong> Any valid POSIX file path relative to repository root.</p><p><strong>Default:</strong> <code>SOURCE</code>, with file extension set to <code>.html</code>.</p><table class="def">
+<thead>
+<tr>
+<th><code>SOURCE</code></th>
+<th><code>DESTINATION</code></th>
+<th>Location of generated spec</th>
+<th>Assets copied to directory</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>index.bs</code></td>
+<td>None</td>
+<td><code>./index.html</code></td>
+<td><code>./</code></td>
+</tr>
+<tr>
+<td><code>my-spec/</code></td>
+<td>None</td>
+<td><code>./my-spec/index.html</code></td>
+<td><code>./my-spec/</code></td>
+</tr>
+<tr>
+<td><code>path/to/spec.bs</code></td>
+<td>None</td>
+<td><code>./path/to/spec.html</code></td>
+<td><code>./path/to/</code></td>
+</tr>
+<tr>
+<td><code>my-spec-src</code></td>
+<td><code>my-spec-out</code></td>
+<td><code>./my-spec-out/index.html</code></td>
+<td><code>./my-spec-out/</code></td>
+</tr>
+<tr>
+<td><code>index.html</code></td>
+<td><code>index.html</code></td>
+<td><code>./index.html</code></td>
+<td><code>./</code></td>
+</tr>
+</tbody></table></section><section id="build_fail_on"><h3 id="x2-4-build_fail_on"><bdi class="secno">2.4 </bdi><code>BUILD_FAIL_ON</code><a class="self-link" aria-label="§" href="#build_fail_on"></a></h3><p>Define exit behaviour on build errors or warnings.</p><p><strong>Possible values:</strong> <code>"nothing"</code>, <code>"fatal"</code>, <code>"link-error"</code>, <code>"warning"</code>, <code>"everything"</code>.</p><table class="def">
+<thead>
+<tr>
+<th><code>BUILD_FAIL_ON</code></th>
+<th>Bikeshed</th>
+<th>ReSpec</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nothing</td>
+<td><code>--die-on=nothing</code></td>
+<td>Absent.</td>
+</tr>
+<tr>
+<td>fatal</td>
+<td><code>--die-on=fatal </code></td>
+<td><code>--haltonerror</code> (<code>-e</code>)</td>
+</tr>
+<tr>
+<td>link-error</td>
+<td><code>--die-on=link-error</code></td>
+<td><code>--haltonerror</code> (<code>-e</code>)</td>
+</tr>
+<tr>
+<td>warning</td>
+<td><code>--die-on=warning </code></td>
+<td><code>--haltonwarn</code> (<code>-w</code>)</td>
+</tr>
+<tr>
+<td>everything</td>
+<td><code>--die-on=everything </code></td>
+<td><code>-e -w</code></td>
+</tr>
+</tbody></table><p><strong>Default:</strong> <code>"fatal"</code>.</p></section><section id="gh_pages_build_override"><h3 id="x2-5-gh_pages_build_override"><bdi class="secno">2.5 </bdi><code>GH_PAGES_BUILD_OVERRIDE</code><a class="self-link" aria-label="§" href="#gh_pages_build_override"></a></h3><p>Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.</p><p><strong>Possible values:</strong> A string or <a href="https://stackoverflow.com/a/15365296">YAML Literal Block Scalar</a> (multiline string) representing the override config/metadata as key-value pairs. That's mouthful, lets clarify using an example:</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override Bikeshed metadata for GitHub Pages deployment
+- uses: w3c/spec-prod@v2
+  with:
+    TOOLCHAIN: bikeshed
+    GH_PAGES_BUILD_OVERRIDE: |
+      status: w3c/WD
+      TR: https://www.w3.org/TR/my-cool-spec/
+    # Warning: The content in GH_PAGES_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
+    # GitHub Actions allow only strings as input.
+    #
+    # Info: Above is same as running Bikeshed CLI like:
+    # bikeshed spec INPUT OUTPUT --md-status="w3c/WD" --md-TR="https://www.w3.org/TR/my-cool-spec/"
+</code></pre><p><strong>Default:</strong> None.</p><p>Note that, you need to use Bikeshed-specific metadata (e.g. <code>status</code>) when using Bikeshed, and ReSpec-specific config (e.g. <code>specStatus</code>) when using ReSpec.</p></section><section id="w3c_build_override"><h3 id="x2-6-w3c_build_override"><bdi class="secno">2.6 </bdi><code>W3C_BUILD_OVERRIDE</code><a class="self-link" aria-label="§" href="#w3c_build_override"></a></h3><p>Override Bikeshed metadata or ReSpec config for the W3C Deployment and validators.</p><p>The Action will try to make use of metadata/config from previously published version, if available. For example, you do not need to manually provide <code>respecConfig.previousPublishDate</code> (or, <code>Previous Version</code> in case of Bikeshed) when publishing to W3C.</p><p><strong>Possible values:</strong> Same as <a href="#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a>.</p><p><strong>Default:</strong> None.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override respecConfig for W3C deployment and validators.
+- uses: w3c/spec-prod@v2
+  with:
+    TOOLCHAIN: respec
+    W3C_BUILD_OVERRIDE: |
+      specStatus: WD
+      shortName: my-custom-shortname
+    # Warning: The content in W3C_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
+    # GitHub Actions allow only strings as input.
+    #
+    # Info: Above is equivalent to running ReSpec CLI like:
+    # respec -s index.html?specStatus=WD&amp;shortName=my-custom-shortname… -o OUTPUT
+</code></pre></section><section id="validate_links"><h3 id="x2-7-validate_links"><bdi class="secno">2.7 </bdi><code>VALIDATE_LINKS</code><a class="self-link" aria-label="§" href="#validate_links"></a></h3><p>Whether or not to check for broken hyperlinks.</p><p><strong>Possible values:</strong> true, false</p><p><strong>Default:</strong> false</p></section><section id="validate_markup"><h3 id="x2-8-validate_markup"><bdi class="secno">2.8 </bdi><code>VALIDATE_MARKUP</code><a class="self-link" aria-label="§" href="#validate_markup"></a></h3><p>Whether or not to validate markup using the <a href="https://github.com/validator/validator">Nu Html Checker</a>.</p><p><strong>Possible values:</strong> true, false</p><p><strong>Default:</strong> true</p></section><section id="gh_pages_branch"><h3 id="x2-9-gh_pages_branch"><bdi class="secno">2.9 </bdi><code>GH_PAGES_BRANCH</code><a class="self-link" aria-label="§" href="#gh_pages_branch"></a></h3><p>Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or provide a Git branch name to push to. You would need to enable GitHub pages publish source in repository settings manually.</p><p><strong>Possible values:</strong>: None, or a git branch name.</p><p><strong>Default:</strong> None</p></section><section id="gh_pages_token"><h3 id="x2-10-gh_pages_token"><bdi class="secno">2.10 </bdi><code>GH_PAGES_TOKEN</code><a class="self-link" aria-label="§" href="#gh_pages_token"></a></h3><p>GitHub Personal access token. This field is required only if the default GitHub actions token doesn't have enough permissions, or you want to have more control. Make sure to <a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets">pass it as a secret</a>.</p><p><strong>Possible values:</strong>: A valid personal GitHub token.</p><p><strong>Default:</strong> <a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token"><code>GITHUB_TOKEN</code></a></p></section><section id="w3c_echidna_token"><h3 id="x2-11-w3c_echidna_token"><bdi class="secno">2.11 </bdi><code>W3C_ECHIDNA_TOKEN</code><a class="self-link" aria-label="§" href="#w3c_echidna_token"></a></h3><p>The automated publication workflow requires a <a href="https://github.com/w3c/echidna/wiki/Token-creation">token</a> associated with the specification you want to publish. Working Group Chairs and W3C Team members can <a href="https://www.w3.org/Web/publications/register">request a token</a> directly from the W3C. This can then be saved as <code>ECHIDNA_TOKEN</code> in your repository settings under <a href="https://user-images.githubusercontent.com/870154/81380287-f9579f80-914d-11ea-84bc-5707bff75dba.png">"Secrets"</a>.</p><p><strong>Possible values:</strong> A valid Echidna token.</p><p><strong>Default:</strong> None.</p></section><section id="w3c_wg_decision_url"><h3 id="x2-12-w3c_wg_decision_url"><bdi class="secno">2.12 </bdi><code>W3C_WG_DECISION_URL</code><a class="self-link" aria-label="§" href="#w3c_wg_decision_url"></a></h3><p>A URL to the working group decision to use auto-publish, usually from a w3c mailing list.</p><p><strong>Possible values:</strong> A non-exhaustive list of possible values:</p><ul>
+<li>WebApps WG: <a href="https://lists.w3.org/Archives/Public/public-webapps/2014JulSep/0627.html">https://lists.w3.org/Archives/Public/public-webapps/2014JulSep/0627.html</a></li>
+<li>Media Capture WG: <a href="https://lists.w3.org/Archives/Public/public-media-capture/2015Dec/0031.html">https://lists.w3.org/Archives/Public/public-media-capture/2015Dec/0031.html</a></li>
+<li>Second Screen WG: <a href="https://lists.w3.org/Archives/Public/public-secondscreen/2015Jun/0096.html">https://lists.w3.org/Archives/Public/public-secondscreen/2015Jun/0096.html</a></li>
+<li>Web RTC: <a href="https://lists.w3.org/Archives/Public/public-webrtc/2016Mar/0031.html">https://lists.w3.org/Archives/Public/public-webrtc/2016Mar/0031.html</a></li>
+<li>Aria: <a href="https://lists.w3.org/Archives/Public/public-html-admin/2015May/0021.html">https://lists.w3.org/Archives/Public/public-html-admin/2015May/0021.html</a></li>
+<li>Device APIs: <a href="https://lists.w3.org/Archives/Public/public-device-apis/2021May/0008.html">https://lists.w3.org/Archives/Public/public-device-apis/2021May/0008.html</a></li>
+<li>Web Performance: <a href="https://lists.w3.org/Archives/Public/public-web-perf/2021Apr/0005.html">https://lists.w3.org/Archives/Public/public-web-perf/2021Apr/0005.html</a></li>
+</ul><p><strong>Default:</strong> None.</p></section><section id="w3c_notifications_cc"><h3 id="x2-13-w3c_notifications_cc"><bdi class="secno">2.13 </bdi><code>W3C_NOTIFICATIONS_CC</code><a class="self-link" aria-label="§" href="#w3c_notifications_cc"></a></h3><p>Comma separated list of email addresses to CC. This field is optional.</p><p><strong>Default:</strong> None.</p></section></section>
+	
+
+<p role="navigation" id="back-to-top">
+    <a href="#title"><abbr title="Back to Top">↑</abbr></a>
+  </p><script id="respec-dfn-panel">(() => {
+// @ts-check
+if (document.respec) {
+  document.respec.ready.then(setupPanel);
+} else {
+  setupPanel();
+}
+
+function setupPanel() {
+  const listener = panelListener();
+  document.body.addEventListener("keydown", listener);
+  document.body.addEventListener("click", listener);
+}
+
+function panelListener() {
+  /** @type {HTMLElement} */
+  let panel = null;
+  return event => {
+    const { target, type } = event;
+
+    if (!(target instanceof HTMLElement)) return;
+
+    // For keys, we only care about Enter key to activate the panel
+    // otherwise it's activated via a click.
+    if (type === "keydown" && event.key !== "Enter") return;
+
+    const action = deriveAction(event);
+
+    switch (action) {
+      case "show": {
+        hidePanel(panel);
+        /** @type {HTMLElement} */
+        const dfn = target.closest("dfn, .index-term");
+        panel = document.getElementById(`dfn-panel-for-${dfn.id}`);
+        const coords = deriveCoordinates(event);
+        displayPanel(dfn, panel, coords);
+        break;
+      }
+      case "dock": {
+        panel.style.left = null;
+        panel.style.top = null;
+        panel.classList.add("docked");
+        break;
+      }
+      case "hide": {
+        hidePanel(panel);
+        panel = null;
+        break;
+      }
+    }
+  };
+}
+
+/**
+ * @param {MouseEvent|KeyboardEvent} event
+ */
+function deriveCoordinates(event) {
+  const target = /** @type HTMLElement */ (event.target);
+
+  // We prevent synthetic AT clicks from putting
+  // the dialog in a weird place. The AT events sometimes
+  // lack coordinates, so they have clientX/Y = 0
+  const rect = target.getBoundingClientRect();
+  if (
+    event instanceof MouseEvent &&
+    event.clientX >= rect.left &&
+    event.clientY >= rect.top
+  ) {
+    // The event probably happened inside the bounding rect...
+    return { x: event.clientX, y: event.clientY };
+  }
+
+  // Offset to the middle of the element
+  const x = rect.x + rect.width / 2;
+  // Placed at the bottom of the element
+  const y = rect.y + rect.height;
+  return { x, y };
+}
+
+/**
+ * @param {Event} event
+ */
+function deriveAction(event) {
+  const target = /** @type {HTMLElement} */ (event.target);
+  const hitALink = !!target.closest("a");
+  if (target.closest("dfn:not([data-cite]), .index-term")) {
+    return hitALink ? "none" : "show";
+  }
+  if (target.closest(".dfn-panel")) {
+    if (hitALink) {
+      return target.classList.contains("self-link") ? "hide" : "dock";
+    }
+    const panel = target.closest(".dfn-panel");
+    return panel.classList.contains("docked") ? "hide" : "none";
+  }
+  if (document.querySelector(".dfn-panel:not([hidden])")) {
+    return "hide";
+  }
+  return "none";
+}
+
+/**
+ * @param {HTMLElement} dfn
+ * @param {HTMLElement} panel
+ * @param {{ x: number, y: number }} clickPosition
+ */
+function displayPanel(dfn, panel, { x, y }) {
+  panel.hidden = false;
+  // distance (px) between edge of panel and the pointing triangle (caret)
+  const MARGIN = 20;
+
+  const dfnRects = dfn.getClientRects();
+  // Find the `top` offset when the `dfn` can be spread across multiple lines
+  let closestTop = 0;
+  let minDiff = Infinity;
+  for (const rect of dfnRects) {
+    const { top, bottom } = rect;
+    const diffFromClickY = Math.abs((top + bottom) / 2 - y);
+    if (diffFromClickY < minDiff) {
+      minDiff = diffFromClickY;
+      closestTop = top;
+    }
+  }
+
+  const top = window.scrollY + closestTop + dfnRects[0].height;
+  const left = x - MARGIN;
+  panel.style.left = `${left}px`;
+  panel.style.top = `${top}px`;
+
+  // Find if the panel is flowing out of the window
+  const panelRect = panel.getBoundingClientRect();
+  const SCREEN_WIDTH = Math.min(window.innerWidth, window.screen.width);
+  if (panelRect.right > SCREEN_WIDTH) {
+    const newLeft = Math.max(MARGIN, x + MARGIN - panelRect.width);
+    const newCaretOffset = left - newLeft;
+    panel.style.left = `${newLeft}px`;
+    /** @type {HTMLElement} */
+    const caret = panel.querySelector(".caret");
+    caret.style.left = `${newCaretOffset}px`;
+  }
+
+  // As it's a dialog, we trap focus.
+  // TODO: when <dialog> becomes a implemented, we should really
+  // use that.
+  trapFocus(panel, dfn);
+}
+
+/**
+ * @param {HTMLElement} panel
+ * @param {HTMLElement} dfn
+ * @returns
+ */
+function trapFocus(panel, dfn) {
+  /** @type NodeListOf<HTMLAnchorElement> elements */
+  const anchors = panel.querySelectorAll("a[href]");
+  // No need to trap focus
+  if (!anchors.length) return;
+
+  // Move focus to first anchor element
+  const first = anchors.item(0);
+  first.focus();
+
+  const trapListener = createTrapListener(anchors, panel, dfn);
+  panel.addEventListener("keydown", trapListener);
+
+  // Hiding the panel releases the trap
+  const mo = new MutationObserver(records => {
+    const [record] = records;
+    const target = /** @type HTMLElement */ (record.target);
+    if (target.hidden) {
+      panel.removeEventListener("keydown", trapListener);
+      mo.disconnect();
+    }
+  });
+  mo.observe(panel, { attributes: true, attributeFilter: ["hidden"] });
+}
+
+/**
+ *
+ * @param {NodeListOf<HTMLAnchorElement>} anchors
+ * @param {HTMLElement} panel
+ * @param {HTMLElement} dfn
+ * @returns
+ */
+function createTrapListener(anchors, panel, dfn) {
+  const lastIndex = anchors.length - 1;
+  let currentIndex = 0;
+  return event => {
+    switch (event.key) {
+      // Hitting "Tab" traps us in a nice loop around elements.
+      case "Tab": {
+        event.preventDefault();
+        currentIndex += event.shiftKey ? -1 : +1;
+        if (currentIndex < 0) {
+          currentIndex = lastIndex;
+        } else if (currentIndex > lastIndex) {
+          currentIndex = 0;
+        }
+        anchors.item(currentIndex).focus();
+        break;
+      }
+
+      // Hitting "Enter" on an anchor releases the trap.
+      case "Enter":
+        hidePanel(panel);
+        break;
+
+      // Hitting "Escape" returns focus to dfn.
+      case "Escape":
+        hidePanel(panel);
+        dfn.focus();
+        return;
+    }
+  };
+}
+
+/** @param {HTMLElement} panel */
+function hidePanel(panel) {
+  if (!panel) return;
+  panel.hidden = true;
+  panel.classList.remove("docked");
+}
+})()</script><script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script></body></html>
