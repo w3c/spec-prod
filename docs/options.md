@@ -156,7 +156,7 @@ A URL to the working group decision to use auto-publish, usually from a w3c mail
 - Second Screen WG: https://lists.w3.org/Archives/Public/public-secondscreen/2015Jun/0096.html
 - Web RTC: https://lists.w3.org/Archives/Public/public-webrtc/2016Mar/0031.html
 - Aria: https://lists.w3.org/Archives/Public/public-html-admin/2015May/0021.html
-- Device APIs: https://lists.w3.org/Archives/Public/public-device-apis/2015Oct/att-0037/minutes-2015-10-15.html#item05
+- Device APIs: https://lists.w3.org/Archives/Public/public-device-apis/2021May/0008.html
 - Web Performance: https://lists.w3.org/Archives/Public/public-web-perf/2021Apr/0005.html
 
 **Default:** None.
