@@ -3,7 +3,7 @@ import { copyFile, mkdir, readFile, writeFile, unlink } from "fs/promises";
 import fetch from "node-fetch";
 import { getAllSubResources, ResourceType } from "subresources";
 import { env, exit, setOutput, sh } from "./utils.js";
-import { StaticServer } from "./utils.js";
+import { deepEqual, StaticServer } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
 
 import { BasicBuildOptions } from "./prepare-build.js";
@@ -45,8 +45,7 @@ export default async function main({
 	configOverride,
 }: Input) {
 	const input: BasicBuildOptions = { toolchain, source, destination };
-	// TODO: compare equal objects also
-	if (configOverride.gh === configOverride.w3c) {
+	if (deepEqual(configOverride.gh, configOverride.w3c)) {
 		const out = await build(input, flags, null, "common");
 		return { ...setOutput("gh", out), ...setOutput("w3c", out) };
 	}
