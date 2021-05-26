@@ -1,4 +1,4 @@
-# Spec Prod
+# Spec Prod | [Documentation 📘](https://w3c.github.io/spec-prod/)
 
 This GitHub Action lets you:
 
