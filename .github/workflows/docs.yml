@@ -20,4 +20,5 @@ jobs:
         with:
           SOURCE: docs/index.html
           DESTINATION: index.html
+          TOOLCHAIN: respec
           GH_PAGES_BRANCH: gh-pages
