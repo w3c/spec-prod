@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Spec Prod Documentation</title>
+		<script
+			src="https://www.w3.org/Tools/respec/respec-w3c"
+			class="remove"
+			defer
+		></script>
+		<script class="remove">
+			var respecConfig = {
+				specStatus: "base",
+				editors: [
+					{ name: "Sid Vishnoi", url: "https://github.com/sidvishnoi" },
+				],
+				github: {
+					repoURL: "https://github.com/w3c/spec-prod",
+					branch: "main",
+				},
+				license: "cc0",
+				tocIntroductory: true,
+				postProcess: [fixLinks, fixAbbr, prettify],
+			};
+
+			function fixLinks() {
+				document.querySelectorAll("section a").forEach(
+					/** @param {HTMLAnchorElement} a */ a => {
+						if (a.host === location.host && a.pathname.includes("options.md")) {
+							a.pathname = "/";
+						}
+					},
+				);
+			}
+
+			function fixAbbr() {
+				document.querySelectorAll("abbr").forEach(abbr => {
+					if (["W3C"].includes(abbr.textContent.trim())) {
+						abbr.insertAdjacentText("beforebegin", abbr.textContent);
+						abbr.remove();
+					}
+				});
+			}
+
+			function prettify() {
+				document
+					.querySelectorAll("table")
+					.forEach(table => table.classList.add("def"));
+				document
+					.querySelectorAll("pre")
+					.forEach(pre => pre.classList.add("example"));
+			}
+		</script>
+	</head>
+	<body>
+		<p class="copyright remove"></p>
+		<section id="abstract">
+			<p>The w3c/spec-prod GitHub Action lets you:</p>
+			<ul>
+				<li>
+					Build <a href="https://github.com/w3c/respec">ReSpec</a> and
+					<a href="https://github.com/tabatkins/bikeshed">Bikeshed</a>
+					specs.
+				</li>
+				<li>
+					Validate generated document's markup and check for broken hyperlinks.
+				</li>
+				<li>
+					Publish generated spec to GitHub Pages and/or w3.org (using Echidna).
+				</li>
+			</ul>
+		</section>
+		<section
+			data-include="examples.md"
+			data-include-format="markdown"
+		></section>
+		<section data-include="options.md" data-include-format="markdown"></section>
+	</body>
+</html>
