@@ -4,16 +4,16 @@ To get started, do the following:
 
 1. [Request an Echidna token](https://www.w3.org/Web/publications/register) for your spec (W3C Team Members and Chairs only!).
 1. Save the token as a "Secret" in the spec's repository's settings.
-1. Create a ".github/workflows/pr-push.yml" file at the root of the spec's repository.
+1. Create a ".github/workflows/auto-publish.yml" file at the root of the spec's repository.
    If you are using VS Code:
    ```bash"
-   code .github/workflows/pr-push.yml
+   code .github/workflows/auto-publish.yml
    ```
-1. In to the "pr-push.yml", copy, paste, and modify an one of the
+1. In to the "auto-publish.yml", copy, paste, and modify an one of the
    [[[#examples]]] below that suits your needs. Most typical one:
 
    ```yml
-     # Inside .github/workflows/pr-push.yml
+     # Inside .github/workflows/auto-publish.yml
      name: Node CI
 
      on:
