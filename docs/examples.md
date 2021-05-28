@@ -5,7 +5,7 @@
 If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (`index.html` or `index.bs`) and validates the output. It does not deploy the built document anywhere.
 
 ```yaml
-# Create a file called .github/workflows/pr-push.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -23,7 +23,7 @@ jobs:
 By default, both hyperlink and markup validators are enabled.
 
 ```yaml
-# Create a file called .github/workflows/pr-push.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -44,7 +44,7 @@ jobs:
 Specify `TOOLCHAIN` if the action cannot figure out the toolchain itself, or if you like to be explicit.
 
 ```yaml
-# Create a file called .github/workflows/pr-push.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -67,7 +67,7 @@ Deployment is only done on `push` events. In this example:
 - the document is built and validated, and then deployed to `gh-pages` branch, when a commit is pushed to the `main` branch.
 
 ```yaml
-# Create a file called .github/workflows/pr-push.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -89,7 +89,7 @@ jobs:
 By default, output location is mapped to the `SOURCE`. You can change that by providing a [`DESTINATION`](options.md#destination).
 
 ```yaml
-# Create a file called .github/workflows/pr-push.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   push:
@@ -112,7 +112,7 @@ jobs:
 ## Deploy to W3C using Echidna
 
 ```yaml
-# Create a file called .github/workflows/pr-push.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -164,7 +164,7 @@ See [`W3C_BUILD_OVERRIDE`](options.md#w3c_build_override) and [`GH_PAGES_BUILD_O
 If you've multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.
 
 ```yaml
-# Create a file called .github/workflows/pr-push.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
