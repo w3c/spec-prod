@@ -146,7 +146,7 @@ The automated publication workflow requires a [token](https://github.com/w3c/ech
 
 **Default:** None.
 
-## `W3C_WG_DECISION_URL` {#w3c_wg_decision_url}
+## `W3C_WG_DECISION_URL`
 
 A URL to the working group decision to use auto-publish, usually from a w3c mailing list.
 
