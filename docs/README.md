@@ -8,7 +8,6 @@ To get started, do the following:
    If you are using VS Code:
    ```bash"
    code .github/workflows/auto-publish.yml
-   ```
 1. In to the "auto-publish.yml", copy, paste, and modify an one of the
    [[[#examples]]] below that suits your needs. Most typical one:
 
