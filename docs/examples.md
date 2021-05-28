@@ -222,7 +222,7 @@ jobs:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
           W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
 
-# Create a file called .github/workflows/action-2.yml
+# Create another file called .github/workflows/auto-publish-spec-2.yml
 name: CI (spec-2)
 on:
   pull_request:
