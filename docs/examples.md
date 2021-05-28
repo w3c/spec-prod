@@ -199,7 +199,7 @@ jobs:
 As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' [`on.<push|pull_request>.paths`](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths) as:
 
 ```yaml
-# Create a file called .github/workflows/action-1.yml
+# Create a file called .github/workflows/auto-publish-spec-1.yml
 name: CI (spec-1)
 on:
   pull_request:
