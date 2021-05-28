@@ -129,16 +129,16 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     null,
     null
   ],
-  "publishISODate": "2021-05-26T00:00:00.000Z",
-  "generatedSubtitle": " 26 May 2021"
+  "publishISODate": "2021-05-28T00:00:00.000Z",
+  "generatedSubtitle": " 28 May 2021"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/base.css"></head>
-	<body class="h-entry informative toc-inline"><div class="head">
+	<body class="h-entry informative"><div class="head">
     <a class="logo" href="https://www.w3.org/"><img alt="W3C" width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C"></a> <h1 id="title" class="title">Spec Prod Documentation</h1>
     
     <h2>
       
-      <time class="dt-published" datetime="2021-05-26">26 May 2021</time>
+      <time class="dt-published" datetime="2021-05-28">28 May 2021</time>
     </h2>
     <dl>
       
@@ -444,7 +444,7 @@ jobs:
 <td><code>--die-on=everything </code></td>
 <td><code>-e -w</code></td>
 </tr>
-</tbody></table><p><strong>Default:</strong> <code>"fatal"</code>.</p></section><section id="gh_pages_build_override"><h3 id="x2-5-gh_pages_build_override"><bdi class="secno">2.5 </bdi><code>GH_PAGES_BUILD_OVERRIDE</code><a class="self-link" aria-label="§" href="#gh_pages_build_override"></a></h3><p>Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.</p><p><strong>Possible values:</strong> A string or <a href="https://stackoverflow.com/a/15365296">YAML Literal Block Scalar</a> (multiline string) representing the override config/metadata as key-value pairs. That's mouthful, lets clarify using an example:</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override Bikeshed metadata for GitHub Pages deployment
+</tbody></table><p><strong>Default:</strong> <code>"fatal"</code>.</p></section><section id="gh_pages_build_override"><h3 id="x2-5-gh_pages_build_override"><bdi class="secno">2.5 </bdi><code>GH_PAGES_BUILD_OVERRIDE</code><a class="self-link" aria-label="§" href="#gh_pages_build_override"></a></h3><p>Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.</p><p>Note that, you need to use <a href="https://tabatkins.github.io/bikeshed/">Bikeshed-specific metadata</a> (e.g. <code>status</code>) when using Bikeshed, and <a href="https://respec.org/docs/#configuration-options">ReSpec-specific config</a> (e.g. <code>specStatus</code>) when using ReSpec.</p><p><strong>Possible values:</strong> A string or <a href="https://stackoverflow.com/a/15365296">YAML Literal Block Scalar</a> (multiline string) representing the override config/metadata as key-value pairs. That's mouthful, lets clarify using an example:</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override Bikeshed metadata for GitHub Pages deployment
 - uses: w3c/spec-prod@v2
   with:
     TOOLCHAIN: bikeshed
@@ -456,7 +456,7 @@ jobs:
     #
     # Info: Above is same as running Bikeshed CLI like:
     # bikeshed spec INPUT OUTPUT --md-status="w3c/WD" --md-TR="https://www.w3.org/TR/my-cool-spec/"
-</code></pre><p><strong>Default:</strong> None.</p><p>Note that, you need to use Bikeshed-specific metadata (e.g. <code>status</code>) when using Bikeshed, and ReSpec-specific config (e.g. <code>specStatus</code>) when using ReSpec.</p></section><section id="w3c_build_override"><h3 id="x2-6-w3c_build_override"><bdi class="secno">2.6 </bdi><code>W3C_BUILD_OVERRIDE</code><a class="self-link" aria-label="§" href="#w3c_build_override"></a></h3><p>Override Bikeshed metadata or ReSpec config for the W3C Deployment and validators.</p><p>The Action will try to make use of metadata/config from previously published version, if available. For example, you do not need to manually provide <code>respecConfig.previousPublishDate</code> (or, <code>Previous Version</code> in case of Bikeshed) when publishing to W3C.</p><p><strong>Possible values:</strong> Same as <a href="#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a>.</p><p><strong>Default:</strong> None.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override respecConfig for W3C deployment and validators.
+</code></pre><p><strong>Default:</strong> None.</p></section><section id="w3c_build_override"><h3 id="x2-6-w3c_build_override"><bdi class="secno">2.6 </bdi><code>W3C_BUILD_OVERRIDE</code><a class="self-link" aria-label="§" href="#w3c_build_override"></a></h3><p>Override Bikeshed metadata or ReSpec config for the W3C Deployment and validators.</p><p>The Action will try to make use of metadata/config from previously published version, if available. For example, you do not need to manually provide <code>respecConfig.previousPublishDate</code> (or, <code>Previous Version</code> in case of Bikeshed) when publishing to W3C.</p><p><strong>Possible values:</strong> Same as <a href="#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a>.</p><p><strong>Default:</strong> None.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override respecConfig for W3C deployment and validators.
 - uses: w3c/spec-prod@v2
   with:
     TOOLCHAIN: respec
