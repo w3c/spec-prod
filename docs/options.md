@@ -52,6 +52,16 @@ Define exit behaviour on build errors or warnings.
 
 Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.
 
+Note that, you need to use Bikeshed-specific metadata (e.g. `status`) when using Bikeshed, and ReSpec-specific config (e.g. `specStatus`) when using ReSpec.
+
+For ReSpec, see the possible values:
+
+  * https://respec.org/docs/#configuration-options
+
+For Bikeshed:
+
+  * https://tabatkins.github.io/bikeshed/
+
 **Possible values:** A string or [YAML Literal Block Scalar](https://stackoverflow.com/a/15365296) (multiline string) representing the override config/metadata as key-value pairs. That's mouthful, lets clarify using an example:
 
 ```yaml
@@ -70,8 +80,6 @@ Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.
 ```
 
 **Default:** None.
-
-Note that, you need to use Bikeshed-specific metadata (e.g. `status`) when using Bikeshed, and ReSpec-specific config (e.g. `specStatus`) when using ReSpec.
 
 ## `W3C_BUILD_OVERRIDE`
 
@@ -138,7 +146,7 @@ The automated publication workflow requires a [token](https://github.com/w3c/ech
 
 **Default:** None.
 
-## `W3C_WG_DECISION_URL`
+## `W3C_WG_DECISION_URL` {#w3c_wg_decision_url}
 
 A URL to the working group decision to use auto-publish, usually from a w3c mailing list.
 
