@@ -52,15 +52,7 @@ Define exit behaviour on build errors or warnings.
 
 Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.
 
-Note that, you need to use Bikeshed-specific metadata (e.g. `status`) when using Bikeshed, and ReSpec-specific config (e.g. `specStatus`) when using ReSpec.
-
-For ReSpec, see the possible values:
-
-  * https://respec.org/docs/#configuration-options
-
-For Bikeshed:
-
-  * https://tabatkins.github.io/bikeshed/
+Note that, you need to use [Bikeshed-specific metadata](https://tabatkins.github.io/bikeshed/) (e.g. `status`) when using Bikeshed, and [ReSpec-specific config](https://respec.org/docs/#configuration-options) (e.g. `specStatus`) when using ReSpec.
 
 **Possible values:** A string or [YAML Literal Block Scalar](https://stackoverflow.com/a/15365296) (multiline string) representing the override config/metadata as key-value pairs. That's mouthful, lets clarify using an example:
 
