@@ -26,7 +26,14 @@
 			function fixLinks() {
 				document.querySelectorAll("section a").forEach(
 					/** @param {HTMLAnchorElement} a */ a => {
-						if (a.host === location.host && a.pathname.includes("options.md")) {
+						const path = a.pathname;
+						if (
+							a.host === location.host &&
+							(path.includes("options.md") || path.includes("examples.md"))
+						) {
+							if (!a.hash) {
+								a.hash = `#${path.replace(/^\//, "").replace(/\.md$/, "")}`;
+							}
 							a.pathname = "/";
 						}
 					},
@@ -70,14 +77,8 @@
 				</li>
 			</ul>
 		</section>
+		<section data-include="README.md" data-include-format="markdown"></section>
 		<section
-			id="readme"
-			data-include="README.md"
-			data-include-format="markdown"
-		>
-		</section>
-		<section
-			id="examples"
 			data-include="examples.md"
 			data-include-format="markdown"
 		></section>
