@@ -13,9 +13,9 @@ To get started, do the following:
    name: CI
 
    on:
+     pull_request: {}
      push:
        branches: [main]
-     pull_request: {}
 
    jobs:
      validate-and-publish:
