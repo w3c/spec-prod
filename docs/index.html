@@ -24,11 +24,17 @@
 			};
 
 			function fixLinks() {
-				document.querySelectorAll("section a").forEach(
+				const re = /\/?(options|examples)\.md$/;
+				document.querySelectorAll("section a:not(.self-link)").forEach(
 					/** @param {HTMLAnchorElement} a */ a => {
-						if (a.host === location.host && a.pathname.includes("options.md")) {
-							a.pathname = "/";
+						if (a.host !== location.host) return;
+						if (!re.test(a.pathname)) return;
+
+						if (!a.hash) {
+							const path = a.pathname.replace(location.pathname, "");
+							a.hash = path.replace(re, "#$1");
 						}
+						a.pathname = a.pathname.replace(re, "/");
 					},
 				);
 			}
