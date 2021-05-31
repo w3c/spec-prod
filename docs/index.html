@@ -26,13 +26,13 @@
 			function fixLinks() {
 				document.querySelectorAll("section a").forEach(
 					/** @param {HTMLAnchorElement} a */ a => {
-						const path = a.pathname;
+						const path = a.pathname.replace(location.pathname, "");
 						if (
 							a.host === location.host &&
 							(path.includes("options.md") || path.includes("examples.md"))
 						) {
 							if (!a.hash) {
-								a.hash = path.replace(/\/(options|examples)\.md$/, "#$1");
+								a.hash = path.replace(/\/?(options|examples)\.md$/, "#$1");
 							}
 							a.pathname = "/";
 						}
