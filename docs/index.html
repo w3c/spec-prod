@@ -24,7 +24,7 @@
 			};
 
 			function fixLinks() {
-				const re = /\/(options|examples)\.md$/;
+				const re = /\/?(options|examples)\.md$/;
 				document.querySelectorAll("section a:not(.self-link)").forEach(
 					/** @param {HTMLAnchorElement} a */ a => {
 						if (a.host !== location.host) return;
