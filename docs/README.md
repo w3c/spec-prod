@@ -20,7 +20,7 @@ To get started, do the following:
    jobs:
      validate-and-publish:
        name: Validate and Publish to TR
-       runs-on: ubuntu-latest
+       runs-on: ubuntu-20.04
        steps:
          - uses: actions/checkout@v2
          - uses: w3c/spec-prod@v2

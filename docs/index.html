@@ -32,7 +32,7 @@
 							(path.includes("options.md") || path.includes("examples.md"))
 						) {
 							if (!a.hash) {
-								a.hash = `#${path.replace(/^\//, "").replace(/\.md$/, "")}`;
+								a.hash = path.replace(/\/(options|examples)\.md$/, "#$1");
 							}
 							a.pathname = "/";
 						}
