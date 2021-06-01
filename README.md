@@ -17,7 +17,7 @@ During a pull request, the action:
 Additionally, if a commit is pushed to the "main" branch, the action deploys the built specification to /TR/.
 
 ```yml
-# .github/workflows/pr-push.yml
+# .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}

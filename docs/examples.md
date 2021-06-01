@@ -5,7 +5,7 @@
 If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (`index.html` or `index.bs`) and validates the output. It does not deploy the built document anywhere.
 
 ```yaml
-# .github/workflows/pr.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -23,7 +23,7 @@ jobs:
 By default, both hyperlink and markup validators are enabled.
 
 ```yaml
-# .github/workflows/pr.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -44,7 +44,7 @@ jobs:
 Specify `TOOLCHAIN` if the action cannot figure out the toolchain itself, or if you like to be explicit.
 
 ```yaml
-# .github/workflows/pr.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -67,7 +67,7 @@ Deployment is only done on `push` events. In this example:
 - the document is built and validated, and then deployed to `gh-pages` branch, when a commit is pushed to the `main` branch.
 
 ```yaml
-# .github/workflows/pr-push.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -89,7 +89,7 @@ jobs:
 By default, output location is mapped to the `SOURCE`. You can change that by providing a [`DESTINATION`](options.md#destination).
 
 ```yaml
-# .github/workflows/push.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   push:
@@ -112,7 +112,7 @@ jobs:
 ## Deploy to W3C using Echidna
 
 ```yaml
-# .github/workflows/pr-push.yml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -164,6 +164,7 @@ See [`W3C_BUILD_OVERRIDE`](options.md#w3c_build_override) and [`GH_PAGES_BUILD_O
 If you've multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.
 
 ```yaml
+# Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -198,7 +199,7 @@ jobs:
 As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' [`on.<push|pull_request>.paths`](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths) as:
 
 ```yaml
-# .github/workflows/pr-push-spec-1.yml
+# Create a file called .github/workflows/auto-publish-spec-1.yml
 name: CI (spec-1)
 on:
   pull_request:
@@ -221,7 +222,7 @@ jobs:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
           W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
 
-# .github/workflows/pr-push-spec-2.yml
+# Create another file called .github/workflows/auto-publish-spec-2.yml
 name: CI (spec-2)
 on:
   pull_request:
