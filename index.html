@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 26.8.5">
+<meta name="generator" content="ReSpec 26.8.6">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 dfn{cursor:pointer}
@@ -129,16 +129,16 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     null,
     null
   ],
-  "publishISODate": "2021-05-31T00:00:00.000Z",
-  "generatedSubtitle": " 31 May 2021"
+  "publishISODate": "2021-06-01T00:00:00.000Z",
+  "generatedSubtitle": " 01 June 2021"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/base.css"></head>
-	<body class="h-entry informative"><div class="head">
+	<body class="h-entry informative toc-inline"><div class="head">
     <a class="logo" href="https://www.w3.org/"><img alt="W3C" width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C"></a> <h1 id="title" class="title">Spec Prod Documentation</h1>
     
     <h2>
       
-      <time class="dt-published" datetime="2021-05-31">31 May 2021</time>
+      <time class="dt-published" datetime="2021-06-01">01 June 2021</time>
     </h2>
     <dl>
       
@@ -187,7 +187,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 				</li>
 			</ul>
 		</section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a class="tocxref" href="#abstract">Abstract</a></li><li class="tocline"><a class="tocxref" href="#examples"><bdi class="secno">1. </bdi>Examples</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#run-as-a-validator-on-pull-requests"><bdi class="secno">1.1 </bdi>Run as a validator on pull requests</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#selectively-enable-disable-validators"><bdi class="secno">1.1.1 </bdi>Selectively enable/disable validators</a></li></ol></li><li class="tocline"><a class="tocxref" href="#specify-toolchain-bikeshed-or-respec"><bdi class="secno">1.2 </bdi>Specify toolchain: Bikeshed or ReSpec</a></li><li class="tocline"><a class="tocxref" href="#deploy-to-github-pages"><bdi class="secno">1.3 </bdi>Deploy to GitHub pages</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#change-output-location-for-built-files"><bdi class="secno">1.3.1 </bdi>Change output location for built files</a></li></ol></li><li class="tocline"><a class="tocxref" href="#deploy-to-w3c-using-echidna"><bdi class="secno">1.4 </bdi>Deploy to W3C using Echidna</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#use-different-respecconfig-when-deploying-to-w3c"><bdi class="secno">1.4.1 </bdi>Use different <code>respecConfig</code> when deploying to W3C</a></li></ol></li><li class="tocline"><a class="tocxref" href="#multiple-specs-in-same-repository"><bdi class="secno">1.5 </bdi>Multiple specs in same repository</a></li></ol></li><li class="tocline"><a class="tocxref" href="#options"><bdi class="secno">2. </bdi>Options</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#toolchain"><bdi class="secno">2.1 </bdi><code>TOOLCHAIN</code></a></li><li class="tocline"><a class="tocxref" href="#source"><bdi class="secno">2.2 </bdi><code>SOURCE</code></a></li><li class="tocline"><a class="tocxref" href="#destination"><bdi class="secno">2.3 </bdi><code>DESTINATION</code></a></li><li class="tocline"><a class="tocxref" href="#build_fail_on"><bdi class="secno">2.4 </bdi><code>BUILD_FAIL_ON</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_build_override"><bdi class="secno">2.5 </bdi><code>GH_PAGES_BUILD_OVERRIDE</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_build_override"><bdi class="secno">2.6 </bdi><code>W3C_BUILD_OVERRIDE</code></a></li><li class="tocline"><a class="tocxref" href="#validate_links"><bdi class="secno">2.7 </bdi><code>VALIDATE_LINKS</code></a></li><li class="tocline"><a class="tocxref" href="#validate_markup"><bdi class="secno">2.8 </bdi><code>VALIDATE_MARKUP</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_branch"><bdi class="secno">2.9 </bdi><code>GH_PAGES_BRANCH</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_token"><bdi class="secno">2.10 </bdi><code>GH_PAGES_TOKEN</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_echidna_token"><bdi class="secno">2.11 </bdi><code>W3C_ECHIDNA_TOKEN</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_wg_decision_url"><bdi class="secno">2.12 </bdi><code>W3C_WG_DECISION_URL</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_notifications_cc"><bdi class="secno">2.13 </bdi><code>W3C_NOTIFICATIONS_CC</code></a></li></ol></li></ol></nav>
-		<section id="examples"><h2 id="x1-examples"><bdi class="secno">1. </bdi>Examples<a class="self-link" aria-label="§" href="#examples"></a></h2><section id="run-as-a-validator-on-pull-requests"><h3 id="x1-1-run-as-a-validator-on-pull-requests"><bdi class="secno">1.1 </bdi>Run as a validator on pull requests<a class="self-link" aria-label="§" href="#run-as-a-validator-on-pull-requests"></a></h3><p>If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (<code>index.html</code> or <code>index.bs</code>) and validates the output. It does not deploy the built document anywhere.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr.yml
+		<section id="examples"><h2 id="x1-examples"><bdi class="secno">1. </bdi>Examples<a class="self-link" aria-label="§" href="#examples"></a></h2><section id="run-as-a-validator-on-pull-requests"><h3 id="x1-1-run-as-a-validator-on-pull-requests"><bdi class="secno">1.1 </bdi>Run as a validator on pull requests<a class="self-link" aria-label="§" href="#run-as-a-validator-on-pull-requests"></a></h3><p>If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (<code>index.html</code> or <code>index.bs</code>) and validates the output. It does not deploy the built document anywhere.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -198,7 +198,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: w3c/spec-prod@v2
-</code></pre><section id="selectively-enable-disable-validators"><h4 id="x1-1-1-selectively-enable-disable-validators"><bdi class="secno">1.1.1 </bdi>Selectively enable/disable validators<a class="self-link" aria-label="§" href="#selectively-enable-disable-validators"></a></h4><p>By default, both hyperlink and markup validators are enabled.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr.yml
+</code></pre><section id="selectively-enable-disable-validators"><h4 id="x1-1-1-selectively-enable-disable-validators"><bdi class="secno">1.1.1 </bdi>Selectively enable/disable validators<a class="self-link" aria-label="§" href="#selectively-enable-disable-validators"></a></h4><p>By default, both hyperlink and markup validators are enabled.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -212,7 +212,7 @@ jobs:
         with:
           VALIDATE_LINKS: false
           VALIDATE_MARKUP: true
-</code></pre></section></section><section id="specify-toolchain-bikeshed-or-respec"><h3 id="x1-2-specify-toolchain-bikeshed-or-respec"><bdi class="secno">1.2 </bdi>Specify toolchain: Bikeshed or ReSpec<a class="self-link" aria-label="§" href="#specify-toolchain-bikeshed-or-respec"></a></h3><p>Specify <code>TOOLCHAIN</code> if the action cannot figure out the toolchain itself, or if you like to be explicit.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr.yml
+</code></pre></section></section><section id="specify-toolchain-bikeshed-or-respec"><h3 id="x1-2-specify-toolchain-bikeshed-or-respec"><bdi class="secno">1.2 </bdi>Specify toolchain: Bikeshed or ReSpec<a class="self-link" aria-label="§" href="#specify-toolchain-bikeshed-or-respec"></a></h3><p>Specify <code>TOOLCHAIN</code> if the action cannot figure out the toolchain itself, or if you like to be explicit.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -228,7 +228,7 @@ jobs:
 </code></pre></section><section id="deploy-to-github-pages"><h3 id="x1-3-deploy-to-github-pages"><bdi class="secno">1.3 </bdi>Deploy to GitHub pages<a class="self-link" aria-label="§" href="#deploy-to-github-pages"></a></h3><p>Deployment is only done on <code>push</code> events. In this example:</p><ul>
 <li>the document is built and validated as a check in the pull request.</li>
 <li>the document is built and validated, and then deployed to <code>gh-pages</code> branch, when a commit is pushed to the <code>main</code> branch.</li>
-</ul><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr-push.yml
+</ul><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -243,7 +243,7 @@ jobs:
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
-</code></pre><section id="change-output-location-for-built-files"><h4 id="x1-3-1-change-output-location-for-built-files"><bdi class="secno">1.3.1 </bdi>Change output location for built files<a class="self-link" aria-label="§" href="#change-output-location-for-built-files"></a></h4><p>By default, output location is mapped to the <code>SOURCE</code>. You can change that by providing a <a href="http://localhost:3000/docs/#destination"><code>DESTINATION</code></a>.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/push.yml
+</code></pre><section id="change-output-location-for-built-files"><h4 id="x1-3-1-change-output-location-for-built-files"><bdi class="secno">1.3.1 </bdi>Change output location for built files<a class="self-link" aria-label="§" href="#change-output-location-for-built-files"></a></h4><p>By default, output location is mapped to the <code>SOURCE</code>. You can change that by providing a <a href="http://localhost:3000/#destination"><code>DESTINATION</code></a>.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   push:
@@ -261,7 +261,7 @@ jobs:
           SOURCE: src/spec.bs
           DESTINATION: specification/index.html # `src/spec.html` if not provided.
           # Deployment will be available at: https://&lt;org&gt;.github.io/&lt;repo&gt;/specification/
-</code></pre></section></section><section id="deploy-to-w3c-using-echidna"><h3 id="x1-4-deploy-to-w3c-using-echidna"><bdi class="secno">1.4 </bdi>Deploy to W3C using Echidna<a class="self-link" aria-label="§" href="#deploy-to-w3c-using-echidna"></a></h3><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr-push.yml
+</code></pre></section></section><section id="deploy-to-w3c-using-echidna"><h3 id="x1-4-deploy-to-w3c-using-echidna"><bdi class="secno">1.4 </bdi>Deploy to W3C using Echidna<a class="self-link" aria-label="§" href="#deploy-to-w3c-using-echidna"></a></h3><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -299,7 +299,8 @@ jobs:
           W3C_BUILD_OVERRIDE: |
             specStatus: WD
             shortName: my-custom-shortname
-</code></pre><p>See <a href="http://localhost:3000/docs/#w3c_build_override"><code>W3C_BUILD_OVERRIDE</code></a> and <a href="http://localhost:3000/docs/#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a> for details.</p></section></section><section id="multiple-specs-in-same-repository"><h3 id="x1-5-multiple-specs-in-same-repository"><bdi class="secno">1.5 </bdi>Multiple specs in same repository<a class="self-link" aria-label="§" href="#multiple-specs-in-same-repository"></a></h3><p>If you've multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.</p><pre class="example"><code class="yaml hljs" aria-busy="false">name: CI
+</code></pre><p>See <a href="http://localhost:3000/#w3c_build_override"><code>W3C_BUILD_OVERRIDE</code></a> and <a href="http://localhost:3000/#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a> for details.</p></section></section><section id="multiple-specs-in-same-repository"><h3 id="x1-5-multiple-specs-in-same-repository"><bdi class="secno">1.5 </bdi>Multiple specs in same repository<a class="self-link" aria-label="§" href="#multiple-specs-in-same-repository"></a></h3><p>If you've multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
+name: CI
 on:
   pull_request: {}
   push:
@@ -326,7 +327,7 @@ jobs:
           GH_PAGES_BRANCH: gh-pages
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
           W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
-</code></pre><p><strong>Note:</strong> At present, each source might create its own commit in <code>GH_PAGES_BRANCH</code> even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when <a href="https://github.com/w3c/spec-prod/issues/8">#8</a> and <a href="https://github.com/w3c/spec-prod/issues/14">#14</a> are fixed.</p><p>As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' <a href="https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths"><code>on.&lt;push|pull_request&gt;.paths</code></a> as:</p><pre class="example"><code class="yaml hljs" aria-busy="false"># .github/workflows/pr-push-spec-1.yml
+</code></pre><p><strong>Note:</strong> At present, each source might create its own commit in <code>GH_PAGES_BRANCH</code> even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when <a href="https://github.com/w3c/spec-prod/issues/8">#8</a> and <a href="https://github.com/w3c/spec-prod/issues/14">#14</a> are fixed.</p><p>As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' <a href="https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths"><code>on.&lt;push|pull_request&gt;.paths</code></a> as:</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish-spec-1.yml
 name: CI (spec-1)
 on:
   pull_request:
@@ -349,7 +350,7 @@ jobs:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
           W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
 
-# .github/workflows/pr-push-spec-2.yml
+# Create another file called .github/workflows/auto-publish-spec-2.yml
 name: CI (spec-2)
 on:
   pull_request:
