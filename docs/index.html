@@ -31,13 +31,9 @@
 						if (!re.test(a.pathname)) return;
 
 						if (!a.hash) {
-							if (a.pathname.endsWith("options.md")) {
-								a.hash = "#options";
-							} else if (a.pathname.endsWith("examples.md")) {
-								a.hash = "#examples";
-							}
+							a.hash = "#" + a.pathname.match(re)[1];
 						}
-						a.pathname = a.pathname.replace(re, "");
+						a.setAttribute("href", a.hash);
 					},
 				);
 			}
