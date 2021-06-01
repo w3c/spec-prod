@@ -31,10 +31,13 @@
 						if (!re.test(a.pathname)) return;
 
 						if (!a.hash) {
-							const path = a.pathname.replace(location.pathname, "");
-							a.hash = path.replace(re, "#$1");
+							if (a.pathname.endsWith("options.md")) {
+								a.hash = "#options";
+							} else if (a.pathname.endsWith("examples.md")) {
+								a.hash = "#examples";
+							}
 						}
-						a.pathname = a.pathname.replace(re, "/");
+						a.pathname = a.pathname.replace(re, "");
 					},
 				);
 			}
