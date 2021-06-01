@@ -243,7 +243,7 @@ jobs:
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
-</code></pre><section id="change-output-location-for-built-files"><h4 id="x1-3-1-change-output-location-for-built-files"><bdi class="secno">1.3.1 </bdi>Change output location for built files<a class="self-link" aria-label="§" href="#change-output-location-for-built-files"></a></h4><p>By default, output location is mapped to the <code>SOURCE</code>. You can change that by providing a <a href="http://localhost:3000/#destination"><code>DESTINATION</code></a>.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
+</code></pre><section id="change-output-location-for-built-files"><h4 id="x1-3-1-change-output-location-for-built-files"><bdi class="secno">1.3.1 </bdi>Change output location for built files<a class="self-link" aria-label="§" href="#change-output-location-for-built-files"></a></h4><p>By default, output location is mapped to the <code>SOURCE</code>. You can change that by providing a <a href="#destination"><code>DESTINATION</code></a>.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   push:
@@ -299,7 +299,7 @@ jobs:
           W3C_BUILD_OVERRIDE: |
             specStatus: WD
             shortName: my-custom-shortname
-</code></pre><p>See <a href="http://localhost:3000/#w3c_build_override"><code>W3C_BUILD_OVERRIDE</code></a> and <a href="http://localhost:3000/#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a> for details.</p></section></section><section id="multiple-specs-in-same-repository"><h3 id="x1-5-multiple-specs-in-same-repository"><bdi class="secno">1.5 </bdi>Multiple specs in same repository<a class="self-link" aria-label="§" href="#multiple-specs-in-same-repository"></a></h3><p>If you've multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
+</code></pre><p>See <a href="#w3c_build_override"><code>W3C_BUILD_OVERRIDE</code></a> and <a href="#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a> for details.</p></section></section><section id="multiple-specs-in-same-repository"><h3 id="x1-5-multiple-specs-in-same-repository"><bdi class="secno">1.5 </bdi>Multiple specs in same repository<a class="self-link" aria-label="§" href="#multiple-specs-in-same-repository"></a></h3><p>If you've multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
