@@ -151,6 +151,7 @@ A URL to the working group decision to use auto-publish, usually from a w3c mail
 - Aria: https://lists.w3.org/Archives/Public/public-html-admin/2015May/0021.html
 - Device APIs: https://lists.w3.org/Archives/Public/public-device-apis/2021May/0008.html
 - Web Performance: https://lists.w3.org/Archives/Public/public-web-perf/2021Apr/0005.html
+- WebAppSec: https://lists.w3.org/Archives/Public/public-webappsec/2015Mar/0170.html 
 
 **Default:** None.
 
