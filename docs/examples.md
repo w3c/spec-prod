@@ -198,7 +198,7 @@ jobs:
           W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
 ```
 
-**Note:** Echidna tokens need to be specified per document but secrets cannot be directly evaluated at the `matrix` level, meaning that `${{ secrets.ECHIDNA_TOKEN_SPEC }}` cannot be evaluated at that level. As in the above example, the idea is rather to name the token secret at the `matrix` level (through `echidna_token: ECHIDNA_TOKEN_SPEC`) and to evaluate the secret in the job's `steps` (through `${{ secrets[matrix.echidna_token] }}`).
+**Note:** Echidna tokens need to be specified per document but secrets cannot be directly evaluated at the `matrix` level, meaning that `${{\ secrets.ECHIDNA_TOKEN_SPEC }}` cannot be evaluated at that level. As in the above example, the idea is rather to name the token secret at the `matrix` level (through `echidna_token: ECHIDNA_TOKEN_SPEC`) and to evaluate the secret in the job's `steps` (through `${{\ secrets[matrix.echidna_token] }}`).
 
 **Note:** Add the `max-parallel: 1` setting as in the example if you run into situations where jobs attempt to push updates to the repository at the same time and fail (see [#58](https://github.com/w3c/spec-prod/issues/58)). This setting makes GitHub run jobs sequentially.
 
