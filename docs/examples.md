@@ -200,7 +200,7 @@ jobs:
 
 **Note:** Echidna tokens need to be specified per document but secrets cannot be directly evaluated at the `matrix` level, meaning that `${{ secrets.ECHIDNA_TOKEN_SPEC }}` cannot be evaluated at that level. As in the above example, the idea is rather to name the token secret at the `matrix` level (through `echidna_token: ECHIDNA_TOKEN_SPEC`) and to evaluate the secret in the job's `steps` (through `${{ secrets[matrix.echidna_token] }}`).
 
-**Note:** Add the `max-parallel: 1` setting as in the example if you run into situations where jobs attempt to push updates to the repository at the same time and fail. This setting makes GitHub run jobs sequentially.
+**Note:** Add the `max-parallel: 1` setting as in the example if you run into situations where jobs attempt to push updates to the repository at the same time and fail (see [#58](https://github.com/w3c/spec-prod/issues/58)). This setting makes GitHub run jobs sequentially.
 
 **Note:** At present, each source might create its own commit in `GH_PAGES_BRANCH` even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when [#8](https://github.com/w3c/spec-prod/issues/8) and [#14](https://github.com/w3c/spec-prod/issues/14) are fixed.
 
