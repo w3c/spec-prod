@@ -161,7 +161,7 @@ See [`W3C_BUILD_OVERRIDE`](options.md#w3c_build_override) and [`GH_PAGES_BUILD_O
 
 ## Multiple specs in same repository
 
-If you've multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.
+If you maintain multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.
 
 ```yaml
 # Create a file called .github/workflows/auto-publish.yml
@@ -175,14 +175,18 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     strategy:
+      max-parallel: 1
       matrix:
         include:
           - source: spec.html
             destination: index.html
+            echidna_token: ECHIDNA_TOKEN_SPEC
           - source: spec-1
             destination: the-spec
+            echidna_token: ECHIDNA_TOKEN_SPEC1
           - source: spec-2
             # destination defaults to spec-2/index.html
+            # echidna_token defaults to no publication to w3.org/TR
     steps:
       - uses: actions/checkout@v2
       - uses: w3c/spec-prod@v2
@@ -190,9 +194,13 @@ jobs:
           SOURCE: ${{ matrix.source }}
           DESTINATION: ${{ matrix.destination }}
           GH_PAGES_BRANCH: gh-pages
-          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
+          W3C_ECHIDNA_TOKEN: ${{ secrets[matrix.echidna_token] }}
           W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
 ```
+
+**Note:** Echidna tokens need to be specified per document but secrets cannot be directly evaluated at the `matrix` level, meaning that `${{\ secrets.ECHIDNA_TOKEN_SPEC }}` cannot be evaluated at that level. As in the above example, the idea is rather to name the token secret at the `matrix` level (through `echidna_token: ECHIDNA_TOKEN_SPEC`) and to evaluate the secret in the job's `steps` (through `${{\ secrets[matrix.echidna_token] }}`).
+
+**Note:** Add the `max-parallel: 1` setting as in the example if you run into situations where jobs attempt to push updates to the repository at the same time and fail (see [#58](https://github.com/w3c/spec-prod/issues/58)). This setting makes GitHub run jobs sequentially.
 
 **Note:** At present, each source might create its own commit in `GH_PAGES_BRANCH` even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when [#8](https://github.com/w3c/spec-prod/issues/8) and [#14](https://github.com/w3c/spec-prod/issues/14) are fixed.
 
