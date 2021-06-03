@@ -7,7 +7,7 @@ A [transcript](#transcript) is provided below, and [minutes](https://www.w3.org/
 width="800"
 height="600"
 src="https://app.streamfizz.live/embed/ckmey0o1v288317ilkz7yt3qoy5"
-frameborder="0" allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen">
+allow="accelerometer; autoplay; encrypted-media; picture-in-picture; fullscreen">
 </iframe>
 
 <details id="transcript">
