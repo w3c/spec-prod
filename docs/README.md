@@ -10,7 +10,7 @@ To get started, do the following:
 
    ```yml
    # Inside .github/workflows/auto-publish.yml
-   name: Automatic Publication 
+   name: Automatic Publication
 
    on:
      pull_request: {}
