@@ -2,7 +2,7 @@ import { env, exit, install, sh, yesOrNo } from "./utils.js";
 import { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
-const permaIgnore = [
+const URL_IGNORE = [
 	// Doesn't like robots
 	"https://ev.buaa.edu.cn/",
 ];
@@ -18,14 +18,13 @@ if (module === require.main) {
 
 export default async function main({ dest: dir }: Input) {
 	await install("link-checker");
-	const ignoreList = makeIgnoreParams(permaIgnore);
+	const opts = getLinkCheckerOptions(URL_IGNORE);
 	// Note: link-checker checks a directory, not a file.
-	await sh(
-		`link-checker ${ignoreList} --http-timeout=50000 --http-redirects=3 --http-always-get ${dir}`,
-		"stream",
-	);
+	await sh(`link-checker ${opts} ${dir}`, "stream");
 }
 
-function makeIgnoreParams(ignoreList: string[]) {
-	return ignoreList.map(url => `--url-ignore="${url}"`).join(" ");
+function getLinkCheckerOptions(ignoreList: string[]) {
+	return ["--http-timeout=50000", "--http-redirects=3", "--http-always-get"]
+		.concat(ignoreList.map(url => `--url-ignore="${url}"`))
+		.join(" ");
 }
