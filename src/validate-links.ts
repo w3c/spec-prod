@@ -1,7 +1,5 @@
 import { env, exit, install, sh, yesOrNo } from "./utils.js";
-import { PUPPETEER_ENV } from "./constants.js";
 import { BuildResult } from "./build.js";
-import path = require("path");
 type Input = Pick<BuildResult, "dest" | "file">;
 
 const permaIgnore = [
@@ -18,11 +16,10 @@ if (module === require.main) {
 	main(input).catch(err => exit(err.message || "Failed", err.code));
 }
 
-export default async function main({ dest, file }: Input) {
+export default async function main({ dest: dir }: Input) {
 	await install("link-checker");
-	// Validator checks a directory, not a file.
-	const dir = path.dirname(file);
 	const ignoreList = makeIgnoreParams(permaIgnore);
+	// Note: link-checker checks a directory, not a file.
 	await sh(
 		`link-checker ${ignoreList} --http-timeout=50000 --http-redirects=3 --http-always-get ${dir}`,
 	);
