@@ -22,6 +22,7 @@ export default async function main({ dest: dir }: Input) {
 	// Note: link-checker checks a directory, not a file.
 	await sh(
 		`link-checker ${ignoreList} --http-timeout=50000 --http-redirects=3 --http-always-get ${dir}`,
+		"stream",
 	);
 }
 
