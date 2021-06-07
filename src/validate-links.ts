@@ -5,6 +5,9 @@ type Input = Pick<BuildResult, "dest" | "file">;
 const URL_IGNORE = [
 	// Doesn't like robots
 	"https://ev.buaa.edu.cn/",
+	// The to-be published /TR URL.
+	// Ideally should include shortname, but may be good enough.
+	`/TR/.+${new Date().toISOString().slice(0, 10).replace(/-/g, "")}/$`,
 ];
 
 if (module === require.main) {
