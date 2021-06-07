@@ -20,6 +20,8 @@ export interface Inputs {
 	DESTINATION: string;
 	BUILD_FAIL_ON: string;
 	VALIDATE_LINKS: string;
+	VALIDATE_LINKS_USE_GET: string;
+	VALIDATE_LINKS_IGNORE_URLS: string;
 	VALIDATE_MARKUP: string;
 	GH_PAGES_BRANCH: string;
 	GH_PAGES_TOKEN: string;
