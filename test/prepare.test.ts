@@ -34,7 +34,7 @@ function getInputsFromWorkflow(): Partial<Inputs> {
 		const text = readFileSync(path.join(workflowDir, workflow), "utf8");
 		const parsed = yaml.parse(text);
 		for (const job of Object.values(parsed.jobs) as Job[]) {
-			const step = job.steps.find(step => step.uses?.includes("w3c/spec-prod"));
+			const step = job.steps.find(step => step.uses?.includes("/spec-prod@"));
 			if (!step) continue;
 			return step.with;
 		}
