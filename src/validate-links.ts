@@ -22,15 +22,9 @@ export default async function main({ dest, file }: Input) {
 	await install("link-checker");
 	// Validator checks a directory, not a file.
 	const dir = path.dirname(file);
-	const useGet = yesOrNo(env("INPUTS_VALIDATE_LINKS_USE_GET"))
-		? "--http-always-get"
-		: "";
-	const ignoreUrls = env("INPUTS_VALIDATE_LINKS_IGNORE_URLS")
-		? env("INPUTS_VALIDATE_LINKS_IGNORE_URLS").split(" ")
-		: [];
-	const ignoreList = makeIgnoreParams([...permaIgnore, ...ignoreUrls]);
+	const ignoreList = makeIgnoreParams(permaIgnore);
 	await sh(
-		`link-checker ${ignoreList} --http-timeout=50000 --http-redirects=3 ${dir}`,
+		`link-checker ${ignoreList} --http-timeout=50000 --http-redirects=3 --http-always-get ${dir}`,
 	);
 }
 
