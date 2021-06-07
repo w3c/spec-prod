@@ -24,7 +24,8 @@ export default async function main({ dest: dir }: Input) {
 }
 
 function getLinkCheckerOptions(ignoreList: string[]) {
-	return ["--http-timeout=50000", "--http-redirects=3", "--http-always-get"]
-		.concat(ignoreList.map(url => `--url-ignore="${url}"`))
+	return ignoreList
+		.map(url => `--url-ignore="${url}"`)
+		.concat(["--http-timeout=50000", "--http-redirects=3", "--http-always-get"])
 		.join(" ");
 }
