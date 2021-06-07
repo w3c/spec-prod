@@ -43,7 +43,7 @@ runs:
     - name: Set up action
       run: |
         echo "::group::Set up action"
-        yarn --cwd ${{ github.action_path }}
+        yarn --cwd ${{ github.action_path }} --ignore-optional
         yarn --cwd ${{ github.action_path }} build
         echo "::endgroup::"
       shell: bash
