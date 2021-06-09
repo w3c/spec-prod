@@ -102,6 +102,8 @@ The Action will try to make use of metadata/config from previously published ver
 
 Whether or not to check for broken hyperlinks.
 
+**Warning:** This feature is experimental.
+
 **Possible values:** true, false
 
 **Default:** false
