@@ -17,9 +17,11 @@ export default async function main(toolchain: "respec" | "bikeshed" | string) {
 	switch (toolchain) {
 		case "respec": {
 			await install("respec", PUPPETEER_ENV);
+			await sh("respec --version", "buffer");
 			break;
 		}
 		case "bikeshed": {
+			await sh("pip3 --version", "buffer");
 			await sh(`pip3 install bikeshed --quiet`, {
 				output: "stream",
 				cwd: ACTION_DIR,
@@ -29,6 +31,7 @@ export default async function main(toolchain: "respec" | "bikeshed" | string) {
 			});
 			exportVariable("PYTHONUSERBASE", PYTHONUSERBASE);
 			await sh("bikeshed update", "stream");
+			await sh("bikeshed --version", "buffer");
 			break;
 		}
 		default: {
