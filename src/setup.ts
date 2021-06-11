@@ -31,7 +31,7 @@ export default async function main(toolchain: "respec" | "bikeshed" | string) {
 			});
 			exportVariable("PYTHONUSERBASE", PYTHONUSERBASE);
 			await sh("bikeshed update", "stream");
-			await sh("bikeshed --version", "buffer");
+			await sh("pip3 show bikeshed | grep -i version", "buffer");
 			break;
 		}
 		default: {
