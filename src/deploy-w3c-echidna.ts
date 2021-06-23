@@ -94,7 +94,8 @@ export default async function main(inputs: Input, buildOutput: BuildResult) {
 
 async function publish(input: Input, buildOutput: BuildResult) {
 	const { dest: outputDir, file } = buildOutput;
-	const { wgDecisionURL: decision, token, cc } = input;
+	const { wgDecisionURL: decision, token, cc, repository } = input;
+	const annotation = `triggered by auto-publish spec-prod action on ${repository}`;
 	const tarFileName = "/tmp/echidna.tar";
 	await sh(`mv ${file} Overview.html`, { cwd: outputDir });
 	await sh(`tar cvf ${tarFileName} *`, {
@@ -107,6 +108,7 @@ async function publish(input: Input, buildOutput: BuildResult) {
 	// command += ` -F "dry-run=true"`;
 	command += ` -F "tar=@${tarFileName}"`;
 	command += ` -F "token=${token}"`;
+	command += ` -F "annotation=${annotation}"`;
 	command += ` -F "decision=${decision}"`;
 	if (cc) command += ` -F "cc=${cc}"`;
 

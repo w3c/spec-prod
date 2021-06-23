@@ -47,7 +47,7 @@ export async function w3cEchidnaDeployment(
 	inputs: Inputs,
 	githubContext: GitHubContext,
 ) {
-	const { event_name: event } = githubContext;
+	const { event_name: event, repository } = githubContext;
 	if (!shouldTryDeploy(event)) {
 		return false;
 	}
@@ -63,7 +63,7 @@ export async function w3cEchidnaDeployment(
 
 	const cc = inputs.W3C_NOTIFICATIONS_CC;
 
-	return { wgDecisionURL, cc, token: token };
+	return { wgDecisionURL, cc, token: token, repository };
 }
 
 function shouldTryDeploy(githubEvent: GitHubContext["event_name"]) {
