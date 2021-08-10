@@ -91,7 +91,7 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 		if (!parsed.base) {
 			parsed.base = "index.html";
 		} else if (!parsed.ext) {
-			parsed.dir = parsed.base;
+			parsed.dir = path.join(parsed.dir, parsed.base);
 			parsed.base = "index.html";
 		}
 		parsed.dir = path.relative(cwd, parsed.dir);
