@@ -1,4 +1,4 @@
-import { deepStrictEqual, AssertionError } from "assert";
+import { deepStrictEqual } from "assert";
 import { inspect } from "util";
 import { exec } from "child_process";
 import { createServer } from "http";
@@ -9,8 +9,8 @@ import serveStatic = require("serve-static");
 import finalhandler = require("finalhandler");
 
 import { ACTION_DIR } from "./constants.js";
-import { ExecOptions } from "node:child_process";
-import { Server } from "node:http";
+import { ExecOptions } from "child_process";
+import { Server } from "http";
 
 export function deepEqual(a: unknown, b: unknown) {
 	try {
