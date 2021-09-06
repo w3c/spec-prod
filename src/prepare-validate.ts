@@ -4,5 +4,6 @@ import { Inputs } from "./prepare.js";
 export function validation(inputs: Inputs) {
 	const links = yesOrNo(inputs.VALIDATE_LINKS) || false;
 	const markup = yesOrNo(inputs.VALIDATE_MARKUP) || false;
-	return { links, markup };
+	const pubrules = yesOrNo(inputs.VALIDATE_PUBRULES) || false;
+	return { links, markup, pubrules };
 }

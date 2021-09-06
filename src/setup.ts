@@ -16,8 +16,8 @@ export default async function main(toolchain: "respec" | "bikeshed" | string) {
 
 	switch (toolchain) {
 		case "respec": {
-			await install("respec", PUPPETEER_ENV);
-			await sh("respec --version", "buffer");
+			// await install("respec", PUPPETEER_ENV);
+			// await sh("respec --version", "buffer");
 			break;
 		}
 		case "bikeshed": {

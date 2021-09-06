@@ -167,6 +167,10 @@ export class StaticServer {
 	get url() {
 		return new URL(`http://localhost:${this._port}`);
 	}
+
+	get port() {
+		return this._port;
+	}
 }
 
 export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;

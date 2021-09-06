@@ -21,6 +21,7 @@ export interface Inputs {
 	BUILD_FAIL_ON: string;
 	VALIDATE_LINKS: string;
 	VALIDATE_MARKUP: string;
+	VALIDATE_PUBRULES: string;
 	GH_PAGES_BRANCH: string;
 	GH_PAGES_TOKEN: string;
 	GH_PAGES_BUILD_OVERRIDE: string;
