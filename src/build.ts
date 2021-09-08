@@ -6,7 +6,6 @@ import { env, exit, setOutput, sh } from "./utils.js";
 import { deepEqual, StaticServer } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
 
-import type { ThenArg } from "./utils.js";
 import { BasicBuildOptions } from "./prepare-build.js";
 import { ProcessedInput } from "./prepare.js";
 type Input = ProcessedInput["build"];
@@ -37,8 +36,6 @@ if (module === require.main) {
 	const input: Input = JSON.parse(env("INPUTS_BUILD"));
 	main(input).catch(err => exit(err.message || "Failed", err.code));
 }
-
-export type Output = ThenArg<ReturnType<typeof main>>;
 
 export default async function main({
 	toolchain,

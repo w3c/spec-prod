@@ -82,14 +82,11 @@ runs:
 
     - name: Upload Build Artifacts
       id: upload-build-artifacts
-      run: |
-        echo "::group::Upload Build Artifacts"
-        node --enable-source-maps ${{ github.action_path }}/src/upload-build-artifacts.js
-        echo "::endgroup::"
-      shell: bash
-      env:
-        GH_BUILD_DIR: ${{ fromJson(steps.build.outputs.w3c).dest }}
-        W3C_BUILD_DIR: ${{ fromJson(steps.build.outputs.w3c).dest }}
+      uses: actions/upload-artifact@v2
+      with:
+        path: |-
+          ${{ fromJson(steps.build.outputs.gh).dest }}
+          ${{ fromJson(steps.build.outputs.w3c).dest }}
 
     - name: Validate hyperlinks
       run: |
