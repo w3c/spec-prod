@@ -87,6 +87,8 @@ runs:
         path: |-
           ${{ fromJson(steps.build.outputs.gh).dest }}
           ${{ fromJson(steps.build.outputs.w3c).dest }}
+        name: spec-prod-result
+        retention-days: 5
 
     - name: Validate hyperlinks
       run: |
