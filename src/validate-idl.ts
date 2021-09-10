@@ -18,15 +18,8 @@ export default async function main({ dest, file }: Input) {
 
 	const fileurl = new URL(file, `file://${dest}/`).href;
 	const results = await crawlList(
-		[
-			{
-				url: fileurl,
-				nightly: { url: fileurl },
-			},
-		],
-		{
-			modules: ["idl"],
-		},
+		[{ url: fileurl, nightly: { url: fileurl } }],
+		{ modules: ["idl"] },
 	);
 
 	const idl = results[0]?.idl?.idl;
