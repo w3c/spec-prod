@@ -1,4 +1,4 @@
-import { env, exit, install, sh, yesOrNo } from "./utils.js";
+import { env, exit, install, yesOrNo } from "./utils.js";
 import { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
