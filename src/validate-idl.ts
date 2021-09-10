@@ -36,8 +36,13 @@ export default async function main({ dest, file }: Input) {
 
 	await install("webidl2");
 	const { parse, validate } = require("webidl2");
-	const tree = parse(idl);
-	const errors = validate(tree);
+	let errors: { message: string }[] = [];
+	try {
+		const tree = parse(idl);
+		errors = validate(tree);
+	} catch (error) {
+		errors = [error];
+	}
 	if (!errors.length) {
 		exit("✅  Looks good! No IDL validation errors!", 0);
 	} else {
