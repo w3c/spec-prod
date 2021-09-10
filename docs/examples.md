@@ -20,7 +20,7 @@ jobs:
 
 ### Selectively enable/disable validators
 
-By default, both hyperlink and markup validators are enabled.
+By default, both markup and Web IDL validators are enabled.
 
 ```yaml
 # Create a file called .github/workflows/auto-publish.yml
@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: w3c/spec-prod@v2
         with:
-          VALIDATE_LINKS: false
+          VALIDATE_WEBIDL: false
           VALIDATE_MARKUP: true
 ```
 
