@@ -98,13 +98,13 @@ The Action will try to make use of metadata/config from previously published ver
     # respec -s index.html?specStatus=WD&shortName=my-custom-shortname… -o OUTPUT
 ```
 
-## `VALIDATE_IDL`
+## `VALIDATE_WEBIDL`
 
-Whether or not to validate the IDL that the spec may define.
+Whether or not to validate the Web IDL that the spec may define.
 
-Spec authoring tools may already include some level of IDL validation but that validation may be restricted to detecting syntax errors. The action also checks additional constraints defined in [Web IDL](https://heycam.github.io/webidl/) such as usage of dictionaries as function parameters or attributes. The action will automatically skip validation if the spec does not define any IDL.
+Spec authoring tools may already include some level of Web IDL validation but that validation may be restricted to detecting syntax errors. The action also checks additional constraints defined in [Web IDL](https://heycam.github.io/webidl/) such as usage of dictionaries as function parameters or attributes. The action will automatically skip validation if the spec does not define any Web IDL.
 
-Note that the IDL validation is restricted to the spec at hand and cannot validate that references to IDL constructs defined in other specs are valid. As such, there may remain IDL errors that can only be detected by tools that look at all specs in combination such as [Webref](https://github.com/w3c/webref)).
+Note that the Web IDL validation is restricted to the spec at hand and cannot validate that references to IDL constructs defined in other specs are valid. As such, there may remain IDL errors that can only be detected by tools that look at all specs in combination such as [Webref](https://github.com/w3c/webref)).
 
 **Possible values:** true, false
 

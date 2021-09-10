@@ -4,6 +4,6 @@ import { Inputs } from "./prepare.js";
 export function validation(inputs: Inputs) {
 	const links = yesOrNo(inputs.VALIDATE_LINKS) || false;
 	const markup = yesOrNo(inputs.VALIDATE_MARKUP) || false;
-	const idl = yesOrNo(inputs.VALIDATE_IDL) || false;
-	return { links, markup, idl };
+	const webidl = yesOrNo(inputs.VALIDATE_WEBIDL) || false;
+	return { links, markup, webidl };
 }

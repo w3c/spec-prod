@@ -3,7 +3,7 @@ import { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
 if (module === require.main) {
-	if (yesOrNo(env("INPUTS_VALIDATE_IDL")) === false) {
+	if (yesOrNo(env("INPUTS_VALIDATE_WEBIDL")) === false) {
 		exit("Skipped", 0);
 	}
 
@@ -12,7 +12,7 @@ if (module === require.main) {
 }
 
 export default async function main({ dest, file }: Input) {
-	console.log(`Validating IDL defined in ${file}...`);
+	console.log(`Validating Web IDL defined in ${file}...`);
 	await install("reffy");
 	const { crawlList } = require("reffy/src/cli/crawl-specs");
 
@@ -24,7 +24,7 @@ export default async function main({ dest, file }: Input) {
 
 	const idl = results[0]?.idl?.idl;
 	if (!idl) {
-		exit("No IDL found in spec, skipped IDL validation", 0);
+		exit("No Web IDL found in spec, skipped validation", 0);
 	}
 
 	await install("webidl2");
@@ -37,14 +37,14 @@ export default async function main({ dest, file }: Input) {
 		errors = [error];
 	}
 	if (!errors.length) {
-		exit("✅  Looks good! No IDL validation errors!", 0);
+		exit("✅  Looks good! No Web IDL validation errors!", 0);
 	} else {
-		console.group("Invalid IDL detected:");
+		console.group("Invalid Web IDL detected:");
 		for (const error of errors) {
 			console.log(error.message);
 			console.log("");
 		}
 		console.groupEnd();
-		exit("❌  Invalid IDL detected... please fix the issues above.");
+		exit("❌  Invalid Web IDL detected... please fix the issues above.");
 	}
 }

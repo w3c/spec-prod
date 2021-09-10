@@ -22,8 +22,8 @@ inputs:
   VALIDATE_MARKUP:
     description: Validate markup
     default: true
-  VALIDATE_IDL:
-    description: Validate IDL
+  VALIDATE_WEBIDL:
+    description: Validate Web IDL
     default: true
   GH_PAGES_BRANCH:
     description: Provide a branch name to deploy to GitHub pages.
@@ -113,14 +113,14 @@ runs:
         INPUTS_VALIDATE_MARKUP: ${{ fromJson(steps.prepare.outputs.validate).markup }}
         OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
 
-    - name: Validate IDL
+    - name: Validate Web IDL
       run: |
-        echo "::group::Validate IDL"
-        node --enable-source-maps ${{ github.action_path }}/src/validate-idl.js
+        echo "::group::Validate Web IDL"
+        node --enable-source-maps ${{ github.action_path }}/src/validate-webidl.js
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_IDL: ${{ fromJson(steps.prepare.outputs.validate).idl }}
+        INPUTS_VALIDATE_WEBIDL: ${{ fromJson(steps.prepare.outputs.validate).webidl }}
         OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Deploy to GitHub pages
