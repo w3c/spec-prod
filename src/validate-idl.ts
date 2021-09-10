@@ -39,9 +39,12 @@ export default async function main({ dest, file }: Input) {
 	if (!errors.length) {
 		exit("✅  Looks good! No IDL validation errors!", 0);
 	} else {
+		console.group("Invalid IDL detected:");
 		for (const error of errors) {
 			console.log(error.message);
+			console.log("");
 		}
+		console.groupEnd();
 		exit("❌  Invalid IDL detected... please fix the issues above.");
 	}
 }
