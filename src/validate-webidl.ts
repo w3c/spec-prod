@@ -1,3 +1,4 @@
+import { rm } from "fs/promises";
 import { env, exit, install, yesOrNo } from "./utils.js";
 import { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
@@ -21,6 +22,7 @@ export default async function main({ dest, file }: Input) {
 		[{ url: fileurl, nightly: { url: fileurl } }],
 		{ modules: ["idl"] },
 	);
+	await rm(".cache", { recursive: true, force: true });
 
 	const idl = results[0]?.idl?.idl;
 	if (!idl) {
