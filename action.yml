@@ -22,6 +22,9 @@ inputs:
   VALIDATE_MARKUP:
     description: Validate markup
     default: true
+  VALIDATE_WEBIDL:
+    description: Validate Web IDL
+    default: true
   GH_PAGES_BRANCH:
     description: Provide a branch name to deploy to GitHub pages.
   GH_PAGES_BUILD_OVERRIDE:
@@ -80,6 +83,16 @@ runs:
       env:
         INPUTS_BUILD: ${{ toJSON(fromJson(steps.prepare.outputs.build)) }}
 
+    - name: Upload Build Artifacts
+      id: upload-build-artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        path: |-
+          ${{ fromJson(steps.build.outputs.gh).dest }}
+          ${{ fromJson(steps.build.outputs.w3c).dest }}
+        name: spec-prod-result
+        retention-days: 5
+
     - name: Validate hyperlinks
       run: |
         echo "::group::Validate hyperlinks"
@@ -108,6 +121,15 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_PUBRULES: ${{ fromJson(steps.prepare.outputs.validate).pubrules }}
+
+    - name: Validate Web IDL
+      run: |
+        echo "::group::Validate Web IDL"
+        node --enable-source-maps ${{ github.action_path }}/src/validate-webidl.js
+        echo "::endgroup::"
+      shell: bash
+      env:
+        INPUTS_VALIDATE_WEBIDL: ${{ fromJson(steps.prepare.outputs.validate).webidl }}
         OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Deploy to GitHub pages

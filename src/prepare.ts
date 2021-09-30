@@ -22,6 +22,7 @@ export interface Inputs {
 	VALIDATE_LINKS: string;
 	VALIDATE_MARKUP: string;
 	VALIDATE_PUBRULES: string;
+	VALIDATE_WEBIDL: string;
 	GH_PAGES_BRANCH: string;
 	GH_PAGES_TOKEN: string;
 	GH_PAGES_BUILD_OVERRIDE: string;

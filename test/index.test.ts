@@ -4,12 +4,16 @@
  *
  * Run this file in a local GitHub repo, and change inputs as needed.
  */
+import { platform } from "os";
 import { formatAsHeading, pprint, ThenArg } from "../src/utils.js";
 
 let SILENT_CHILD = !true;
+
+// TODO: use `os.devNull` when switching to Node 16.3+
+const devNull = platform() === "win32" ? String.raw`\\.\nul` : "/dev/null";
 Object.assign(process.env, {
-	GITHUB_ENV: "/dev/null",
-	GITHUB_PATH: "/dev/null",
+	GITHUB_ENV: devNull,
+	GITHUB_PATH: devNull,
 });
 
 const console = global.console;
@@ -49,6 +53,7 @@ Promise.resolve()
 	.then(run(require("./validate-pubrules.test.js").default))
 	// .then(run(require("./validate-links.test.js").default))
 	// .then(run(require("./validate-markup.test.js").default))
+  // .then(run(require("./validate-webidl.test.js").default))
 	// .then(run(require("./deploy-gh-pages.test.js").default))
 	.then(() => {
 		// console.log();

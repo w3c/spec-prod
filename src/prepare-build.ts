@@ -350,6 +350,9 @@ function getFailOnFlags(
 					return ["-w"];
 				case "everything":
 					return ["-e", "-w"];
+				case "nothing":
+				default:
+					return [];
 			}
 		}
 		case "bikeshed": {
