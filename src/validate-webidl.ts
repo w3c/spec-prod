@@ -14,7 +14,7 @@ if (module === require.main) {
 
 export default async function main({ dest, file }: Input) {
 	console.log(`Validating Web IDL defined in ${file}...`);
-	await install("reffy");
+	await install("reffy@4");
 	const { crawlSpecs } = require("reffy");
 
 	const fileurl = new URL(file, `file://${dest}/`).href;
