@@ -15,10 +15,10 @@ if (module === require.main) {
 export default async function main({ dest, file }: Input) {
 	console.log(`Validating Web IDL defined in ${file}...`);
 	await install("reffy");
-	const { crawlList } = require("reffy/src/cli/crawl-specs");
+	const { crawlSpecs } = require("reffy");
 
 	const fileurl = new URL(file, `file://${dest}/`).href;
-	const results = await crawlList(
+	const results = await crawlSpecs(
 		[{ url: fileurl, nightly: { url: fileurl } }],
 		{ modules: ["idl"] },
 	);
