@@ -1,11 +1,11 @@
 {
 	"dependencies": {
-		"@actions/core": "^1.5.0",
+		"@actions/core": "^1.6.0",
 		"finalhandler": "^1.1.2",
 		"node-fetch": "^2.6.5",
 		"puppeteer": "^10",
 		"serve-static": "^1.14.1",
-		"split2": "^3.2.2",
+		"split2": "^4.0.0",
 		"subresources": "^1.2.0"
 	},
 	"scripts": {
@@ -19,7 +19,7 @@
 		"@types/node-fetch": "^2.5.12",
 		"@types/serve-static": "^1.13.10",
 		"@types/split2": "^3.2.1",
-		"typescript": "^4.4.3"
+		"typescript": "^4.4.4"
 	},
 	"optionalDependencies": {
 		"prettier": "^2.4.1",
