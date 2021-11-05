@@ -8,6 +8,9 @@
 		"split2": "^4.0.0",
 		"subresources": "^1.2.0"
 	},
+	"engines": {
+		"node": "^16"
+	},
 	"scripts": {
 		"build": "tsc -p tsconfig.prod.json",
 		"dev": "tsc -p tsconfig.json -w",
