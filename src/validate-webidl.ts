@@ -29,7 +29,7 @@ export default async function main({ dest, file }: Input) {
 		exit("No Web IDL found in spec, skipped validation", 0);
 	}
 
-	await install("webidl2");
+	await install("webidl2@latest");
 	const { parse, validate } = require("webidl2");
 	let errors: { message: string }[] = [];
 	try {
