@@ -43,6 +43,13 @@ inputs:
 runs:
   using: composite
   steps:
+    - run: node --version
+      shell: bash
+    - uses: actions/setup-node@v2
+      with:
+        node-version: "16"
+    - run: node --version
+      shell: bash
     - name: Set up action
       run: |
         echo "::group::Set up action"
