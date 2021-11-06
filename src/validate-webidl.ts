@@ -30,6 +30,9 @@ export default async function main({ dest, file }: Input) {
 	}
 
 	await install("webidl2@latest");
+	// An outdated version might be cached from importing reffy.
+	delete require.cache[require.resolve("webidl2")];
+
 	const { parse, validate } = require("webidl2");
 	let errors: { message: string }[] = [];
 	try {
