@@ -22,6 +22,12 @@ interface Result {
 	warnings: SpecberusError[];
 	info?: any[];
 }
+interface ExtractMetadataResult {
+	success: boolean;
+	metadata: {
+		profile: string;
+	};
+}
 
 const INGORED_RULES = new Set(["validation.html", "links.linkchecker"]);
 
@@ -68,13 +74,13 @@ export default async function main({ dest, file }: Input) {
 	}
 }
 
-function sinkAsync() {
+function sinkAsync<T>() {
 	const { Sink } = require("specberus/lib/sink");
 	const noop = () => {};
 	const sink = new Sink(noop, noop, noop, noop);
 	return {
 		sink,
-		resultPromise: new Promise((res, rej) => {
+		resultPromise: new Promise<T>((res, rej) => {
 			sink.on("end-all", res);
 			sink.on("exception", rej);
 		}),
@@ -98,7 +104,7 @@ async function validate(url: URL) {
 	profile.rules = profile.rules.filter(({ name }) => !INGORED_RULES.has(name));
 
 	console.log("validating");
-	const { sink, resultPromise } = sinkAsync();
+	const { sink, resultPromise } = sinkAsync<Result>();
 	specberus.validate({
 		url,
 		profile,
@@ -106,7 +112,7 @@ async function validate(url: URL) {
 		echidnaReady: true,
 		patentPolicy: "pp2020",
 	});
-	const result = (await resultPromise) as Result;
+	const result = await resultPromise;
 	delete result.info;
 	return result;
 }
@@ -115,7 +121,7 @@ async function extractMetadata(url: URL) {
 	const { Specberus } = require("specberus");
 	const specberus = new Specberus();
 
-	const { sink, resultPromise } = sinkAsync();
+	const { sink, resultPromise } = sinkAsync<ExtractMetadataResult>();
 	specberus.extractMetadata({ url, events: sink });
 	const result = await resultPromise;
 	return result;
