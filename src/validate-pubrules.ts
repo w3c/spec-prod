@@ -49,7 +49,6 @@ export default async function main({ dest, file }: Input) {
 	let result;
 	try {
 		process.env.W3C_API_KEY = "API_KEY";
-		process.env.BASE_URI = "/";
 		// TODO: use correct file in URL
 		result = await validate(server.url);
 	} catch (error) {
@@ -57,7 +56,6 @@ export default async function main({ dest, file }: Input) {
 		exit("Something went wrong");
 	} finally {
 		delete process.env.W3C_API_KEY;
-		delete process.env.BASE_URI;
 		await server.stop();
 	}
 
