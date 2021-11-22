@@ -7,7 +7,7 @@ export default async function validatePubrules(outputs: Outputs) {
 		return;
 	}
 
-	const { dest = process.cwd() + ".common", file = "index.html" } =
+	const { dest = process.cwd() + ".w3c", file = "index.html" } =
 		outputs?.build?.w3c || {};
 
 	return await main({ dest, file });

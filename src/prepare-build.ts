@@ -133,13 +133,6 @@ async function extendW3CBuildConfig(
 	toolchain: BasicBuildOptions["toolchain"],
 	source: BasicBuildOptions["source"],
 ) {
-	conf.specStatus = "WD";
-	conf.shortName = "appmanifest";
-	conf.publishDate = "2021-09-06";
-	conf.previousMaturity = "WD";
-	conf.previousPublishDate = "2021-08-25";
-
-	return conf;
 	/** Get present date in YYYY-MM-DD format */
 	const getShortIsoDate = () => new Date().toISOString().slice(0, 10);
 

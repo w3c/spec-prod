@@ -50,15 +50,15 @@ Promise.resolve()
 	.then(run(require("./prepare.test.js").default))
 	.then(run(require("./setup.test.js").default))
 	.then(run(require("./build.test.js").default))
+	.then(run(require("./validate-links.test.js").default))
+	.then(run(require("./validate-markup.test.js").default))
+	.then(run(require("./validate-webidl.test.js").default))
 	.then(run(require("./validate-pubrules.test.js").default))
-	// .then(run(require("./validate-links.test.js").default))
-	// .then(run(require("./validate-markup.test.js").default))
-  // .then(run(require("./validate-webidl.test.js").default))
-	// .then(run(require("./deploy-gh-pages.test.js").default))
+	.then(run(require("./deploy-gh-pages.test.js").default))
 	.then(() => {
-		// console.log();
-		// console.log(formatAsHeading("OUTPUTS", "#"));
-		// pprint(outputs);
+		console.log();
+		console.log(formatAsHeading("OUTPUTS", "#"));
+		pprint(outputs);
 	})
 	.catch(err => {
 		console.error(err);

@@ -44,21 +44,6 @@ export default async function main({
 	flags,
 	configOverride,
 }: Input) {
-	return {
-		gh: {
-			root: "/home/sid/src/w3c/manifest.gh",
-			dest: "/home/sid/src/w3c/manifest.gh",
-			dir: "",
-			file: "index.html",
-		},
-		w3c: {
-			root: "/home/sid/src/w3c/manifest.w3c",
-			dest: "/home/sid/src/w3c/manifest.w3c",
-			dir: "",
-			file: "index.html",
-		},
-	};
-
 	const input: BasicBuildOptions = { toolchain, source, destination };
 	if (deepEqual(configOverride.gh, configOverride.w3c)) {
 		const out = await build(input, flags, null, "common");
