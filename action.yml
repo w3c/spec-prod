@@ -25,6 +25,11 @@ inputs:
   VALIDATE_WEBIDL:
     description: Validate Web IDL
     default: true
+  VALIDATE_PUBRULES:
+    description: Validate against W3C Publiation Rules
+    default: false
+  W3C_API_KEY:
+    description: W3C API Key
   GH_PAGES_BRANCH:
     description: Provide a branch name to deploy to GitHub pages.
   GH_PAGES_BUILD_OVERRIDE:

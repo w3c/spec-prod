@@ -86,10 +86,7 @@ function sinkAsync<T>() {
 }
 
 // TODO:
-// - imrpove current step indicator
-// - pretty print errors
-// - happy typescript
-// - API key exception handling
+// - API key exception handling (based on apiKey being required or not)
 async function validate(url: URL) {
 	const { Specberus } = require("specberus");
 
