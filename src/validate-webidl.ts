@@ -14,11 +14,11 @@ if (module === require.main) {
 
 export default async function main({ dest, file }: Input) {
 	console.log(`Validating Web IDL defined in ${file}...`);
-	await install("reffy");
-	const { crawlList } = require("reffy/src/cli/crawl-specs");
+	await install("reffy@4");
+	const { crawlSpecs } = require("reffy");
 
 	const fileurl = new URL(file, `file://${dest}/`).href;
-	const results = await crawlList(
+	const results = await crawlSpecs(
 		[{ url: fileurl, nightly: { url: fileurl } }],
 		{ modules: ["idl"] },
 	);
@@ -29,7 +29,10 @@ export default async function main({ dest, file }: Input) {
 		exit("No Web IDL found in spec, skipped validation", 0);
 	}
 
-	await install("webidl2");
+	await install("webidl2@latest");
+	// An outdated version might be cached from importing reffy.
+	delete require.cache[require.resolve("webidl2")];
+
 	const { parse, validate } = require("webidl2");
 	let errors: { message: string }[] = [];
 	try {

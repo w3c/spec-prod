@@ -1,12 +1,15 @@
 {
 	"dependencies": {
-		"@actions/core": "^1.5.0",
+		"@actions/core": "^1.6.0",
 		"finalhandler": "^1.1.2",
 		"node-fetch": "^2.6.5",
-		"puppeteer": "^10",
+		"puppeteer": "^11",
 		"serve-static": "^1.14.1",
-		"split2": "^3.2.2",
+		"split2": "^4.1.0",
 		"subresources": "^1.2.0"
+	},
+	"engines": {
+		"node": "^16"
 	},
 	"scripts": {
 		"build": "tsc -p tsconfig.prod.json",
@@ -15,11 +18,11 @@
 	},
 	"devDependencies": {
 		"@types/finalhandler": "^1.1.1",
-		"@types/node": "^14.17.19",
+		"@types/node": "^16.11.6",
 		"@types/node-fetch": "^2.5.12",
 		"@types/serve-static": "^1.13.10",
 		"@types/split2": "^3.2.1",
-		"typescript": "^4.4.3"
+		"typescript": "^4.4.4"
 	},
 	"optionalDependencies": {
 		"prettier": "^2.4.1",
