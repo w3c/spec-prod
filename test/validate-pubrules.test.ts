@@ -1,3 +1,4 @@
+import { env } from "../src/utils.js";
 import main from "../src/validate-pubrules.js";
 import { Outputs } from "./index.test.js";
 
@@ -9,6 +10,6 @@ export default async function validatePubrules(outputs: Outputs) {
 
 	const { dest = process.cwd() + ".w3c", file = "index.html" } =
 		outputs?.build?.w3c || {};
-
-	return await main({ dest, file });
+	const apiKey = env("W3C_API_KEY");
+	return await main({ dest, file }, apiKey);
 }
