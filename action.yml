@@ -25,6 +25,11 @@ inputs:
   VALIDATE_WEBIDL:
     description: Validate Web IDL
     default: true
+  VALIDATE_PUBRULES:
+    description: Validate against W3C Publiation Rules
+    default: false
+  W3C_API_KEY:
+    description: W3C API Key (required for VALIDATE_PUBRULES for now)
   GH_PAGES_BRANCH:
     description: Provide a branch name to deploy to GitHub pages.
   GH_PAGES_BUILD_OVERRIDE:
@@ -115,6 +120,17 @@ runs:
       env:
         INPUTS_VALIDATE_MARKUP: ${{ fromJson(steps.prepare.outputs.validate).markup }}
         OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
+
+    - name: Validate pubrules (Specberus)
+      run: |
+        echo "::group::Validate pubrules (Specberus)"
+        node --enable-source-maps ${{ github.action_path }}/src/validate-pubrules.js
+        echo "::endgroup::"
+      shell: bash
+      env:
+        INPUTS_VALIDATE_PUBRULES: ${{ fromJson(steps.prepare.outputs.validate).pubrules }}
+        OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
+        INPUTS_W3C_API_KEY: ${{ inputs.W3C_API_KEY }}
 
     - name: Validate Web IDL
       run: |

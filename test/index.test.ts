@@ -53,6 +53,7 @@ Promise.resolve()
 	.then(run(require("./validate-links.test.js").default))
 	.then(run(require("./validate-markup.test.js").default))
 	.then(run(require("./validate-webidl.test.js").default))
+	.then(run(require("./validate-pubrules.test.js").default))
 	.then(run(require("./deploy-gh-pages.test.js").default))
 	.then(() => {
 		console.log();
