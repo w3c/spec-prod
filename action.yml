@@ -29,7 +29,7 @@ inputs:
     description: Validate against W3C Publiation Rules
     default: false
   W3C_API_KEY:
-    description: W3C API Key
+    description: W3C API Key (required for VALIDATE_PUBRULES for now)
   GH_PAGES_BRANCH:
     description: Provide a branch name to deploy to GitHub pages.
   GH_PAGES_BUILD_OVERRIDE:
@@ -126,6 +126,7 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_PUBRULES: ${{ fromJson(steps.prepare.outputs.validate).pubrules }}
+        INPUTS_W3C_API_KEY: ${{ inputs.W3C_API_KEY }}
 
     - name: Validate Web IDL
       run: |
