@@ -1,4 +1,11 @@
-import { env, exit, install, StaticServer, yesOrNo } from "./utils.js";
+import {
+	env,
+	exit,
+	install,
+	StaticServer,
+	yesOrNo,
+	formatAsHeading,
+} from "./utils.js";
 
 import { BuildResult } from "./build.js";
 import path = require("path");
@@ -23,17 +30,31 @@ export default async function main({ dest, file }: Input) {
 	await install("specberus");
 
 	const server = await new StaticServer(dest).start();
+	let result;
 	try {
 		process.env.W3C_API_KEY = "API_KEY";
 		process.env.BASE_URI = "/";
 		// TODO: use correct file in URL
-		await validate(server.url);
+		result = await validate(server.url);
 	} catch (error) {
 		console.error(error);
+		exit("Something went wrong");
 	} finally {
 		delete process.env.W3C_API_KEY;
 		delete process.env.BASE_URI;
 		await server.stop();
+	}
+
+	if (result.errors?.length) {
+		console.log(formatAsHeading("Errors"));
+		console.log(result.errors);
+	}
+	if (result.warnings?.length) {
+		console.log(formatAsHeading("Warnings"));
+		console.log(result.warnings);
+	}
+	if (!result.success) {
+		exit("There were some errors");
 	}
 }
 
@@ -77,7 +98,7 @@ async function validate(url: URL) {
 	});
 	const result = await resultPromise;
 	delete result.info;
-	console.log(result);
+	return result;
 }
 
 async function extractMetadata(url: URL) {

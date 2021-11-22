@@ -139,7 +139,7 @@ async function extendW3CBuildConfig(
 	conf.previousMaturity = "WD";
 	conf.previousPublishDate = "2021-08-25";
 
-	return;
+	return conf;
 	/** Get present date in YYYY-MM-DD format */
 	const getShortIsoDate = () => new Date().toISOString().slice(0, 10);
 
