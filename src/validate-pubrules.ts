@@ -7,11 +7,21 @@ import {
 	formatAsHeading,
 } from "./utils.js";
 
-import { BuildResult } from "./build.js";
-import path = require("path");
-import { ACTION_DIR } from "./constants.js";
-import EventEmitter = require("events");
+import type { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
+
+interface SpecberusError {
+	name: string;
+	key: string;
+	detailMessage: string;
+	extra: any;
+}
+interface Result {
+	success: boolean;
+	errors: SpecberusError[];
+	warnings: SpecberusError[];
+	info?: any[];
+}
 
 const INGORED_RULES = new Set(["validation.html", "links.linkchecker"]);
 
@@ -96,7 +106,7 @@ async function validate(url: URL) {
 		echidnaReady: true,
 		patentPolicy: "pp2020",
 	});
-	const result = await resultPromise;
+	const result = (await resultPromise) as Result;
 	delete result.info;
 	return result;
 }
