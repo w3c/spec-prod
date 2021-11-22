@@ -129,6 +129,7 @@ runs:
       shell: bash
       env:
         INPUTS_VALIDATE_PUBRULES: ${{ fromJson(steps.prepare.outputs.validate).pubrules }}
+        OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
         INPUTS_W3C_API_KEY: ${{ inputs.W3C_API_KEY }}
 
     - name: Validate Web IDL
