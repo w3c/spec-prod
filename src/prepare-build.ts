@@ -5,9 +5,8 @@ import * as puppeteer from "puppeteer";
 import { PUPPETEER_ENV } from "./constants.js";
 import { exit } from "./utils.js";
 
-import { ThenArg } from "./utils.js";
 import { Inputs } from "./prepare.js";
-export type BuildOptions = ThenArg<ReturnType<typeof buildOptions>>;
+export type BuildOptions = Awaited<ReturnType<typeof buildOptions>>;
 
 export async function buildOptions(inputs: Inputs) {
 	const { toolchain, source, destination } = getBasicBuildOptions(inputs);
@@ -44,10 +43,10 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 	if (toolchain) {
 		switch (toolchain) {
 			case "respec":
-				source = source || "index.html";
+				source ||= "index.html";
 				break;
 			case "bikeshed":
-				source = source || "index.bs";
+				source ||= "index.bs";
 				break;
 			default:
 				exit(`Invalid input "TOOLCHAIN": ${toolchain}`);
@@ -263,7 +262,7 @@ async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 			);
 			if (thisVersion) {
 				const dd = thisVersion.nextElementSibling as HTMLElement | null;
-				if (dd && dd.localName === "dd") {
+				if (dd?.localName === "dd") {
 					const link = dd.querySelector("a");
 					if (link) return link.href;
 				}
@@ -278,7 +277,7 @@ async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 			);
 			if (thisVersion) {
 				const dd = thisVersion.nextElementSibling as HTMLElement | null;
-				if (dd && dd.localName === "dd") {
+				if (dd?.localName === "dd") {
 					const link = dd.querySelector("a");
 					if (link) return link.href;
 				}

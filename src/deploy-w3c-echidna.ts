@@ -194,7 +194,7 @@ function showErrors(jobs: EchidnaJobs) {
 	type AvailableErrorLoggers = keyof ErrorLoggers;
 	for (const type of Object.keys(loggers) as AvailableErrorLoggers[]) {
 		const logger = loggers[type]!;
-		if (jobs[type] && jobs[type].errors.length) {
+		if (jobs[type]?.errors.length) {
 			console.log();
 			logger(jobs[type].errors);
 			console.log();

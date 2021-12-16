@@ -1,8 +1,7 @@
 import { exit, yesOrNo } from "./utils.js";
 
-import { ThenArg } from "./utils.js";
 import { Inputs, GitHubContext } from "./prepare.js";
-export type W3CDeployOptions = ThenArg<ReturnType<typeof w3cEchidnaDeployment>>;
+export type W3CDeployOptions = Awaited<ReturnType<typeof w3cEchidnaDeployment>>;
 export type GithubPagesDeployOptions = ReturnType<typeof githubPagesDeployment>;
 
 export function githubPagesDeployment(

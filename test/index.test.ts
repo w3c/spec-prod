@@ -5,7 +5,7 @@
  * Run this file in a local GitHub repo, and change inputs as needed.
  */
 import { platform } from "os";
-import { formatAsHeading, pprint, ThenArg } from "../src/utils.js";
+import { formatAsHeading, pprint } from "../src/utils.js";
 
 let SILENT_CHILD = !true;
 
@@ -30,9 +30,9 @@ if (SILENT_CHILD) {
 }
 
 export interface Outputs {
-	prepare: ThenArg<ReturnType<typeof import("../src/prepare.js").default>>;
-	setup: ThenArg<ReturnType<typeof import("../src/setup.js").default>>;
-	build: ThenArg<ReturnType<typeof import("../src/build.js").default>>;
+	prepare: Awaited<ReturnType<typeof import("../src/prepare.js").default>>;
+	setup: Awaited<ReturnType<typeof import("../src/setup.js").default>>;
+	build: Awaited<ReturnType<typeof import("../src/build.js").default>>;
 }
 const outputs: Partial<Outputs> = {};
 type AsyncFn = (outputs: Partial<Outputs>) => Promise<object | undefined>;

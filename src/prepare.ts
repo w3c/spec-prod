@@ -1,11 +1,4 @@
-import {
-	env,
-	exit,
-	formatAsHeading,
-	pprint,
-	setOutput,
-	ThenArg,
-} from "./utils.js";
+import { env, exit, formatAsHeading, pprint, setOutput } from "./utils.js";
 
 import { buildOptions } from "./prepare-build.js";
 import {
@@ -73,7 +66,7 @@ export default async function main(
 	};
 }
 
-export type ProcessedInput = ThenArg<ReturnType<typeof processInputs>>;
+export type ProcessedInput = Awaited<ReturnType<typeof processInputs>>;
 async function processInputs(inputs: Inputs, githubContext: GitHubContext) {
 	return {
 		build: await buildOptions(inputs),
