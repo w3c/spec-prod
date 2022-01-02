@@ -18,7 +18,8 @@ inputs:
     default: fatal
   VALIDATE_LINKS:
     description: Validate hyperlinks
-    default: false
+    default: "false"
+    required: false
   VALIDATE_MARKUP:
     description: Validate markup
     default: true
@@ -102,13 +103,13 @@ runs:
         retention-days: 5
 
     - name: Validate hyperlinks
+      if: ${{ fromJson(steps.prepare.outputs.validate).links }}
       run: |
         echo "::group::Validate hyperlinks"
         node --enable-source-maps ${{ github.action_path }}/src/validate-links.js
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_LINKS: ${{ fromJson(steps.prepare.outputs.validate).links }}
         OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Validate markup
