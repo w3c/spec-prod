@@ -1,4 +1,6 @@
 import { env, exit, install, sh, yesOrNo } from "./utils.js";
+import core = require("@actions/core");
+import path = require("path");
 
 import { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
@@ -16,6 +18,12 @@ export default async function main({ dest, file }: Input) {
 	console.log(`Validating ${file}...`);
 	await install("vnu-jar");
 	const vnuJar = require("vnu-jar");
+
+	const matchersPath = path.join(
+		__dirname,
+		"validate-markup-problem-matcher.json",
+	);
+	core.info(`##[add-matcher]${matchersPath}`);
 
 	try {
 		await sh(`java -jar "${vnuJar}" --also-check-css ${file}`, {
