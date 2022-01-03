@@ -11,10 +11,6 @@ const URL_IGNORE = [
 ];
 
 if (module === require.main) {
-	if (yesOrNo(env("INPUTS_VALIDATE_LINKS")) === false) {
-		exit("Skipped", 0);
-	}
-
 	const input: Input = JSON.parse(env("OUTPUTS_BUILD"));
 	main(input).catch(err => exit(err.message || "Failed", err.code));
 }
