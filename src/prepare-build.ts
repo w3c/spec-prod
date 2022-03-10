@@ -142,6 +142,10 @@ async function extendW3CBuildConfig(
 		conf.date = publishDate = conf.date || publishDate;
 	}
 
+	if (toolchain === "bikeshed") {
+		conf["Prepare For TR"] = "yes";
+	}
+
 	let shortName: string | undefined = conf.shortName || conf.shortname;
 	if (!shortName) {
 		if (toolchain === "respec") {
