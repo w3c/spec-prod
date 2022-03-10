@@ -141,7 +141,7 @@ async function extendW3CBuildConfig(
 	} else if (toolchain === "bikeshed") {
 		conf.date = publishDate = conf.date || publishDate;
 	}
-		
+
 	if (toolchain === "bikeshed") {
 		conf["Prepare For TR"] = "yes";
 	}
