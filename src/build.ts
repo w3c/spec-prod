@@ -172,7 +172,6 @@ async function findAssetsToCopy(source: Input["source"]) {
 	let remoteAssets: URL[] = [];
 
 	const server = await new StaticServer().start();
-	const rootUrl = new URL(tmpOutputFile(source), server.url);
 
 	const isLocalAsset = (url: URL) => url.origin === server.url.origin;
 	const remoteAssetRules: ((url: URL, type: ResourceType) => boolean)[] = [
@@ -182,18 +181,21 @@ async function findAssetsToCopy(source: Input["source"]) {
 	process.env["PUPPETEER_EXECUTABLE_PATH"] =
 		PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH;
 
-	const rootUrls = new Set([rootUrl.pathname]);
-	const recursivelyFindAssets = async (rootUrl: URL) => {
+	const mainPage = urlToPage(new URL(tmpOutputFile(source), server.url));
+	const pages = new Set([mainPage]);
+	for (const page of pages) {
+		const rootUrl = new URL(page);
 		console.log(`[INFO] From ${rootUrl.pathname}…`);
 		for await (const res of getAllSubResources(rootUrl, { links: true })) {
 			const url = new URL(res.url);
 			if (isLocalAsset(url) && res.type === "link") {
-				if (rootUrls.has(url.pathname)) continue;
-				rootUrls.add(url.pathname);
+				const nextPage = urlToPage(url);
+				if (pages.has(nextPage)) continue;
+				pages.add(nextPage);
 				localAssets.push(url.pathname);
 				const { ok, headers } = await fetch(url);
 				if (ok && headers.get("content-type")?.includes("text/html")) {
-					await recursivelyFindAssets(url);
+					pages.add(nextPage);
 				}
 			} else if (isLocalAsset(url)) {
 				localAssets.push(url.pathname);
@@ -201,9 +203,8 @@ async function findAssetsToCopy(source: Input["source"]) {
 				remoteAssets.push(url);
 			}
 		}
-	};
+	}
 
-	await recursivelyFindAssets(rootUrl);
 	localAssets = unique(localAssets);
 	remoteAssets = unique(remoteAssets, url => url.href);
 
@@ -287,4 +288,8 @@ function replaceAll(replaceThis: string, withThis: string, inThis: string) {
 function trimList(list: string[], len = 8) {
 	if (list.length < len) return list;
 	return list.slice(0, len).concat([`${list.length - len} more..`]);
+}
+
+function urlToPage(url: URL) {
+	return new URL(url.pathname, url.origin).href;
 }
