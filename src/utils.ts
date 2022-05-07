@@ -127,6 +127,23 @@ export async function sh(command: string, options: ShOptions | ShOutput = {}) {
 	}
 }
 
+export function unique<T>(items: T[], key?: (item: T) => string | number) {
+	if (!key) {
+		return [...new Set(items)];
+	}
+
+	const alreadyHas = new Set<ReturnType<typeof key>>();
+	const uniqueItems: T[] = [];
+	for (const item of items) {
+		const k = key(item);
+		if (!alreadyHas.has(k)) {
+			uniqueItems.push(item);
+			alreadyHas.add(k);
+		}
+	}
+	return uniqueItems;
+}
+
 export function yesOrNo(value: string | number | boolean): boolean | undefined {
 	const str = String(value).trim();
 	if (/^(?:y|yes|true|1|on)$/i.test(str)) {

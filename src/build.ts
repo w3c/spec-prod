@@ -2,7 +2,7 @@ import * as path from "path";
 import { copyFile, mkdir, readFile, writeFile, unlink } from "fs/promises";
 import fetch from "node-fetch";
 import { getAllSubResources, ResourceType } from "subresources";
-import { env, exit, setOutput, sh } from "./utils.js";
+import { env, exit, setOutput, sh, unique } from "./utils.js";
 import { deepEqual, StaticServer } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
 
@@ -168,8 +168,8 @@ async function copyRelevantAssets(
 
 async function findAssetsToCopy(source: Input["source"]) {
 	console.groupCollapsed(`[INFO] Finding relevant assets…`);
-	const localAssets: string[] = [];
-	const remoteAssets: URL[] = [];
+	let localAssets: string[] = [];
+	let remoteAssets: URL[] = [];
 
 	const server = await new StaticServer().start();
 	const rootUrl = new URL(tmpOutputFile(source), server.url);
@@ -181,14 +181,31 @@ async function findAssetsToCopy(source: Input["source"]) {
 
 	process.env["PUPPETEER_EXECUTABLE_PATH"] =
 		PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH;
-	for await (const res of getAllSubResources(rootUrl)) {
-		const url = new URL(res.url);
-		if (isLocalAsset(url)) {
-			localAssets.push(url.pathname);
-		} else if (remoteAssetRules.some(matcher => matcher(url, res.type))) {
-			remoteAssets.push(url);
+
+	const rootUrls = new Set([rootUrl.pathname]);
+	const recursivelyFindAssets = async (rootUrl: URL) => {
+		console.log(`[INFO] From ${rootUrl.pathname}…`);
+		for await (const res of getAllSubResources(rootUrl, { links: true })) {
+			const url = new URL(res.url);
+			if (isLocalAsset(url) && res.type === "link") {
+				if (rootUrls.has(url.pathname)) continue;
+				rootUrls.add(url.pathname);
+				localAssets.push(url.pathname);
+				const { ok, headers } = await fetch(url);
+				if (ok && headers.get("content-type")?.includes("text/html")) {
+					await recursivelyFindAssets(url);
+				}
+			} else if (isLocalAsset(url)) {
+				localAssets.push(url.pathname);
+			} else if (remoteAssetRules.some(matcher => matcher(url, res.type))) {
+				remoteAssets.push(url);
+			}
 		}
-	}
+	};
+
+	await recursivelyFindAssets(rootUrl);
+	localAssets = unique(localAssets);
+	remoteAssets = unique(remoteAssets, url => url.href);
 
 	console.log("Local assets to be copied:", trimList(localAssets));
 	console.log(
