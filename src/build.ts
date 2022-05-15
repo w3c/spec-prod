@@ -186,16 +186,20 @@ async function findAssetsToCopy(source: Input["source"]) {
 	for (const page of pages) {
 		const rootUrl = new URL(page);
 		console.log(`[INFO] From ${rootUrl.pathname}…`);
+		const { ok, headers } = await fetch(rootUrl);
+		if (!ok || !headers.get("content-type")?.includes("text/html")) {
+			console.log(
+				`[WARNING] Failed to fetch ${rootUrl.pathname}. Some assets might be missing.`,
+			);
+			continue;
+		}
 		for await (const res of getAllSubResources(rootUrl, { links: true })) {
 			const url = new URL(res.url);
 			if (isLocalAsset(url) && res.type === "link") {
 				const nextPage = urlToPage(url);
-				if (pages.has(nextPage)) continue;
-				pages.add(nextPage);
-				localAssets.push(url.pathname);
-				const { ok, headers } = await fetch(url);
-				if (ok && headers.get("content-type")?.includes("text/html")) {
+				if (!pages.has(nextPage)) {
 					pages.add(nextPage);
+					localAssets.push(url.pathname);
 				}
 			} else if (isLocalAsset(url)) {
 				localAssets.push(url.pathname);
