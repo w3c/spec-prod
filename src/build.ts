@@ -197,9 +197,10 @@ async function findAssetsToCopy(source: Input["source"]) {
 			const url = new URL(res.url);
 			if (isLocalAsset(url) && res.type === "link") {
 				const nextPage = urlToPage(url);
-				if (pages.has(nextPage)) continue;
-				pages.add(nextPage);
-				localAssets.push(url.pathname);
+				if (!pages.has(nextPage)) {
+					pages.add(nextPage);
+					localAssets.push(url.pathname);
+				}
 			} else if (isLocalAsset(url)) {
 				localAssets.push(url.pathname);
 			} else if (remoteAssetRules.some(matcher => matcher(url, res.type))) {
