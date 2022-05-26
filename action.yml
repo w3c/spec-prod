@@ -162,3 +162,8 @@ runs:
       env:
         INPUTS_DEPLOY: ${{ steps.prepare.outputs.deploy && toJson(fromJson(steps.prepare.outputs.deploy).w3c) }}
         OUTPUTS_BUILD: ${{ steps.build.outputs.w3c && toJson(fromJson(steps.build.outputs.w3c)) }}
+
+    - name: End
+      if: ${{ failure() }}
+      shell: bash
+      run: node -e 'require("@actions/core").setFailed("Failed")'
