@@ -4,6 +4,7 @@ on:
     paths:
       - "src/**"
       - "test/**"
+      - "action.yml"
       - "tsconfig.json"
       - "package.json"
       - "yarn.lock"
