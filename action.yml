@@ -166,5 +166,7 @@ runs:
     - name: End
       if: ${{ failure() }}
       shell: bash
-      run: node -e 'require("@actions/core").setFailed("Failed. See details above.")'
+      run: |
+        # Failed
+        node -e 'require("@actions/core").setFailed("Failed. See details above.")'
       working-directory: ${{ github.action_path }}
