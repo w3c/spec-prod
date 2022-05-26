@@ -63,7 +63,6 @@ runs:
         FORCE_COLOR: true
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
     - name: Prepare
-      if: ${{ success() }}
       id: prepare
       run: |
         echo "::group::Prepare"
@@ -75,17 +74,15 @@ runs:
         INPUTS_GITHUB: ${{ toJSON(github) }}
 
     - name: Setup toolchain
-      if: ${{ success() }}
       run: |
         echo "::group::Setup toolchain"
         node --enable-source-maps ${{ github.action_path }}/src/setup.js
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.build).toolchain }}
+        INPUTS_TOOLCHAIN: ${{ steps.prepare.outputs.build && fromJson(steps.prepare.outputs.build).toolchain }}
 
     - name: Generate Static HTML
-      if: ${{ success() }}
       id: build
       run: |
         echo "::group::Generate Static HTML"
@@ -93,81 +90,75 @@ runs:
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_BUILD: ${{ toJSON(fromJson(steps.prepare.outputs.build)) }}
+        INPUTS_BUILD: ${{ steps.prepare.outputs.build && toJSON(fromJson(steps.prepare.outputs.build)) }}
 
     - name: Upload Build Artifacts
-      if: ${{ success() }}
       id: upload-build-artifacts
       uses: actions/upload-artifact@v2
       with:
         path: |-
-          ${{ fromJson(steps.build.outputs.gh).dest }}
-          ${{ fromJson(steps.build.outputs.w3c).dest }}
+          ${{ steps.build.outputs.gh && fromJson(steps.build.outputs.gh).dest }}
+          ${{ steps.build.outputs.w3c && fromJson(steps.build.outputs.w3c).dest }}
         name: spec-prod-result
         retention-days: 5
 
     - name: Validate hyperlinks
-      if: ${{ success() && fromJson(steps.prepare.outputs.validate).links }}
+      if: ${{ success() && steps.prepare.outputs.validate && fromJson(steps.prepare.outputs.validate).links }}
       run: |
         echo "::group::Validate hyperlinks"
         node --enable-source-maps ${{ github.action_path }}/src/validate-links.js
         echo "::endgroup::"
       shell: bash
       env:
-        OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
+        OUTPUTS_BUILD: ${{ steps.build.outputs.w3c && toJson(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Validate markup
-      if: ${{ success() }}
       run: |
         echo "::group::Validate markup"
         node --enable-source-maps ${{ github.action_path }}/src/validate-markup.js
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_MARKUP: ${{ fromJson(steps.prepare.outputs.validate).markup }}
-        OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
+        INPUTS_VALIDATE_MARKUP: ${{ steps.prepare.outputs.validate && fromJson(steps.prepare.outputs.validate).markup }}
+        OUTPUTS_BUILD: ${{ steps.build.outputs.w3c && toJson(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Validate pubrules (Specberus)
-      if: ${{ success() }}
       run: |
         echo "::group::Validate pubrules (Specberus)"
         node --enable-source-maps ${{ github.action_path }}/src/validate-pubrules.js
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_PUBRULES: ${{ fromJson(steps.prepare.outputs.validate).pubrules }}
-        OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
+        INPUTS_VALIDATE_PUBRULES: ${{ steps.prepare.outputs.validate && fromJson(steps.prepare.outputs.validate).pubrules }}
+        OUTPUTS_BUILD: ${{ steps.build.outputs.w3c && toJson(fromJson(steps.build.outputs.w3c)) }}
         INPUTS_W3C_API_KEY: ${{ inputs.W3C_API_KEY }}
 
     - name: Validate Web IDL
-      if: ${{ success() }}
       run: |
         echo "::group::Validate Web IDL"
         node --enable-source-maps ${{ github.action_path }}/src/validate-webidl.js
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_VALIDATE_WEBIDL: ${{ fromJson(steps.prepare.outputs.validate).webidl }}
-        OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
+        INPUTS_VALIDATE_WEBIDL: ${{ steps.prepare.outputs.validate && fromJson(steps.prepare.outputs.validate).webidl }}
+        OUTPUTS_BUILD: ${{ steps.build.outputs.w3c && toJson(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Deploy to GitHub pages
-      if: ${{ success() }}
       run: |
         echo "::group::Deploy to GitHub pages"
         node --enable-source-maps ${{ github.action_path }}/src/deploy-gh-pages.js
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.deploy).ghPages) }}
-        OUTPUT_DIR: ${{ fromJson(steps.build.outputs.gh).root }}
+        INPUTS_DEPLOY: ${{ steps.prepare.outputs.deploy && toJson(fromJson(steps.prepare.outputs.deploy).ghPages) }}
+        OUTPUT_DIR: ${{ steps.build.outputs.gh && fromJson(steps.build.outputs.gh).root }}
 
     - name: Deploy to W3C
-      if: ${{ success() }}
       run: |
         echo "::group::Deploy to W3C"
         node --enable-source-maps ${{ github.action_path }}/src/deploy-w3c-echidna.js
         echo "::endgroup::"
       shell: bash
       env:
-        INPUTS_DEPLOY: ${{ toJson(fromJson(steps.prepare.outputs.deploy).w3c) }}
-        OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
+        INPUTS_DEPLOY: ${{ steps.prepare.outputs.deploy && toJson(fromJson(steps.prepare.outputs.deploy).w3c) }}
+        OUTPUTS_BUILD: ${{ steps.build.outputs.w3c && toJson(fromJson(steps.build.outputs.w3c)) }}
