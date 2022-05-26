@@ -63,6 +63,7 @@ runs:
         FORCE_COLOR: true
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
     - name: Prepare
+      if: ${{ success() }}
       id: prepare
       run: |
         echo "::group::Prepare"
@@ -74,6 +75,7 @@ runs:
         INPUTS_GITHUB: ${{ toJSON(github) }}
 
     - name: Setup toolchain
+      if: ${{ success() }}
       run: |
         echo "::group::Setup toolchain"
         node --enable-source-maps ${{ github.action_path }}/src/setup.js
@@ -83,6 +85,7 @@ runs:
         INPUTS_TOOLCHAIN: ${{ fromJson(steps.prepare.outputs.build).toolchain }}
 
     - name: Generate Static HTML
+      if: ${{ success() }}
       id: build
       run: |
         echo "::group::Generate Static HTML"
@@ -93,6 +96,7 @@ runs:
         INPUTS_BUILD: ${{ toJSON(fromJson(steps.prepare.outputs.build)) }}
 
     - name: Upload Build Artifacts
+      if: ${{ success() }}
       id: upload-build-artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -103,7 +107,7 @@ runs:
         retention-days: 5
 
     - name: Validate hyperlinks
-      if: ${{ fromJson(steps.prepare.outputs.validate).links }}
+      if: ${{ success() && fromJson(steps.prepare.outputs.validate).links }}
       run: |
         echo "::group::Validate hyperlinks"
         node --enable-source-maps ${{ github.action_path }}/src/validate-links.js
@@ -113,6 +117,7 @@ runs:
         OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Validate markup
+      if: ${{ success() }}
       run: |
         echo "::group::Validate markup"
         node --enable-source-maps ${{ github.action_path }}/src/validate-markup.js
@@ -123,6 +128,7 @@ runs:
         OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Validate pubrules (Specberus)
+      if: ${{ success() }}
       run: |
         echo "::group::Validate pubrules (Specberus)"
         node --enable-source-maps ${{ github.action_path }}/src/validate-pubrules.js
@@ -134,6 +140,7 @@ runs:
         INPUTS_W3C_API_KEY: ${{ inputs.W3C_API_KEY }}
 
     - name: Validate Web IDL
+      if: ${{ success() }}
       run: |
         echo "::group::Validate Web IDL"
         node --enable-source-maps ${{ github.action_path }}/src/validate-webidl.js
@@ -144,6 +151,7 @@ runs:
         OUTPUTS_BUILD: ${{ toJson(fromJson(steps.build.outputs.w3c)) }}
 
     - name: Deploy to GitHub pages
+      if: ${{ success() }}
       run: |
         echo "::group::Deploy to GitHub pages"
         node --enable-source-maps ${{ github.action_path }}/src/deploy-gh-pages.js
@@ -154,6 +162,7 @@ runs:
         OUTPUT_DIR: ${{ fromJson(steps.build.outputs.gh).root }}
 
     - name: Deploy to W3C
+      if: ${{ success() }}
       run: |
         echo "::group::Deploy to W3C"
         node --enable-source-maps ${{ github.action_path }}/src/deploy-w3c-echidna.js
