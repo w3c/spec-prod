@@ -28,7 +28,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}

@@ -14,7 +14,7 @@ jobs:
     name: Build and Validate
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
 ```
 
@@ -32,7 +32,7 @@ jobs:
     name: Build and Validate
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           VALIDATE_WEBIDL: false
@@ -53,7 +53,7 @@ jobs:
     name: Build and Validate
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           TOOLCHAIN: respec # or bikeshed
@@ -78,7 +78,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
@@ -99,7 +99,7 @@ jobs:
     name: Deploy to GitHub pages
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
@@ -123,7 +123,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
@@ -145,7 +145,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           TOOLCHAIN: respec
@@ -188,7 +188,7 @@ jobs:
             # destination defaults to spec-2/index.html
             # echidna_token defaults to no publication to w3.org/TR
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           SOURCE: ${{ matrix.source }}
@@ -221,7 +221,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           SOURCE: spec-1
@@ -244,7 +244,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           SOURCE: spec-2/spec.bs
