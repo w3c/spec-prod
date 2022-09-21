@@ -18,9 +18,8 @@
 					repoURL: "https://github.com/w3c/spec-prod",
 					branch: "main",
 				},
-				license: "w3c-software-doc",
 				tocIntroductory: true,
-				postProcess: [fixLinks, fixAbbr, prettify],
+				postProcess: [fixLinks, fixAbbr, prettify, fixBadMeta],
 			};
 
 			function fixLinks() {
@@ -54,6 +53,19 @@
 				document
 					.querySelectorAll("pre")
 					.forEach(pre => pre.classList.add("example"));
+			}
+
+			function fixBadMeta() {
+				[...document.querySelectorAll(".head dl dt")]
+					.filter(
+						dt =>
+							dt.textContent === "Latest published version:" ||
+							dt.textContent === "History:",
+					)
+					.forEach(dt => {
+						dt.nextElementSibling.remove();
+						dt.remove();
+					});
 			}
 		</script>
 	</head>
