@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 26.13.4">
+<meta name="generator" content="ReSpec 32.2.4">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 dfn{cursor:pointer}
-.dfn-panel{position:absolute;z-index:35;min-width:300px;max-width:500px;padding:.5em .75em;margin-top:.6em;font:small Helvetica Neue,sans-serif,Droid Sans Fallback;background:#fff;color:#000;box-shadow:0 1em 3em -.4em rgba(0,0,0,.3),0 0 1px 1px rgba(0,0,0,.05);border-radius:2px}
+.dfn-panel{position:absolute;z-index:35;min-width:300px;max-width:500px;padding:.5em .75em;margin-top:.6em;font-family:"Helvetica Neue",sans-serif;font-size:small;background:#fff;color:#000;box-shadow:0 1em 3em -.4em rgba(0,0,0,.3),0 0 1px 1px rgba(0,0,0,.05);border-radius:2px}
 .dfn-panel:not(.docked)>.caret{position:absolute;top:-9px}
 .dfn-panel:not(.docked)>.caret::after,.dfn-panel:not(.docked)>.caret::before{content:"";position:absolute;border:10px solid transparent;border-top:0;border-bottom:10px solid #fff;top:0}
 .dfn-panel:not(.docked)>.caret::before{border-bottom:9px solid #a2a9b1}
@@ -34,8 +34,7 @@ dfn{cursor:pointer}
 25%{transform:scale(1.25,1.25);opacity:.75}
 100%{transform:scale(1,1)}
 }
-.hljs{background:0 0!important}
-a abbr,h1 abbr,h2 abbr,h3 abbr,h4 abbr,h5 abbr,h6 abbr{border:none}
+:is(h1,h2,h3,h4,h5,h6,a) abbr{border:none}
 dfn{font-weight:700}
 a.internalDFN{color:inherit;border-bottom:1px solid #99c;text-decoration:none}
 a.externalDFN{color:inherit;border-bottom:1px dotted #ccc;text-decoration:none}
@@ -48,8 +47,6 @@ a.bibref{text-decoration:none}
 }
 #references :target{background:#eaf3ff;animation:pop .4s ease-in-out 0s 1}
 cite .bibref{font-style:normal}
-code{color:#c63501}
-th code{color:inherit}
 a[href].orcid{padding-left:4px;padding-right:4px}
 a[href].orcid>svg{margin-bottom:-2px}
 .toc a,.tof a{text-decoration:none}
@@ -74,21 +71,22 @@ details.respec-tests-details[open]{z-index:999999;position:absolute;border:thin 
 details.respec-tests-details[open]>summary{border-bottom:thin solid #cad3e2;padding-left:1em;margin-bottom:1em;line-height:2em}
 details.respec-tests-details>ul{width:100%;margin-top:-.3em}
 details.respec-tests-details>li{padding-left:1em}
-a[href].self-link:hover{opacity:1;text-decoration:none;background-color:transparent}
-h2,h3,h4,h5,h6{position:relative}
+.self-link:hover{opacity:1;text-decoration:none;background-color:transparent}
 aside.example .marker>a.self-link{color:inherit}
-h2>a.self-link,h3>a.self-link,h4>a.self-link,h5>a.self-link,h6>a.self-link{border:none;color:inherit;font-size:83%;height:2em;left:-1.6em;opacity:.5;position:absolute;text-align:center;text-decoration:none;top:0;transition:opacity .2s;width:2em}
-h2>a.self-link::before,h3>a.self-link::before,h4>a.self-link::before,h5>a.self-link::before,h6>a.self-link::before{content:"§";display:block}
+.header-wrapper{display:flex;align-items:baseline}
+:is(h2,h3,h4,h5,h6):not(#toc>h2,#abstract>h2,#sotd>h2,.head>h2){position:relative;left:-.5em}
+:is(h2,h3,h4,h5,h6):not(#toch2)+a.self-link{color:inherit;order:-1;position:relative;left:-1.1em;font-size:1rem;opacity:.5}
+:is(h2,h3,h4,h5,h6)+a.self-link::before{content:"§";text-decoration:none;color:var(--heading-text)}
+:is(h2,h3)+a.self-link{top:-.2em}
+:is(h4,h5,h6)+a.self-link::before{color:#000}
 @media (max-width:767px){
 dd{margin-left:0}
-h2>a.self-link,h3>a.self-link,h4>a.self-link,h5>a.self-link,h6>a.self-link{left:auto;top:auto}
 }
 @media print{
 .removeOnSave{display:none}
 }
 </style>
 <meta name="description" content="The w3c/spec-prod GitHub Action lets you:">
-<link rel="canonical" href="https://www.w3.org/TR/spec-prod/">
 <style>
 .hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;background:#fafafa}
 .hljs-comment,.hljs-quote{color:#717277;font-style:italic}
@@ -122,49 +120,52 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     "repoURL": "https://github.com/w3c/spec-prod",
     "branch": "main"
   },
-  "license": "cc0",
+  "license": "w3c-software-doc",
   "tocIntroductory": true,
   "postProcess": [
     null,
     null,
     null
   ],
-  "publishISODate": "2021-09-10T00:00:00.000Z",
-  "generatedSubtitle": " 10 September 2021"
+  "publishISODate": "2022-09-21T00:00:00.000Z",
+  "generatedSubtitle": "21 September 2022"
 }</script>
-<link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/base.css"></head>
+<link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/base.css"></head>
 	<body class="h-entry informative"><div class="head">
-     <h1 id="title" class="title">Spec Prod Documentation</h1>
     
-    <h2>
-      
-      <time class="dt-published" datetime="2021-09-10">10 September 2021</time>
-    </h2>
-    <dl>
-      
-      <dt>Latest editor's draft:</dt><dd><a href="https://w3c.github.io/spec-prod/">https://w3c.github.io/spec-prod/</a></dd>
-      
-      
-      
-      
-      
-      <dt>Editor:</dt>
-      <dd class="editor p-author h-card vcard">
+    <h1 id="title" class="title">Spec Prod Documentation</h1> 
+    <p id="w3c-state"> <time class="dt-published" datetime="2022-09-21">21 September 2022</time></p>
+    <details open="">
+      <summary>More details about this document</summary>
+      <dl>
+        
+        <dt>Latest published version:</dt><dd>
+                <a href="https://www.w3.org/spec-prod/">https://www.w3.org/spec-prod/</a>
+              </dd>
+        <dt>Latest editor's draft:</dt><dd><a href="https://w3c.github.io/spec-prod/">https://w3c.github.io/spec-prod/</a></dd>
+        <dt>History:</dt><dd>
+                    <a href="https://github.com/w3c/spec-prod/commits/main">Commit history</a>
+                  </dd>
+        
+        
+        
+        
+        
+        <dt>Editor:</dt><dd class="editor p-author h-card vcard">
     <a class="u-url url p-name fn" href="https://github.com/sidvishnoi">Sid Vishnoi</a>
   </dd>
-      
-      
-      <dt>Participate:</dt><dd>
-    <a href="https://github.com/w3c/spec-prod/">GitHub w3c/spec-prod</a>
-  </dd><dd>
-    <a href="https://github.com/w3c/spec-prod/issues/">File an issue</a>
-  </dd><dd>
-    <a href="https://github.com/w3c/spec-prod/commits/main">Commit history</a>
-  </dd><dd>
-    <a href="https://github.com/w3c/spec-prod/pulls/">Pull requests</a>
-  </dd>
-    </dl>
-    
+        
+        
+        <dt>Feedback:</dt><dd>
+        <a href="https://github.com/w3c/spec-prod/">GitHub w3c/spec-prod</a>
+        (<a href="https://github.com/w3c/spec-prod/pulls/">pull requests</a>,
+        <a href="https://github.com/w3c/spec-prod/issues/new/choose">new issue</a>,
+        <a href="https://github.com/w3c/spec-prod/issues/">open issues</a>)
+      </dd>
+        
+        
+      </dl>
+    </details>
     
     
     
@@ -187,7 +188,9 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 				</li>
 			</ul>
 		</section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a class="tocxref" href="#abstract">Abstract</a></li><li class="tocline"><a class="tocxref" href="#getting-started"><bdi class="secno">1. </bdi>Getting started</a></li><li class="tocline"><a class="tocxref" href="#examples"><bdi class="secno">2. </bdi>Examples</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#run-as-a-validator-on-pull-requests"><bdi class="secno">2.1 </bdi>Run as a validator on pull requests</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#selectively-enable-disable-validators"><bdi class="secno">2.1.1 </bdi>Selectively enable/disable validators</a></li></ol></li><li class="tocline"><a class="tocxref" href="#specify-toolchain-bikeshed-or-respec"><bdi class="secno">2.2 </bdi>Specify toolchain: Bikeshed or ReSpec</a></li><li class="tocline"><a class="tocxref" href="#deploy-to-github-pages"><bdi class="secno">2.3 </bdi>Deploy to GitHub pages</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#change-output-location-for-built-files"><bdi class="secno">2.3.1 </bdi>Change output location for built files</a></li></ol></li><li class="tocline"><a class="tocxref" href="#deploy-to-w3c-using-echidna"><bdi class="secno">2.4 </bdi>Deploy to W3C using Echidna</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#use-different-respecconfig-when-deploying-to-w3c"><bdi class="secno">2.4.1 </bdi>Use different <code>respecConfig</code> when deploying to W3C</a></li></ol></li><li class="tocline"><a class="tocxref" href="#multiple-specs-in-same-repository"><bdi class="secno">2.5 </bdi>Multiple specs in same repository</a></li></ol></li><li class="tocline"><a class="tocxref" href="#options"><bdi class="secno">3. </bdi>Options</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#toolchain"><bdi class="secno">3.1 </bdi><code>TOOLCHAIN</code></a></li><li class="tocline"><a class="tocxref" href="#source"><bdi class="secno">3.2 </bdi><code>SOURCE</code></a></li><li class="tocline"><a class="tocxref" href="#destination"><bdi class="secno">3.3 </bdi><code>DESTINATION</code></a></li><li class="tocline"><a class="tocxref" href="#build_fail_on"><bdi class="secno">3.4 </bdi><code>BUILD_FAIL_ON</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_build_override"><bdi class="secno">3.5 </bdi><code>GH_PAGES_BUILD_OVERRIDE</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_build_override"><bdi class="secno">3.6 </bdi><code>W3C_BUILD_OVERRIDE</code></a></li><li class="tocline"><a class="tocxref" href="#validate_webidl"><bdi class="secno">3.7 </bdi><code>VALIDATE_WEBIDL</code></a></li><li class="tocline"><a class="tocxref" href="#validate_links"><bdi class="secno">3.8 </bdi><code>VALIDATE_LINKS</code></a></li><li class="tocline"><a class="tocxref" href="#validate_markup"><bdi class="secno">3.9 </bdi><code>VALIDATE_MARKUP</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_branch"><bdi class="secno">3.10 </bdi><code>GH_PAGES_BRANCH</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_token"><bdi class="secno">3.11 </bdi><code>GH_PAGES_TOKEN</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_echidna_token"><bdi class="secno">3.12 </bdi><code>W3C_ECHIDNA_TOKEN</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_wg_decision_url"><bdi class="secno">3.13 </bdi><code>W3C_WG_DECISION_URL</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_notifications_cc"><bdi class="secno">3.14 </bdi><code>W3C_NOTIFICATIONS_CC</code></a></li></ol></li><li class="tocline"><a class="tocxref" href="#other-useful-resources"><bdi class="secno">4. </bdi>Other useful resources</a></li></ol></nav>
-		<section id="getting-started"><h2 id="x1-getting-started"><bdi class="secno">1. </bdi>Getting started<a class="self-link" aria-label="§" href="#getting-started"></a></h2><p>To get started, do the following:</p><ol>
+		<section id="getting-started"><div class="header-wrapper"><h2 id="x1-getting-started"><bdi class="secno">1. </bdi>Getting started</h2><a class="self-link" href="#getting-started" aria-label="Permalink for Section 1."></a></div>
+<p>To get started, do the following:</p>
+<ol>
 <li><p>If you want to deploy to W3C /TR:</p>
 <ol>
 <li><a href="https://www.w3.org/Web/publications/register">Request an Echidna token</a> for your spec (W3C Team Members and Chairs only!).</li>
@@ -221,8 +224,12 @@ jobs:
             specStatus: WD
 </code></pre>
 </li>
-</ol></section>
-		<section id="examples"><h2 id="x2-examples"><bdi class="secno">2. </bdi>Examples<a class="self-link" aria-label="§" href="#examples"></a></h2><section id="run-as-a-validator-on-pull-requests"><h3 id="x2-1-run-as-a-validator-on-pull-requests"><bdi class="secno">2.1 </bdi>Run as a validator on pull requests<a class="self-link" aria-label="§" href="#run-as-a-validator-on-pull-requests"></a></h3><p>If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (<code>index.html</code> or <code>index.bs</code>) and validates the output. It does not deploy the built document anywhere.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
+</ol>
+</section>
+		<section id="examples"><div class="header-wrapper"><h2 id="x2-examples"><bdi class="secno">2. </bdi>Examples</h2><a class="self-link" href="#examples" aria-label="Permalink for Section 2."></a></div>
+<section id="run-as-a-validator-on-pull-requests"><div class="header-wrapper"><h3 id="x2-1-run-as-a-validator-on-pull-requests"><bdi class="secno">2.1 </bdi>Run as a validator on pull requests</h3><a class="self-link" href="#run-as-a-validator-on-pull-requests" aria-label="Permalink for Section 2.1"></a></div>
+<p>If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (<code>index.html</code> or <code>index.bs</code>) and validates the output. It does not deploy the built document anywhere.</p>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -233,7 +240,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: w3c/spec-prod@v2
-</code></pre><section id="selectively-enable-disable-validators"><h4 id="x2-1-1-selectively-enable-disable-validators"><bdi class="secno">2.1.1 </bdi>Selectively enable/disable validators<a class="self-link" aria-label="§" href="#selectively-enable-disable-validators"></a></h4><p>By default, both markup and Web IDL validators are enabled.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
+</code></pre>
+<section id="selectively-enable-disable-validators"><div class="header-wrapper"><h4 id="x2-1-1-selectively-enable-disable-validators"><bdi class="secno">2.1.1 </bdi>Selectively enable/disable validators</h4><a class="self-link" href="#selectively-enable-disable-validators" aria-label="Permalink for Section 2.1.1"></a></div>
+<p>By default, both markup and Web IDL validators are enabled.</p>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -247,7 +257,10 @@ jobs:
         with:
           VALIDATE_WEBIDL: false
           VALIDATE_MARKUP: true
-</code></pre></section></section><section id="specify-toolchain-bikeshed-or-respec"><h3 id="x2-2-specify-toolchain-bikeshed-or-respec"><bdi class="secno">2.2 </bdi>Specify toolchain: Bikeshed or ReSpec<a class="self-link" aria-label="§" href="#specify-toolchain-bikeshed-or-respec"></a></h3><p>Specify <code>TOOLCHAIN</code> if the action cannot figure out the toolchain itself, or if you like to be explicit.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
+</code></pre>
+</section></section><section id="specify-toolchain-bikeshed-or-respec"><div class="header-wrapper"><h3 id="x2-2-specify-toolchain-bikeshed-or-respec"><bdi class="secno">2.2 </bdi>Specify toolchain: Bikeshed or ReSpec</h3><a class="self-link" href="#specify-toolchain-bikeshed-or-respec" aria-label="Permalink for Section 2.2"></a></div>
+<p>Specify <code>TOOLCHAIN</code> if the action cannot figure out the toolchain itself, or if you like to be explicit.</p>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -260,10 +273,14 @@ jobs:
       - uses: w3c/spec-prod@v2
         with:
           TOOLCHAIN: respec # or bikeshed
-</code></pre></section><section id="deploy-to-github-pages"><h3 id="x2-3-deploy-to-github-pages"><bdi class="secno">2.3 </bdi>Deploy to GitHub pages<a class="self-link" aria-label="§" href="#deploy-to-github-pages"></a></h3><p>Deployment is only done on <code>push</code> events. In this example:</p><ul>
+</code></pre>
+</section><section id="deploy-to-github-pages"><div class="header-wrapper"><h3 id="x2-3-deploy-to-github-pages"><bdi class="secno">2.3 </bdi>Deploy to GitHub pages</h3><a class="self-link" href="#deploy-to-github-pages" aria-label="Permalink for Section 2.3"></a></div>
+<p>Deployment is only done on <code>push</code> events. In this example:</p>
+<ul>
 <li>the document is built and validated as a check in the pull request.</li>
 <li>the document is built and validated, and then deployed to <code>gh-pages</code> branch, when a commit is pushed to the <code>main</code> branch.</li>
-</ul><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
+</ul>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -278,7 +295,10 @@ jobs:
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
-</code></pre><section id="change-output-location-for-built-files"><h4 id="x2-3-1-change-output-location-for-built-files"><bdi class="secno">2.3.1 </bdi>Change output location for built files<a class="self-link" aria-label="§" href="#change-output-location-for-built-files"></a></h4><p>By default, output location is mapped to the <code>SOURCE</code>. You can change that by providing a <a href="#destination"><code>DESTINATION</code></a>.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
+</code></pre>
+<section id="change-output-location-for-built-files"><div class="header-wrapper"><h4 id="x2-3-1-change-output-location-for-built-files"><bdi class="secno">2.3.1 </bdi>Change output location for built files</h4><a class="self-link" href="#change-output-location-for-built-files" aria-label="Permalink for Section 2.3.1"></a></div>
+<p>By default, output location is mapped to the <code>SOURCE</code>. You can change that by providing a <a href="#destination"><code>DESTINATION</code></a>.</p>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   push:
@@ -296,7 +316,9 @@ jobs:
           SOURCE: src/spec.bs
           DESTINATION: specification/index.html # `src/spec.html` if not provided.
           # Deployment will be available at: https://&lt;org&gt;.github.io/&lt;repo&gt;/specification/
-</code></pre></section></section><section id="deploy-to-w3c-using-echidna"><h3 id="x2-4-deploy-to-w3c-using-echidna"><bdi class="secno">2.4 </bdi>Deploy to W3C using Echidna<a class="self-link" aria-label="§" href="#deploy-to-w3c-using-echidna"></a></h3><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
+</code></pre>
+</section></section><section id="deploy-to-w3c-using-echidna"><div class="header-wrapper"><h3 id="x2-4-deploy-to-w3c-using-echidna"><bdi class="secno">2.4 </bdi>Deploy to W3C using Echidna</h3><a class="self-link" href="#deploy-to-w3c-using-echidna" aria-label="Permalink for Section 2.4"></a></div>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -313,7 +335,9 @@ jobs:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
           # Replace following with appropriate value. See options.md for details.
           W3C_WG_DECISION_URL: https://lists.w3.org/Archives/Public/public-group/2014JulSep/1234.html
-</code></pre><section id="use-different-respecconfig-when-deploying-to-w3c"><h4 id="x2-4-1-use-different-respecconfig-when-deploying-to-w3c"><bdi class="secno">2.4.1 </bdi>Use different <code>respecConfig</code> when deploying to W3C<a class="self-link" aria-label="§" href="#use-different-respecconfig-when-deploying-to-w3c"></a></h4><pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override respecConfig for W3C deployment and validators.
+</code></pre>
+<section id="use-different-respecconfig-when-deploying-to-w3c"><div class="header-wrapper"><h4 id="x2-4-1-use-different-respecconfig-when-deploying-to-w3c"><bdi class="secno">2.4.1 </bdi>Use different <code>respecConfig</code> when deploying to W3C</h4><a class="self-link" href="#use-different-respecconfig-when-deploying-to-w3c" aria-label="Permalink for Section 2.4.1"></a></div>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override respecConfig for W3C deployment and validators.
 name: CI
 on:
   pull_request: {}
@@ -334,7 +358,11 @@ jobs:
           W3C_BUILD_OVERRIDE: |
             specStatus: WD
             shortName: my-custom-shortname
-</code></pre><p>See <a href="#w3c_build_override"><code>W3C_BUILD_OVERRIDE</code></a> and <a href="#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a> for details.</p></section></section><section id="multiple-specs-in-same-repository"><h3 id="x2-5-multiple-specs-in-same-repository"><bdi class="secno">2.5 </bdi>Multiple specs in same repository<a class="self-link" aria-label="§" href="#multiple-specs-in-same-repository"></a></h3><p>If you maintain multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
+</code></pre>
+<p>See <a href="#w3c_build_override"><code>W3C_BUILD_OVERRIDE</code></a> and <a href="#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a> for details.</p>
+</section></section><section id="multiple-specs-in-same-repository"><div class="header-wrapper"><h3 id="x2-5-multiple-specs-in-same-repository"><bdi class="secno">2.5 </bdi>Multiple specs in same repository</h3><a class="self-link" href="#multiple-specs-in-same-repository" aria-label="Permalink for Section 2.5"></a></div>
+<p>If you maintain multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.</p>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
 name: CI
 on:
   pull_request: {}
@@ -366,7 +394,12 @@ jobs:
           GH_PAGES_BRANCH: gh-pages
           W3C_ECHIDNA_TOKEN: ${{ secrets[matrix.echidna_token] }}
           W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
-</code></pre><p><strong>Note:</strong> Echidna tokens need to be specified per document but secrets cannot be directly evaluated at the <code>matrix</code> level, meaning that <code>${{ secrets.ECHIDNA_TOKEN_SPEC }}</code> cannot be evaluated at that level. As in the above example, the idea is rather to name the token secret at the <code>matrix</code> level (through <code>echidna_token: ECHIDNA_TOKEN_SPEC</code>) and to evaluate the secret in the job's <code>steps</code> (through <code>${{ secrets[matrix.echidna_token] }}</code>).</p><p><strong>Note:</strong> Add the <code>max-parallel: 1</code> setting as in the example if you run into situations where jobs attempt to push updates to the repository at the same time and fail (see <a href="https://github.com/w3c/spec-prod/issues/58">#58</a>). This setting makes GitHub run jobs sequentially.</p><p><strong>Note:</strong> At present, each source might create its own commit in <code>GH_PAGES_BRANCH</code> even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when <a href="https://github.com/w3c/spec-prod/issues/8">#8</a> and <a href="https://github.com/w3c/spec-prod/issues/14">#14</a> are fixed.</p><p>As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' <a href="https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths"><code>on.&lt;push|pull_request&gt;.paths</code></a> as:</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish-spec-1.yml
+</code></pre>
+<p><strong>Note:</strong> Echidna tokens need to be specified per document but secrets cannot be directly evaluated at the <code>matrix</code> level, meaning that <code>${{ secrets.ECHIDNA_TOKEN_SPEC }}</code> cannot be evaluated at that level. As in the above example, the idea is rather to name the token secret at the <code>matrix</code> level (through <code>echidna_token: ECHIDNA_TOKEN_SPEC</code>) and to evaluate the secret in the job's <code>steps</code> (through <code>${{ secrets[matrix.echidna_token] }}</code>).</p>
+<p><strong>Note:</strong> Add the <code>max-parallel: 1</code> setting as in the example if you run into situations where jobs attempt to push updates to the repository at the same time and fail (see <a href="https://github.com/w3c/spec-prod/issues/58">#58</a>). This setting makes GitHub run jobs sequentially.</p>
+<p><strong>Note:</strong> At present, each source might create its own commit in <code>GH_PAGES_BRANCH</code> even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when <a href="https://github.com/w3c/spec-prod/issues/8">#8</a> and <a href="https://github.com/w3c/spec-prod/issues/14">#14</a> are fixed.</p>
+<p>As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' <a href="https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths"><code>on.&lt;push|pull_request&gt;.paths</code></a> as:</p>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish-spec-1.yml
 name: CI (spec-1)
 on:
   pull_request:
@@ -411,8 +444,22 @@ jobs:
           GH_PAGES_BRANCH: gh-pages
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
           W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
-</code></pre></section></section>
-		<section id="options"><h2 id="x3-options"><bdi class="secno">3. </bdi>Options<a class="self-link" aria-label="§" href="#options"></a></h2><section id="toolchain"><h3 id="x3-1-toolchain"><bdi class="secno">3.1 </bdi><code>TOOLCHAIN</code><a class="self-link" aria-label="§" href="#toolchain"></a></h3><p>Toolchain to use.</p><p><strong>Possible values:</strong> <code>respec</code>, <code>bikeshed</code>.</p><p><strong>Default:</strong> None. Inferred from <code>SOURCE</code>: <code>respec</code> if an <code>index.html</code> exists, or <code>bikeshed</code> if an <code>index.bs</code> exists.</p></section><section id="source"><h3 id="x3-2-source"><bdi class="secno">3.2 </bdi><code>SOURCE</code><a class="self-link" aria-label="§" href="#source"></a></h3><p>Source file path.</p><p><strong>Possible values:</strong> Any valid POSIX file path relative to repository root.</p><p><strong>Default:</strong> None. Inferred from <code>TOOLCHAIN</code>: <code>index.html</code>/<code>index.bs</code> if exists.</p></section><section id="destination"><h3 id="x3-3-destination"><bdi class="secno">3.3 </bdi><code>DESTINATION</code><a class="self-link" aria-label="§" href="#destination"></a></h3><p>Location of generated HTML document and other assets. This is useful when you've multiple specs in same repository.</p><p><strong>Possible values:</strong> Any valid POSIX file path relative to repository root.</p><p><strong>Default:</strong> <code>SOURCE</code>, with file extension set to <code>.html</code>.</p><table class="def">
+</code></pre>
+</section></section>
+		<section id="options"><div class="header-wrapper"><h2 id="x3-options"><bdi class="secno">3. </bdi>Options</h2><a class="self-link" href="#options" aria-label="Permalink for Section 3."></a></div>
+<section id="toolchain"><div class="header-wrapper"><h3 id="x3-1-toolchain"><bdi class="secno">3.1 </bdi><code>TOOLCHAIN</code></h3><a class="self-link" href="#toolchain" aria-label="Permalink for Section 3.1"></a></div>
+<p>Toolchain to use.</p>
+<p><strong>Possible values:</strong> <code>respec</code>, <code>bikeshed</code>.</p>
+<p><strong>Default:</strong> None. Inferred from <code>SOURCE</code>: <code>respec</code> if an <code>index.html</code> exists, or <code>bikeshed</code> if an <code>index.bs</code> exists.</p>
+</section><section id="source"><div class="header-wrapper"><h3 id="x3-2-source"><bdi class="secno">3.2 </bdi><code>SOURCE</code></h3><a class="self-link" href="#source" aria-label="Permalink for Section 3.2"></a></div>
+<p>Source file path.</p>
+<p><strong>Possible values:</strong> Any valid POSIX file path relative to repository root.</p>
+<p><strong>Default:</strong> None. Inferred from <code>TOOLCHAIN</code>: <code>index.html</code>/<code>index.bs</code> if exists.</p>
+</section><section id="destination"><div class="header-wrapper"><h3 id="x3-3-destination"><bdi class="secno">3.3 </bdi><code>DESTINATION</code></h3><a class="self-link" href="#destination" aria-label="Permalink for Section 3.3"></a></div>
+<p>Location of generated HTML document and other assets. This is useful when you've multiple specs in same repository.</p>
+<p><strong>Possible values:</strong> Any valid POSIX file path relative to repository root.</p>
+<p><strong>Default:</strong> <code>SOURCE</code>, with file extension set to <code>.html</code>.</p>
+<table class="def">
 <thead>
 <tr>
 <th><code>SOURCE</code></th>
@@ -451,7 +498,11 @@ jobs:
 <td><code>./index.html</code></td>
 <td><code>./</code></td>
 </tr>
-</tbody></table></section><section id="build_fail_on"><h3 id="x3-4-build_fail_on"><bdi class="secno">3.4 </bdi><code>BUILD_FAIL_ON</code><a class="self-link" aria-label="§" href="#build_fail_on"></a></h3><p>Define exit behaviour on build errors or warnings.</p><p><strong>Possible values:</strong> <code>"nothing"</code>, <code>"fatal"</code>, <code>"link-error"</code>, <code>"warning"</code>, <code>"everything"</code>.</p><table class="def">
+</tbody></table>
+</section><section id="build_fail_on"><div class="header-wrapper"><h3 id="x3-4-build_fail_on"><bdi class="secno">3.4 </bdi><code>BUILD_FAIL_ON</code></h3><a class="self-link" href="#build_fail_on" aria-label="Permalink for Section 3.4"></a></div>
+<p>Define exit behaviour on build errors or warnings.</p>
+<p><strong>Possible values:</strong> <code>"nothing"</code>, <code>"fatal"</code>, <code>"link-error"</code>, <code>"warning"</code>, <code>"everything"</code>.</p>
+<table class="def">
 <thead>
 <tr>
 <th><code>BUILD_FAIL_ON</code></th>
@@ -484,7 +535,13 @@ jobs:
 <td><code>--die-on=everything </code></td>
 <td><code>-e -w</code></td>
 </tr>
-</tbody></table><p><strong>Default:</strong> <code>"fatal"</code>.</p></section><section id="gh_pages_build_override"><h3 id="x3-5-gh_pages_build_override"><bdi class="secno">3.5 </bdi><code>GH_PAGES_BUILD_OVERRIDE</code><a class="self-link" aria-label="§" href="#gh_pages_build_override"></a></h3><p>Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.</p><p>Note that, you need to use <a href="https://tabatkins.github.io/bikeshed/">Bikeshed-specific metadata</a> (e.g. <code>status</code>) when using Bikeshed, and <a href="https://respec.org/docs/#configuration-options">ReSpec-specific config</a> (e.g. <code>specStatus</code>) when using ReSpec.</p><p><strong>Possible values:</strong> A string or <a href="https://stackoverflow.com/a/15365296">YAML Literal Block Scalar</a> (multiline string) representing the override config/metadata as key-value pairs. That's mouthful, lets clarify using an example:</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override Bikeshed metadata for GitHub Pages deployment
+</tbody></table>
+<p><strong>Default:</strong> <code>"fatal"</code>.</p>
+</section><section id="gh_pages_build_override"><div class="header-wrapper"><h3 id="x3-5-gh_pages_build_override"><bdi class="secno">3.5 </bdi><code>GH_PAGES_BUILD_OVERRIDE</code></h3><a class="self-link" href="#gh_pages_build_override" aria-label="Permalink for Section 3.5"></a></div>
+<p>Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.</p>
+<p>Note that, you need to use <a href="https://tabatkins.github.io/bikeshed/">Bikeshed-specific metadata</a> (e.g. <code>status</code>) when using Bikeshed, and <a href="https://respec.org/docs/#configuration-options">ReSpec-specific config</a> (e.g. <code>specStatus</code>) when using ReSpec.</p>
+<p><strong>Possible values:</strong> A string or <a href="https://stackoverflow.com/a/15365296">YAML Literal Block Scalar</a> (multiline string) representing the override config/metadata as key-value pairs. That's mouthful, lets clarify using an example:</p>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override Bikeshed metadata for GitHub Pages deployment
 - uses: w3c/spec-prod@v2
   with:
     TOOLCHAIN: bikeshed
@@ -496,7 +553,14 @@ jobs:
     #
     # Info: Above is same as running Bikeshed CLI like:
     # bikeshed spec INPUT OUTPUT --md-status="w3c/WD" --md-TR="https://www.w3.org/TR/my-cool-spec/"
-</code></pre><p><strong>Default:</strong> None.</p></section><section id="w3c_build_override"><h3 id="x3-6-w3c_build_override"><bdi class="secno">3.6 </bdi><code>W3C_BUILD_OVERRIDE</code><a class="self-link" aria-label="§" href="#w3c_build_override"></a></h3><p>Override Bikeshed metadata or ReSpec config for the W3C Deployment and validators.</p><p>The Action will try to make use of metadata/config from previously published version, if available. For example, you do not need to manually provide <code>respecConfig.previousPublishDate</code> (or, <code>Previous Version</code> in case of Bikeshed) when publishing to W3C.</p><p><strong>Possible values:</strong> Same as <a href="#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a>.</p><p><strong>Default:</strong> None.</p><pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override respecConfig for W3C deployment and validators.
+</code></pre>
+<p><strong>Default:</strong> None.</p>
+</section><section id="w3c_build_override"><div class="header-wrapper"><h3 id="x3-6-w3c_build_override"><bdi class="secno">3.6 </bdi><code>W3C_BUILD_OVERRIDE</code></h3><a class="self-link" href="#w3c_build_override" aria-label="Permalink for Section 3.6"></a></div>
+<p>Override Bikeshed metadata or ReSpec config for the W3C Deployment and validators.</p>
+<p>The Action will try to make use of metadata/config from previously published version, if available. For example, you do not need to manually provide <code>respecConfig.previousPublishDate</code> (or, <code>Previous Version</code> in case of Bikeshed) when publishing to W3C.</p>
+<p><strong>Possible values:</strong> Same as <a href="#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a>.</p>
+<p><strong>Default:</strong> None.</p>
+<pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override respecConfig for W3C deployment and validators.
 - uses: w3c/spec-prod@v2
   with:
     TOOLCHAIN: respec
@@ -508,7 +572,38 @@ jobs:
     #
     # Info: Above is equivalent to running ReSpec CLI like:
     # respec -s index.html?specStatus=WD&amp;shortName=my-custom-shortname… -o OUTPUT
-</code></pre></section><section id="validate_webidl"><h3 id="x3-7-validate_webidl"><bdi class="secno">3.7 </bdi><code>VALIDATE_WEBIDL</code><a class="self-link" aria-label="§" href="#validate_webidl"></a></h3><p>Whether or not to validate the Web IDL that the spec may define.</p><p>Spec authoring tools may already include some level of Web IDL validation but that validation may be restricted to detecting syntax errors. The action also checks additional constraints defined in <a href="https://heycam.github.io/webidl/">Web IDL</a> such as usage of dictionaries as function parameters or attributes. The action will automatically skip validation if the spec does not define any Web IDL.</p><p>Note that the Web IDL validation is restricted to the spec at hand and cannot validate that references to IDL constructs defined in other specs are valid. As such, there may remain IDL errors that can only be detected by tools that look at all specs in combination such as <a href="https://github.com/w3c/webref">Webref</a>).</p><p><strong>Possible values:</strong> true, false</p><p><strong>Default:</strong> true</p></section><section id="validate_links"><h3 id="x3-8-validate_links"><bdi class="secno">3.8 </bdi><code>VALIDATE_LINKS</code><a class="self-link" aria-label="§" href="#validate_links"></a></h3><p>Whether or not to check for broken hyperlinks.</p><p><strong>Warning:</strong> This feature is experimental.</p><p><strong>Possible values:</strong> true, false</p><p><strong>Default:</strong> false</p></section><section id="validate_markup"><h3 id="x3-9-validate_markup"><bdi class="secno">3.9 </bdi><code>VALIDATE_MARKUP</code><a class="self-link" aria-label="§" href="#validate_markup"></a></h3><p>Whether or not to validate markup using the <a href="https://github.com/validator/validator">Nu Html Checker</a>.</p><p><strong>Possible values:</strong> true, false</p><p><strong>Default:</strong> true</p></section><section id="gh_pages_branch"><h3 id="x3-10-gh_pages_branch"><bdi class="secno">3.10 </bdi><code>GH_PAGES_BRANCH</code><a class="self-link" aria-label="§" href="#gh_pages_branch"></a></h3><p>Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or provide a Git branch name to push to. You would need to enable GitHub pages publish source in repository settings manually.</p><p><strong>Possible values:</strong>: None, or a git branch name.</p><p><strong>Default:</strong> None</p></section><section id="gh_pages_token"><h3 id="x3-11-gh_pages_token"><bdi class="secno">3.11 </bdi><code>GH_PAGES_TOKEN</code><a class="self-link" aria-label="§" href="#gh_pages_token"></a></h3><p>GitHub Personal access token. This field is required only if the default GitHub actions token doesn't have enough permissions, or you want to have more control. Make sure to <a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets">pass it as a secret</a>.</p><p><strong>Possible values:</strong>: A valid personal GitHub token.</p><p><strong>Default:</strong> <a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token"><code>GITHUB_TOKEN</code></a></p></section><section id="w3c_echidna_token"><h3 id="x3-12-w3c_echidna_token"><bdi class="secno">3.12 </bdi><code>W3C_ECHIDNA_TOKEN</code><a class="self-link" aria-label="§" href="#w3c_echidna_token"></a></h3><p>The automated publication workflow requires a <a href="https://github.com/w3c/echidna/wiki/Token-creation">token</a> associated with the specification you want to publish. Working Group Chairs and W3C Team members can <a href="https://www.w3.org/Web/publications/register">request a token</a> directly from the W3C. This can then be saved as <code>ECHIDNA_TOKEN</code> in your repository settings under <a href="https://user-images.githubusercontent.com/870154/81380287-f9579f80-914d-11ea-84bc-5707bff75dba.png">"Secrets"</a>.</p><p><strong>Possible values:</strong> A valid Echidna token.</p><p><strong>Default:</strong> None.</p></section><section id="w3c_wg_decision_url"><h3 id="x3-13-w3c_wg_decision_url"><bdi class="secno">3.13 </bdi><code>W3C_WG_DECISION_URL</code><a class="self-link" aria-label="§" href="#w3c_wg_decision_url"></a></h3><p>A URL to the working group decision to use auto-publish, usually from a w3c mailing list.</p><p><strong>Possible values:</strong> A non-exhaustive list of possible values:</p><ul>
+</code></pre>
+</section><section id="validate_webidl"><div class="header-wrapper"><h3 id="x3-7-validate_webidl"><bdi class="secno">3.7 </bdi><code>VALIDATE_WEBIDL</code></h3><a class="self-link" href="#validate_webidl" aria-label="Permalink for Section 3.7"></a></div>
+<p>Whether or not to validate the Web IDL that the spec may define.</p>
+<p>Spec authoring tools may already include some level of Web IDL validation but that validation may be restricted to detecting syntax errors. The action also checks additional constraints defined in <a href="https://heycam.github.io/webidl/">Web IDL</a> such as usage of dictionaries as function parameters or attributes. The action will automatically skip validation if the spec does not define any Web IDL.</p>
+<p>Note that the Web IDL validation is restricted to the spec at hand and cannot validate that references to IDL constructs defined in other specs are valid. As such, there may remain IDL errors that can only be detected by tools that look at all specs in combination such as <a href="https://github.com/w3c/webref">Webref</a>).</p>
+<p><strong>Possible values:</strong> true, false</p>
+<p><strong>Default:</strong> true</p>
+</section><section id="validate_links"><div class="header-wrapper"><h3 id="x3-8-validate_links"><bdi class="secno">3.8 </bdi><code>VALIDATE_LINKS</code></h3><a class="self-link" href="#validate_links" aria-label="Permalink for Section 3.8"></a></div>
+<p>Whether or not to check for broken hyperlinks.</p>
+<p><strong>Warning:</strong> This feature is experimental.</p>
+<p><strong>Possible values:</strong> true, false</p>
+<p><strong>Default:</strong> false</p>
+</section><section id="validate_markup"><div class="header-wrapper"><h3 id="x3-9-validate_markup"><bdi class="secno">3.9 </bdi><code>VALIDATE_MARKUP</code></h3><a class="self-link" href="#validate_markup" aria-label="Permalink for Section 3.9"></a></div>
+<p>Whether or not to validate markup using the <a href="https://github.com/validator/validator">Nu Html Checker</a>.</p>
+<p><strong>Possible values:</strong> true, false</p>
+<p><strong>Default:</strong> true</p>
+</section><section id="gh_pages_branch"><div class="header-wrapper"><h3 id="x3-10-gh_pages_branch"><bdi class="secno">3.10 </bdi><code>GH_PAGES_BRANCH</code></h3><a class="self-link" href="#gh_pages_branch" aria-label="Permalink for Section 3.10"></a></div>
+<p>Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or provide a Git branch name to push to. You would need to enable GitHub pages publish source in repository settings manually.</p>
+<p><strong>Possible values:</strong>: None, or a git branch name.</p>
+<p><strong>Default:</strong> None</p>
+</section><section id="gh_pages_token"><div class="header-wrapper"><h3 id="x3-11-gh_pages_token"><bdi class="secno">3.11 </bdi><code>GH_PAGES_TOKEN</code></h3><a class="self-link" href="#gh_pages_token" aria-label="Permalink for Section 3.11"></a></div>
+<p>GitHub Personal access token. This field is required only if the default GitHub actions token doesn't have enough permissions, or you want to have more control. Make sure to <a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets">pass it as a secret</a>.</p>
+<p><strong>Possible values:</strong>: A valid personal GitHub token.</p>
+<p><strong>Default:</strong> <a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token"><code>GITHUB_TOKEN</code></a></p>
+</section><section id="w3c_echidna_token"><div class="header-wrapper"><h3 id="x3-12-w3c_echidna_token"><bdi class="secno">3.12 </bdi><code>W3C_ECHIDNA_TOKEN</code></h3><a class="self-link" href="#w3c_echidna_token" aria-label="Permalink for Section 3.12"></a></div>
+<p>The automated publication workflow requires a <a href="https://github.com/w3c/echidna/wiki/Token-creation">token</a> associated with the specification you want to publish. Working Group Chairs and W3C Team members can <a href="https://www.w3.org/Web/publications/register">request a token</a> directly from the W3C. This can then be saved as <code>ECHIDNA_TOKEN</code> in your repository settings under <a href="downloaded-assets/user-images.githubusercontent.com/870154/81380287-f9579f80-914d-11ea-84bc-5707bff75dba.png">"Secrets"</a>.</p>
+<p><strong>Possible values:</strong> A valid Echidna token.</p>
+<p><strong>Default:</strong> None.</p>
+</section><section id="w3c_wg_decision_url"><div class="header-wrapper"><h3 id="x3-13-w3c_wg_decision_url"><bdi class="secno">3.13 </bdi><code>W3C_WG_DECISION_URL</code></h3><a class="self-link" href="#w3c_wg_decision_url" aria-label="Permalink for Section 3.13"></a></div>
+<p>A URL to the working group decision to use auto-publish, usually from a w3c mailing list.</p>
+<p><strong>Possible values:</strong> A non-exhaustive list of possible values:</p>
+<ul>
 <li>WebApps WG: <a href="https://lists.w3.org/Archives/Public/public-webapps/2014JulSep/0627.html">https://lists.w3.org/Archives/Public/public-webapps/2014JulSep/0627.html</a></li>
 <li>Media Capture WG: <a href="https://lists.w3.org/Archives/Public/public-media-capture/2015Dec/0031.html">https://lists.w3.org/Archives/Public/public-media-capture/2015Dec/0031.html</a></li>
 <li>Second Screen WG: <a href="https://lists.w3.org/Archives/Public/public-secondscreen/2015Jun/0096.html">https://lists.w3.org/Archives/Public/public-secondscreen/2015Jun/0096.html</a></li>
@@ -518,12 +613,19 @@ jobs:
 <li>Web Performance: <a href="https://lists.w3.org/Archives/Public/public-web-perf/2021Apr/0005.html">https://lists.w3.org/Archives/Public/public-web-perf/2021Apr/0005.html</a></li>
 <li>WebAppSec: <a href="https://lists.w3.org/Archives/Public/public-webappsec/2015Mar/0170.html">https://lists.w3.org/Archives/Public/public-webappsec/2015Mar/0170.html</a></li>
 <li>Web Payments WG: <a href="https://www.w3.org/2016/04/14-wpwg-minutes.html#item02">https://www.w3.org/2016/04/14-wpwg-minutes.html#item02</a></li>
-</ul><p><strong>Default:</strong> None.</p></section><section id="w3c_notifications_cc"><h3 id="x3-14-w3c_notifications_cc"><bdi class="secno">3.14 </bdi><code>W3C_NOTIFICATIONS_CC</code><a class="self-link" aria-label="§" href="#w3c_notifications_cc"></a></h3><p>Comma separated list of email addresses to CC. This field is optional.</p><p><strong>Default:</strong> None.</p></section></section>
-		<section id="other-useful-resources"><h2 id="x4-other-useful-resources"><bdi class="secno">4. </bdi>Other useful resources<a class="self-link" aria-label="§" href="#other-useful-resources"></a></h2><ul>
+</ul>
+<p><strong>Default:</strong> None.</p>
+</section><section id="w3c_notifications_cc"><div class="header-wrapper"><h3 id="x3-14-w3c_notifications_cc"><bdi class="secno">3.14 </bdi><code>W3C_NOTIFICATIONS_CC</code></h3><a class="self-link" href="#w3c_notifications_cc" aria-label="Permalink for Section 3.14"></a></div>
+<p>Comma separated list of email addresses to CC. This field is optional.</p>
+<p><strong>Default:</strong> None.</p>
+</section></section>
+		<section id="other-useful-resources"><div class="header-wrapper"><h2 id="x4-other-useful-resources"><bdi class="secno">4. </bdi>Other useful resources</h2><a class="self-link" href="#other-useful-resources" aria-label="Permalink for Section 4."></a></div>
+<ul>
 <li>Denis Ah-Kang (W3C) gave an overview of the automatic publishing system on the 18 March 2021:
 <a href="https://www.w3.org/2021/03/18-echidna/video.html">video with transcript</a>
 and <a href="https://www.w3.org/2021/03/18-pub-minutes.html">minutes</a> are available.</li>
-</ul></section>
+</ul>
+</section>
 	
 
 <p role="navigation" id="back-to-top">
@@ -750,4 +852,4 @@ function hidePanel(panel) {
   panel.hidden = true;
   panel.classList.remove("docked");
 }
-})()</script><script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script></body></html>
+})()</script><script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script></body></html>
