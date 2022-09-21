@@ -209,7 +209,7 @@ jobs:
     name: Validate and Publish to TR
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           TOOLCHAIN: respec # or bikeshed
@@ -234,7 +234,7 @@ jobs:
     name: Build and Validate
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
 </code></pre>
 <section id="selectively-enable-disable-validators"><div class="header-wrapper"><h4 id="x2-1-1-selectively-enable-disable-validators"><bdi class="secno">2.1.1 </bdi>Selectively enable/disable validators</h4><a class="self-link" href="#selectively-enable-disable-validators" aria-label="Permalink for Section 2.1.1"></a></div>
@@ -248,7 +248,7 @@ jobs:
     name: Build and Validate
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           VALIDATE_WEBIDL: false
@@ -265,7 +265,7 @@ jobs:
     name: Build and Validate
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           TOOLCHAIN: respec # or bikeshed
@@ -287,7 +287,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
@@ -304,7 +304,7 @@ jobs:
     name: Deploy to GitHub pages
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
@@ -325,7 +325,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
@@ -344,7 +344,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           TOOLCHAIN: respec
@@ -382,7 +382,7 @@ jobs:
             # destination defaults to spec-2/index.html
             # echidna_token defaults to no publication to w3.org/TR
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           SOURCE: ${{ matrix.source }}
@@ -409,7 +409,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           SOURCE: spec-1
@@ -432,7 +432,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
         with:
           SOURCE: spec-2/spec.bs
