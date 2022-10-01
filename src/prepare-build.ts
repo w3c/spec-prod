@@ -255,8 +255,8 @@ async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 		const page = await browser.newPage();
 		console.log("[INFO] Navigating to", url);
 		const res = await page.goto(url);
-		console.log("[INFO] Navigation complete with statusCode:", res.status());
-		if (!res.ok) {
+		console.log("[INFO] Navigation complete with statusCode:", res!.status());
+		if (!res!.ok) {
 			throw new Error(`Failed to fetch ${url}`);
 		}
 
