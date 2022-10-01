@@ -162,7 +162,6 @@ export class StaticServer {
 	constructor(dir = process.cwd()) {
 		const serve = serveStatic(dir);
 		this._server = createServer((req, res) => {
-			// @ts-expect-error
 			serve(req, res, finalhandler(req, res));
 		});
 	}
