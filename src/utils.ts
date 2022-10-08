@@ -42,24 +42,17 @@ export function formatAsHeading(text: string, symbol = "=") {
 }
 
 /**
- * Locally install a npm package using Yarn.
+ * Locally install a npm package using pnpm.
  */
-export function install(name: string | string[], env: ExecOptions["env"] = {}) {
-	if (Array.isArray(name)) {
-		name = name.join(" ");
+export async function install(name: string, env: ExecOptions["env"] = {}) {
+	const output = await sh(`pnpm add ${name}`, { cwd: ACTION_DIR, env });
+	const pkgName = name.replace(/@.+/, "");
+	const re = new RegExp(String.raw`\+ (${pkgName})\s(.+)$`);
+	const versionLine = output.split("\n").find(line => re.test(line));
+	if (versionLine) {
+		console.log(versionLine);
 	}
-	return sh(`yarn add ${name} --no-progress`, { cwd: ACTION_DIR, env }).then(
-		output => {
-			const re = new RegExp(
-				String.raw`\s(${(name as string).replace(/@.+/, "")})@(.+)$`,
-			);
-			const versionLine = output.split("\n").find(line => re.test(line));
-			if (versionLine) {
-				console.log(versionLine);
-			}
-			return output;
-		},
-	);
+	return output;
 }
 
 /**
@@ -76,7 +69,7 @@ export function setOutput<K extends string, V>(key: K, value: V) {
 
 type ShOutput = "buffer" | "stream" | "silent";
 interface ShOptions extends ExecOptions {
-	output?: string;
+	output?: ShOutput;
 }
 /**
  * Asynchronously run a shell command get its result.
