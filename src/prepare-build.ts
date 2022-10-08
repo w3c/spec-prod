@@ -3,7 +3,6 @@ import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import * as puppeteer from "puppeteer";
 import { PUPPETEER_ENV } from "./constants.js";
-import { exit } from "./utils.js";
 
 import { Inputs } from "./prepare.js";
 export type BuildOptions = Awaited<ReturnType<typeof buildOptions>>;
@@ -49,7 +48,7 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 				source ||= "index.bs";
 				break;
 			default:
-				exit(`Invalid input "TOOLCHAIN": ${toolchain}`);
+				throw new Error(`Invalid input "TOOLCHAIN": ${toolchain}`);
 		}
 	}
 
@@ -62,11 +61,11 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 	}
 
 	if (!toolchain && !source) {
-		exit(`Either of "TOOLCHAIN" or "SOURCE" must be provided.`);
+		throw new Error(`Either of "TOOLCHAIN" or "SOURCE" must be provided.`);
 	}
 
 	if (!existsSync(source)) {
-		exit(`"SOURCE" file "${source}" not found.`);
+		throw new Error(`"SOURCE" file "${source}" not found.`);
 	}
 
 	if (!toolchain) {
@@ -78,7 +77,7 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 				toolchain = "bikeshed";
 				break;
 			default:
-				exit(
+				throw new Error(
 					`Failed to figure out "TOOLCHAIN" from "SOURCE". Please specify the "TOOLCHAIN".`,
 				);
 		}
@@ -331,7 +330,7 @@ function getFailOnFlags(
 	];
 
 	if (failOn && !FAIL_ON_OPTIONS.includes(failOn)) {
-		exit(
+		throw new Error(
 			`BUILD_FAIL_ON must be one of [${FAIL_ON_OPTIONS.join(", ")}]. ` +
 				`Found "${failOn}".`,
 		);

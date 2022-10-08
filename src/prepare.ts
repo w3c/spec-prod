@@ -1,3 +1,4 @@
+import { summary } from "@actions/core";
 import { env, exit, formatAsHeading, pprint, setOutput } from "./utils.js";
 
 import { buildOptions } from "./prepare-build.js";
@@ -40,9 +41,21 @@ export interface GitHubContext {
 if (module === require.main) {
 	const inputs: Inputs = JSON.parse(env("INPUTS_USER"));
 	const githubContext: GitHubContext = JSON.parse(env("INPUTS_GITHUB"));
-	main(inputs, githubContext).catch(err =>
-		exit(err.message || "Failed", err.code),
-	);
+	main(inputs, githubContext).catch(async err => {
+		summary.addHeading(":red_circle: Failed to process inputs.", 2);
+		summary.addCodeBlock(err.message);
+		if (err.stack) {
+			summary.addCodeBlock(err.stack);
+		}
+		if (err.stdout) {
+			summary.addCodeBlock(err.stdout);
+		}
+		if (err.stderr) {
+			summary.addCodeBlock(err.stderr);
+		}
+		await summary.write();
+		exit(err.message || "Failed", err.code);
+	});
 }
 
 export default async function main(
