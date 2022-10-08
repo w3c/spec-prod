@@ -3,3 +3,6 @@ python_modules
 .vscode
 *.js
 *.map
+package-lock.json
+yarn.lock
+*.log
