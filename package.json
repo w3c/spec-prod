@@ -14,7 +14,7 @@
 	"scripts": {
 		"build": "tsc -p tsconfig.prod.json",
 		"dev": "tsc -p tsconfig.json -w",
-		"lint": "prettier . --ignore-path .gitignore --check"
+		"lint": "prettier . --check"
 	},
 	"devDependencies": {
 		"@types/finalhandler": "^1.2.0",
