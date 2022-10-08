@@ -45,7 +45,7 @@ export function formatAsHeading(text: string, symbol = "=") {
  * Locally install a npm package using pnpm.
  */
 export async function install(name: string, env: ExecOptions["env"] = {}) {
-	const output = await sh(`pnpm add ${name}`, { cwd: ACTION_DIR, env });
+	const output = await sh(`pnpm add ${name}`, { cwd: ACTION_DIR, output: 'stream', env });
 	const pkgName = name.replace(/@.+/, "");
 	const re = new RegExp(String.raw`\+ (${pkgName})\s(.+)$`);
 	const versionLine = output.split("\n").find(line => re.test(line));
