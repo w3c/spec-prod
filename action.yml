@@ -49,12 +49,12 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "16"
     - uses: pnpm/action-setup@v2.2.2
       with:
         version: 7
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "16"
     - name: Set up action
       run: |
         echo "::group::Set up action"
