@@ -110,7 +110,12 @@ export async function sh(command: string, options: ShOptions | ShOutput = {}) {
 					if (stdout) console.log(stdout);
 					if (stderr) console.error(stderr);
 				}
-				code === 0 ? resolve(stdout) : reject({ stdout, stderr, code });
+				if (code === 0) {
+					resolve(stdout);
+				} else {
+					const message = `Command \`${command}\` failed with exit code: ${code}.`;
+					reject({ message, stdout, stderr, code });
+				}
 			});
 		});
 	} finally {
