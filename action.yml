@@ -52,16 +52,19 @@ runs:
     - uses: actions/setup-node@v3
       with:
         node-version: "16"
+    - uses: pnpm/action-setup@v2.2.2
+      with:
+        version: 7
     - name: Set up action
       run: |
         echo "::group::Set up action"
-        yarn --cwd ${{ github.action_path }} --ignore-optional
-        yarn --cwd ${{ github.action_path }} build
+        pnpm -C ${{ github.action_path }} install --no-optional
+        pnpm -C ${{ github.action_path }} build
         echo "::endgroup::"
       shell: bash
       env:
-        FORCE_COLOR: true
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+        FORCE_COLOR: "true"
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1"
     - name: Prepare
       id: prepare
       run: |

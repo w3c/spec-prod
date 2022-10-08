@@ -7,7 +7,7 @@ on:
       - "action.yml"
       - "tsconfig.json"
       - "package.json"
-      - "yarn.lock"
+      - "pnpm-lock.yaml"
       - ".github/workflows/**"
 
 env:
@@ -22,8 +22,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
-          cache: yarn
-      - run: yarn
-      - run: yarn lint
-      - run: yarn build --noEmit
+          node-version: 16
+          cache: pnpm
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+      - run: pnpm i
+      - run: pnpm lint
+      - run: pnpm build --noEmit
