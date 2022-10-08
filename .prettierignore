@@ -1,0 +1,13 @@
+# copied from .gitignore
+# https://github.com/prettier/prettier/issues/8048
+node_modules
+python_modules
+.vscode
+*.js
+*.map
+package-lock.json
+yarn.lock
+*.log
+
+# actual .prettierignore
+pnpm-lock.yaml
