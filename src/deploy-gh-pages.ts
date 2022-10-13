@@ -78,7 +78,7 @@ async function commit({ sha, event, actor }: CommitInputs) {
 		commitHeadline,
 		"",
 		`SHA: ${sha}`,
-		`Reason: ${event}, by @${actor}`,
+		`Reason: ${event}, by ${actor}`,
 		"",
 		"",
 		`Co-authored-by: ${GITHUB_ACTIONS_BOT}`,
