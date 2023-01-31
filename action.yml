@@ -27,7 +27,7 @@ inputs:
     description: Validate Web IDL
     default: true
   VALIDATE_PUBRULES:
-    description: Validate against W3C Publiation Rules
+    description: Validate against W3C Publication Rules
     default: false
   W3C_API_KEY:
     description: W3C API Key (required for VALIDATE_PUBRULES for now)
