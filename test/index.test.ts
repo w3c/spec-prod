@@ -49,6 +49,7 @@ const run = (fn: AsyncFn) => async () => {
 Promise.resolve()
 	.then(run(require("./prepare.test.js").default))
 	.then(run(require("./setup.test.js").default))
+	.then(run(require("./validate-input-markup.test.js").default))
 	.then(run(require("./build.test.js").default))
 	.then(run(require("./validate-links.test.js").default))
 	.then(run(require("./validate-markup.test.js").default))
