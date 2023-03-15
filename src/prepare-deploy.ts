@@ -66,5 +66,5 @@ export async function w3cEchidnaDeployment(
 }
 
 function shouldTryDeploy(githubEvent: GitHubContext["event_name"]) {
-	return githubEvent === "push";
+	return githubEvent === "push" || githubEvent === "workflow_dispatch";
 }
