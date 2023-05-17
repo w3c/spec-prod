@@ -77,6 +77,8 @@ jobs:
   main:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
@@ -98,6 +100,8 @@ jobs:
   main:
     name: Deploy to GitHub pages
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
@@ -174,6 +178,8 @@ jobs:
   main:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     strategy:
       max-parallel: 1
       matrix:
@@ -220,6 +226,8 @@ jobs:
   main:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
@@ -243,6 +251,8 @@ jobs:
   main:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: w3c/spec-prod@v2
