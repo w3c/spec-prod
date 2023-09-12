@@ -48,6 +48,8 @@ runs:
   using: composite
   steps:
     - uses: pnpm/action-setup@v2
+      with:
+        run_install: false
     - uses: actions/setup-node@v3
       with:
         node-version: 20
