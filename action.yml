@@ -47,8 +47,9 @@ inputs:
 runs:
   using: composite
   steps:
-      # Both pnpm and setup-node expect paths relative to checked-out repo. But we want to use package.json and .nvmrc from action repo
-      # So, we'll provide them a path relative to GITHUB_WORKSPACE
+    # Both pnpm and setup-node expect paths relative to checked-out repo. But we
+    # want to use package.json and .nvmrc from action repo. So, we'll provide
+    # them a path relative to GITHUB_WORKSPACE
     - id: action_relative_path
       run: |
         action_path=$(node -p 'require("path").relative(process.env.GITHUB_WORKSPACE, "${{ github.action_path }}")')
