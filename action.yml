@@ -50,6 +50,8 @@ runs:
     - id: action_relative_path
       run: |
         action_path=$(node -p 'require("path").relative(process.env.GITHUB_WORKSPACE, "${{ github.action_path }}")')
+        echo "${action_path}"
+        echo "${action_path}/package.json"
         echo "action_path=${action_path}" >> "$GITHUB_OUTPUT"
       shell: bash
     - uses: pnpm/action-setup@v2
