@@ -52,7 +52,7 @@ runs:
         version: 7
     - uses: actions/setup-node@v3
       with:
-        node-version-file: '.nvmrc'
+        node-version-file: ".nvmrc"
     - name: Set up action
       run: |
         echo "::group::Set up action"
