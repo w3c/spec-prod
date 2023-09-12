@@ -47,12 +47,22 @@ inputs:
 runs:
   using: composite
   steps:
+    # Both pnpm and setup-node expect paths relative to checked-out repo. But we
+    # want to use package.json and .nvmrc from action repo. So, we'll provide
+    # them a path relative to GITHUB_WORKSPACE
+    # See https://github.com/actions/setup-node/issues/852
+    - id: action_relative_path
+      run: |
+        action_path=$(node -p 'require("path").relative(process.env.GITHUB_WORKSPACE, "${{ github.action_path }}")')
+        echo "action_path=${action_path}" >> "$GITHUB_OUTPUT"
+      shell: bash
+
     - uses: pnpm/action-setup@v2
       with:
-        version: 7
+        package_json_file: ${{ steps.action_relative_path.outputs.action_path }}/package.json
     - uses: actions/setup-node@v3
       with:
-        node-version-file: ".nvmrc"
+        node-version-file: ${{ steps.action_relative_path.outputs.action_path }}/.nvmrc
     - name: Set up action
       run: |
         echo "::group::Set up action"
