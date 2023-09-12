@@ -47,12 +47,16 @@ inputs:
 runs:
   using: composite
   steps:
+    - id: action_relative_path
+      run: |
+        action_path=$(node -p 'require("path").relative(process.env.GITHUB_WORKSPACE, "${{ github.action_path }}")')
+        echo "action_path=${action_path}" >> "$GITHUB_OUTPUT"
     - uses: pnpm/action-setup@v2
       with:
-        package_json_file: ${{ github.action_path }}/package.json
+        package_json_file: ${{ steps.outputs.action_relative_path.action_path }}/package.json
     - uses: actions/setup-node@v3
       with:
-        node-version: 20
+        node-version-file: ${{ steps.outputs.action_relative_path.action_path }}/.nvmrc
     - name: Set up action
       run: |
         echo "::group::Set up action"
