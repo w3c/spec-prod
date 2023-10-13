@@ -5,11 +5,17 @@ import * as puppeteer from "puppeteer";
 import { PUPPETEER_ENV } from "./constants.js";
 import { exit } from "./utils.js";
 
-import { Inputs } from "./prepare.js";
+import { Inputs, GitHubContext } from "./prepare.js";
 export type BuildOptions = Awaited<ReturnType<typeof buildOptions>>;
 
-export async function buildOptions(inputs: Inputs) {
-	const { toolchain, source, destination } = getBasicBuildOptions(inputs);
+export async function buildOptions(
+	inputs: Inputs,
+	githubContext: GitHubContext,
+) {
+	const { toolchain, source, destination, gitRevision } = getBasicBuildOptions(
+		inputs,
+		githubContext,
+	);
 
 	const configOverride = {
 		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
@@ -26,7 +32,7 @@ export async function buildOptions(inputs: Inputs) {
 	const flags = [];
 	flags.push(...getFailOnFlags(toolchain, inputs.BUILD_FAIL_ON));
 
-	return { toolchain, source, destination, flags, configOverride };
+	return { toolchain, source, destination, gitRevision, flags, configOverride };
 }
 
 type NormalizedPath = { dir: string; file: string; path: string };
@@ -34,8 +40,12 @@ export type BasicBuildOptions = {
 	toolchain: "respec" | "bikeshed";
 	source: NormalizedPath;
 	destination: NormalizedPath;
+	gitRevision: string;
 };
-function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
+function getBasicBuildOptions(
+	inputs: Inputs,
+	githubContext: GitHubContext,
+): BasicBuildOptions {
 	let toolchain = inputs.TOOLCHAIN;
 	let source = inputs.SOURCE;
 	let destination = inputs.DESTINATION;
@@ -109,6 +119,7 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 		toolchain,
 		source: getNormalizedPath(source),
 		destination: getNormalizedPath(destination),
+		gitRevision: githubContext.sha,
 	} as BasicBuildOptions;
 }
 
