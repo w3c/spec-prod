@@ -41,16 +41,10 @@ export default async function main({
 	toolchain,
 	source,
 	destination,
-	gitRevision,
 	flags,
 	configOverride,
 }: Input) {
-	const input: BasicBuildOptions = {
-		toolchain,
-		source,
-		destination,
-		gitRevision,
-	};
+	const input: BasicBuildOptions = { toolchain, source, destination };
 	if (deepEqual(configOverride.gh, configOverride.w3c)) {
 		const out = await build(input, flags, null, "common");
 		return { ...setOutput("gh", out), ...setOutput("w3c", out) };

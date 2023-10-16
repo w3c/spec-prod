@@ -12,15 +12,18 @@ export async function buildOptions(
 	inputs: Inputs,
 	githubContext: GitHubContext,
 ) {
-	const { toolchain, source, destination, gitRevision } = getBasicBuildOptions(
-		inputs,
-		githubContext,
-	);
+	const { toolchain, source, destination } = getBasicBuildOptions(inputs);
 
 	const configOverride = {
 		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
 		w3c: getConfigOverride(inputs.W3C_BUILD_OVERRIDE),
 	};
+	if (toolchain === "respec") {
+		configOverride.gh = configOverride.gh || {};
+		configOverride.w3c = configOverride.w3c || {};
+		configOverride.gh.gitRevision = configOverride.w3c.gitRevision =
+			githubContext.sha;
+	}
 	if (inputs.W3C_ECHIDNA_TOKEN || inputs.W3C_WG_DECISION_URL) {
 		configOverride.w3c = await extendW3CBuildConfig(
 			configOverride.w3c || {},
@@ -32,7 +35,7 @@ export async function buildOptions(
 	const flags = [];
 	flags.push(...getFailOnFlags(toolchain, inputs.BUILD_FAIL_ON));
 
-	return { toolchain, source, destination, gitRevision, flags, configOverride };
+	return { toolchain, source, destination, flags, configOverride };
 }
 
 type NormalizedPath = { dir: string; file: string; path: string };
@@ -40,12 +43,8 @@ export type BasicBuildOptions = {
 	toolchain: "respec" | "bikeshed";
 	source: NormalizedPath;
 	destination: NormalizedPath;
-	gitRevision: string;
 };
-function getBasicBuildOptions(
-	inputs: Inputs,
-	githubContext: GitHubContext,
-): BasicBuildOptions {
+function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 	let toolchain = inputs.TOOLCHAIN;
 	let source = inputs.SOURCE;
 	let destination = inputs.DESTINATION;
@@ -119,7 +118,6 @@ function getBasicBuildOptions(
 		toolchain,
 		source: getNormalizedPath(source),
 		destination: getNormalizedPath(destination),
-		gitRevision: githubContext.sha,
 	} as BasicBuildOptions;
 }
 
