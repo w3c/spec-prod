@@ -69,7 +69,7 @@ export default async function main(
 export type ProcessedInput = Awaited<ReturnType<typeof processInputs>>;
 async function processInputs(inputs: Inputs, githubContext: GitHubContext) {
 	return {
-		build: await buildOptions(inputs),
+		build: await buildOptions(inputs, githubContext),
 		validate: validation(inputs),
 		deploy: {
 			ghPages: githubPagesDeployment(inputs, githubContext),
