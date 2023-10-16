@@ -97,6 +97,14 @@ The Action will try to make use of metadata/config from previously published ver
     # Info: Above is equivalent to running ReSpec CLI like:
     # respec -s index.html?specStatus=WD&shortName=my-custom-shortname… -o OUTPUT
 ```
+## `VALIDATE_INPUT_MARKUP`
+
+Whether or not to validate the  markup of the input document using the [Nu Html Checker](https://github.com/validator/validator). This option is unlikely to be useful for Bikeshed documents, or for ReSpec documents based on markdown.
+
+**Possible values:** true, false
+
+**Default:** false
+
 
 ## `VALIDATE_WEBIDL`
 
@@ -122,7 +130,7 @@ Whether or not to check for broken hyperlinks.
 
 ## `VALIDATE_MARKUP`
 
-Whether or not to validate markup using the [Nu Html Checker](https://github.com/validator/validator).
+Whether or not to validate markup of the generated document using the [Nu Html Checker](https://github.com/validator/validator).
 
 **Possible values:** true, false
 
