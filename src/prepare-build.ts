@@ -19,8 +19,8 @@ export async function buildOptions(
 		w3c: getConfigOverride(inputs.W3C_BUILD_OVERRIDE),
 	};
 	if (toolchain === "respec") {
-		configOverride.gh = configOverride.gh || {};
-		configOverride.w3c = configOverride.w3c || {};
+		configOverride.gh ??= {};
+		configOverride.w3c ??= {};
 		configOverride.gh.gitRevision = configOverride.w3c.gitRevision =
 			githubContext.sha;
 	}
