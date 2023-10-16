@@ -18,15 +18,15 @@
 		"lint": "prettier . --check"
 	},
 	"devDependencies": {
-		"@types/finalhandler": "^1.2.0",
-		"@types/node": "^20.6.0",
-		"@types/node-fetch": "^2.6.4",
-		"@types/serve-static": "^1.15.2",
-		"@types/split2": "^4.2.0",
+		"@types/finalhandler": "^1.2.1",
+		"@types/node": "^20.8.6",
+		"@types/node-fetch": "^2.6.6",
+		"@types/serve-static": "^1.15.3",
+		"@types/split2": "^4.2.1",
 		"typescript": "^5.2.2"
 	},
 	"optionalDependencies": {
 		"prettier": "^3.0.3",
-		"yaml": "^2.3.2"
+		"yaml": "^2.3.3"
 	}
 }
