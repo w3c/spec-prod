@@ -35,7 +35,7 @@ export default async function main(toolchain: "respec" | "bikeshed" | string) {
 			break;
 		}
 		default: {
-			const msg = `Envirnoment variable "INPUTS_TOOLCHAIN" must be either one of "respec" or "bikeshed". found "${toolchain}"`;
+			const msg = `Environment variable "INPUTS_TOOLCHAIN" must be either one of "respec" or "bikeshed". found "${toolchain}"`;
 			exit(msg, 1);
 		}
 	}
