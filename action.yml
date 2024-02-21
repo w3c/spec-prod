@@ -105,7 +105,7 @@ runs:
 
     - name: Upload Build Artifacts
       id: upload-build-artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         path: |-
           ${{ steps.build.outputs.gh && fromJson(steps.build.outputs.gh).dest }}
