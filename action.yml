@@ -22,13 +22,13 @@ inputs:
     required: false
   VALIDATE_MARKUP:
     description: Validate markup
-    default: 'true'
+    default: "true"
   VALIDATE_WEBIDL:
     description: Validate Web IDL
-    default: 'true'
+    default: "true"
   VALIDATE_PUBRULES:
     description: Validate against W3C Publication Rules
-    default: 'false'
+    default: "false"
   GH_PAGES_BRANCH:
     description: Provide a branch name to deploy to GitHub pages.
   GH_PAGES_BUILD_OVERRIDE:
