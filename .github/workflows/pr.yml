@@ -11,7 +11,7 @@ on:
       - ".github/workflows/**"
 
 env:
-  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+  PUPPETEER_SKIP_DOWNLOAD: 1
   PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome
 
 jobs:
@@ -19,13 +19,12 @@ jobs:
     name: Check linting issues
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2.2.2
+      - uses: actions/checkout@v4
+      - uses: codespell-project/actions-codespell@v2
+      - uses: pnpm/action-setup@v3
+      - uses: actions/setup-node@v4
         with:
-          version: 7
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
+          node-version-file: ".nvmrc"
           cache: pnpm
       - run: pnpm i
       - run: pnpm lint

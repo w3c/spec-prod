@@ -14,7 +14,7 @@ jobs:
     name: Build and Validate
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
 ```
 
@@ -32,7 +32,7 @@ jobs:
     name: Build and Validate
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
           VALIDATE_WEBIDL: false
@@ -53,7 +53,7 @@ jobs:
     name: Build and Validate
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
           TOOLCHAIN: respec # or bikeshed
@@ -77,8 +77,10 @@ jobs:
   main:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
@@ -98,8 +100,10 @@ jobs:
   main:
     name: Deploy to GitHub pages
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
           GH_PAGES_BRANCH: gh-pages
@@ -123,7 +127,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
           W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
@@ -145,7 +149,7 @@ jobs:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
           TOOLCHAIN: respec
@@ -174,6 +178,8 @@ jobs:
   main:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     strategy:
       max-parallel: 1
       matrix:
@@ -188,7 +194,7 @@ jobs:
             # destination defaults to spec-2/index.html
             # echidna_token defaults to no publication to w3.org/TR
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
           SOURCE: ${{ matrix.source }}
@@ -220,8 +226,10 @@ jobs:
   main:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
           SOURCE: spec-1
@@ -243,8 +251,10 @@ jobs:
   main:
     name: Build, Validate and Deploy
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
           SOURCE: spec-2/spec.bs

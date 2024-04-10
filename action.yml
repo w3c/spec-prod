@@ -25,15 +25,13 @@ inputs:
     required: false
   VALIDATE_MARKUP:
     description: Validate markup
-    default: true
+    default: "true"
   VALIDATE_WEBIDL:
     description: Validate Web IDL
-    default: true
+    default: "true"
   VALIDATE_PUBRULES:
     description: Validate against W3C Publication Rules
-    default: false
-  W3C_API_KEY:
-    description: W3C API Key (required for VALIDATE_PUBRULES for now)
+    default: "false"
   GH_PAGES_BRANCH:
     description: Provide a branch name to deploy to GitHub pages.
   GH_PAGES_BUILD_OVERRIDE:
@@ -52,12 +50,22 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: pnpm/action-setup@v2
+    # Both pnpm and setup-node expect paths relative to checked-out repo. But we
+    # want to use package.json and .nvmrc from action repo. So, we'll provide
+    # them a path relative to GITHUB_WORKSPACE
+    # See https://github.com/actions/setup-node/issues/852
+    - id: action_relative_path
+      run: |
+        action_path=$(node -p 'require("path").relative(process.env.GITHUB_WORKSPACE, "${{ github.action_path }}")')
+        echo "action_path=${action_path}" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - uses: pnpm/action-setup@v3
       with:
-        version: 7
-    - uses: actions/setup-node@v3
+        package_json_file: ${{ steps.action_relative_path.outputs.action_path }}/package.json
+    - uses: actions/setup-node@v4
       with:
-        node-version: "16"
+        node-version-file: ${{ steps.action_relative_path.outputs.action_path }}/.nvmrc
     - name: Set up action
       run: |
         echo "::group::Set up action"
@@ -67,7 +75,7 @@ runs:
       shell: bash
       env:
         FORCE_COLOR: "true"
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "1"
+        PUPPETEER_SKIP_DOWNLOAD: "1"
     - name: Prepare
       id: prepare
       run: |
@@ -110,7 +118,7 @@ runs:
 
     - name: Upload Build Artifacts
       id: upload-build-artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         path: |-
           ${{ steps.build.outputs.gh && fromJson(steps.build.outputs.gh).dest }}
@@ -147,7 +155,6 @@ runs:
       env:
         INPUTS_VALIDATE_PUBRULES: ${{ steps.prepare.outputs.validate && fromJson(steps.prepare.outputs.validate).pubrules }}
         OUTPUTS_BUILD: ${{ steps.build.outputs.w3c && toJson(fromJson(steps.build.outputs.w3c)) }}
-        INPUTS_W3C_API_KEY: ${{ inputs.W3C_API_KEY }}
 
     - name: Validate Web IDL
       run: |

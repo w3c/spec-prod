@@ -139,6 +139,7 @@ Whether or not to validate markup of the generated document using the [Nu Html C
 ## `GH_PAGES_BRANCH`
 
 Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or provide a Git branch name to push to. You would need to enable GitHub pages publish source in repository settings manually.
+When this option is set, you need to ensure that the `GITHUB_TOKEN` for the job running spec-prod has [`write` access to the `contents` scope](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token).
 
 **Possible values:**: None, or a git branch name.
 

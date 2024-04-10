@@ -8,7 +8,7 @@ on:
   workflow_dispatch: {}
 
 env:
-  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+  PUPPETEER_SKIP_DOWNLOAD: 1
   PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
     name: Build Documentation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
           SOURCE: docs/index.html

@@ -5,16 +5,25 @@ import * as puppeteer from "puppeteer";
 import { PUPPETEER_ENV } from "./constants.js";
 import { exit } from "./utils.js";
 
-import { Inputs } from "./prepare.js";
+import { Inputs, GitHubContext } from "./prepare.js";
 export type BuildOptions = Awaited<ReturnType<typeof buildOptions>>;
 
-export async function buildOptions(inputs: Inputs) {
+export async function buildOptions(
+	inputs: Inputs,
+	githubContext: GitHubContext,
+) {
 	const { toolchain, source, destination } = getBasicBuildOptions(inputs);
 
 	const configOverride = {
 		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
 		w3c: getConfigOverride(inputs.W3C_BUILD_OVERRIDE),
 	};
+	if (toolchain === "respec") {
+		configOverride.gh ??= {};
+		configOverride.w3c ??= {};
+		configOverride.gh.gitRevision = configOverride.w3c.gitRevision =
+			githubContext.sha;
+	}
 	if (inputs.W3C_ECHIDNA_TOKEN || inputs.W3C_WG_DECISION_URL) {
 		configOverride.w3c = await extendW3CBuildConfig(
 			configOverride.w3c || {},
@@ -175,6 +184,7 @@ async function getShortnameForRespec(source: BasicBuildOptions["source"]) {
 	console.group(`[INFO] Finding shortName for ReSpec document: ${source.path}`);
 	const browser = await puppeteer.launch({
 		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
+		headless: true,
 	});
 
 	try {
@@ -206,6 +216,7 @@ async function getShortnameForBikeshed(source: BasicBuildOptions["source"]) {
 	);
 	const browser = await puppeteer.launch({
 		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
+		headless: true,
 	});
 
 	try {
@@ -249,6 +260,7 @@ async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 
 	const browser = await puppeteer.launch({
 		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
+		headless: true,
 	});
 
 	try {

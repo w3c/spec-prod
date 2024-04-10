@@ -37,25 +37,22 @@ if (module === require.main) {
 	}
 
 	const input: Input = JSON.parse(env("OUTPUTS_BUILD"));
-	const apiKey = env("INPUTS_W3C_API_KEY");
-	main(input, apiKey).catch(err => exit(err.message || "Failed", err.code));
+	main(input).catch(err => exit(err.message || "Failed", err.code));
 }
 
-export default async function main({ dest, file }: Input, apiKey: string) {
+export default async function main({ dest, file }: Input) {
 	console.log(`Pubrules ${file}...`);
 	await install("specberus");
 
 	const server = await new StaticServer(dest).start();
 	let result;
 	try {
-		process.env.W3C_API_KEY = apiKey;
 		// TODO: use correct file in URL
 		result = await validate(server.url);
 	} catch (error) {
 		console.error(error);
 		exit("Something went wrong");
 	} finally {
-		delete process.env.W3C_API_KEY;
 		await server.stop();
 	}
 
@@ -85,8 +82,6 @@ function sinkAsync<T>() {
 	};
 }
 
-// TODO:
-// - API key exception handling (based on apiKey being required or not)
 async function validate(url: URL) {
 	const { Specberus } = require("specberus");
 

@@ -1,31 +1,32 @@
 {
 	"dependencies": {
-		"@actions/core": "^1.10.0",
+		"@actions/core": "^1.10.1",
 		"finalhandler": "^1.2.0",
-		"node-fetch": "^2.6.7",
-		"puppeteer": "^19",
+		"node-fetch": "^2.7.0",
+		"puppeteer": "^22",
 		"serve-static": "^1.15.0",
-		"split2": "^4.1.0",
+		"split2": "^4.2.0",
 		"subresources": "^1.3.2"
 	},
 	"engines": {
-		"node": "^16"
+		"node": "^20"
 	},
+	"packageManager": "pnpm@8.15.6",
 	"scripts": {
 		"build": "tsc -p tsconfig.prod.json",
 		"dev": "tsc -p tsconfig.json -w",
 		"lint": "prettier . --check"
 	},
 	"devDependencies": {
-		"@types/finalhandler": "^1.2.0",
-		"@types/node": "^18.11.13",
-		"@types/node-fetch": "^2.6.2",
-		"@types/serve-static": "^1.15.0",
-		"@types/split2": "^3.2.1",
-		"typescript": "^4.9.4"
+		"@types/finalhandler": "^1.2.3",
+		"@types/node": "^20.12.6",
+		"@types/node-fetch": "^2.6.11",
+		"@types/serve-static": "^1.15.7",
+		"@types/split2": "^4.2.3",
+		"typescript": "^5.4.4"
 	},
 	"optionalDependencies": {
-		"prettier": "^2.8.1",
-		"yaml": "^2.1.3"
+		"prettier": "^3.2.5",
+		"yaml": "^2.4.1"
 	}
 }
