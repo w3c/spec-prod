@@ -184,7 +184,7 @@ async function getShortnameForRespec(source: BasicBuildOptions["source"]) {
 	console.group(`[INFO] Finding shortName for ReSpec document: ${source.path}`);
 	const browser = await puppeteer.launch({
 		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
-		headless: "new",
+		headless: true,
 	});
 
 	try {
@@ -216,7 +216,7 @@ async function getShortnameForBikeshed(source: BasicBuildOptions["source"]) {
 	);
 	const browser = await puppeteer.launch({
 		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
-		headless: "new",
+		headless: true,
 	});
 
 	try {
@@ -260,7 +260,7 @@ async function getPreviousVersionInfo(shortName: string, publishDate: string) {
 
 	const browser = await puppeteer.launch({
 		executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
-		headless: "new",
+		headless: true,
 	});
 
 	try {

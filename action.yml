@@ -22,13 +22,13 @@ inputs:
     required: false
   VALIDATE_MARKUP:
     description: Validate markup
-    default: true
+    default: "true"
   VALIDATE_WEBIDL:
     description: Validate Web IDL
-    default: true
+    default: "true"
   VALIDATE_PUBRULES:
     description: Validate against W3C Publication Rules
-    default: false
+    default: "false"
   GH_PAGES_BRANCH:
     description: Provide a branch name to deploy to GitHub pages.
   GH_PAGES_BUILD_OVERRIDE:
@@ -57,10 +57,10 @@ runs:
         echo "action_path=${action_path}" >> "$GITHUB_OUTPUT"
       shell: bash
 
-    - uses: pnpm/action-setup@v2
+    - uses: pnpm/action-setup@v3
       with:
         package_json_file: ${{ steps.action_relative_path.outputs.action_path }}/package.json
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
         node-version-file: ${{ steps.action_relative_path.outputs.action_path }}/.nvmrc
     - name: Set up action
@@ -105,7 +105,7 @@ runs:
 
     - name: Upload Build Artifacts
       id: upload-build-artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         path: |-
           ${{ steps.build.outputs.gh && fromJson(steps.build.outputs.gh).dest }}
