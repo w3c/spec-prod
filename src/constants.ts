@@ -4,8 +4,7 @@ export const ACTION_DIR = path.join(__dirname, "..");
 
 export const PUPPETEER_ENV = (() => {
 	const skipChromeDownload =
-		!!process.env.PUPPETEER_SKIP_DOWNLOAD ||
-		!!process.env.GITHUB_ACTIONS;
+		!!process.env.PUPPETEER_SKIP_DOWNLOAD || !!process.env.GITHUB_ACTIONS;
 	if (!skipChromeDownload) return {};
 	return {
 		PUPPETEER_SKIP_DOWNLOAD: "1",
