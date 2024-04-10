@@ -16,6 +16,9 @@ inputs:
   BUILD_FAIL_ON:
     description: Exit behaviour on errors.
     default: fatal
+  VALIDATE_INPUT_MARKUP:
+    description: Validate input markup
+    default: "false"
   VALIDATE_LINKS:
     description: Validate hyperlinks
     default: "false"
@@ -92,6 +95,16 @@ runs:
       shell: bash
       env:
         INPUTS_TOOLCHAIN: ${{ steps.prepare.outputs.build && fromJson(steps.prepare.outputs.build).toolchain }}
+
+    - name: Validate input markup
+      run: |
+        echo "::group::Validate input markup"
+        node --enable-source-maps ${{ github.action_path }}/src/validate-input-markup.js
+        echo "::endgroup::"
+      shell: bash
+      env:
+        INPUTS_VALIDATE_INPUT_MARKUP: ${{ steps.prepare.outputs.validate && fromJson(steps.prepare.outputs.validate).input_markup }}
+        INPUTS_BUILD: ${{ steps.prepare.outputs.build && toJSON(fromJson(steps.prepare.outputs.build)) }}
 
     - name: Generate Static HTML
       id: build

@@ -13,6 +13,7 @@ export interface Inputs {
 	DESTINATION: string;
 	BUILD_FAIL_ON: string;
 	VALIDATE_LINKS: string;
+	VALIDATE_INPUT_MARKUP: string;
 	VALIDATE_MARKUP: string;
 	VALIDATE_PUBRULES: string;
 	VALIDATE_WEBIDL: string;
