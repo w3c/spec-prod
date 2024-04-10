@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
+      - uses: codespell-project/actions-codespell@v2
       - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
