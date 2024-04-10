@@ -19,7 +19,7 @@ export default async function main({ source }: Input) {
 
 	try {
 		await sh(`java -jar "${vnuJar}" ${source}`, {
-			output: "stream"
+			output: "stream",
 		});
 		exit("✅  Looks good! No HTML validation errors!", 0);
 	} catch {
