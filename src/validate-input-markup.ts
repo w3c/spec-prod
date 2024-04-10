@@ -1,7 +1,7 @@
 import { env, exit, install, sh, yesOrNo } from "./utils.js";
 
-import { BuildResult } from "./build.js";
-type Input = Pick<BuildResult, "source">;
+import { ProcessedInput } from "./prepare.js";
+type Input = Pick<ProcessedInput["build"], "source">;
 
 if (module === require.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_INPUT_MARKUP")) === false) {
