@@ -8,7 +8,7 @@ on:
   workflow_dispatch: {}
 
 env:
-  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 1
+  PUPPETEER_SKIP_DOWNLOAD: 1
   PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome
 
 jobs:
