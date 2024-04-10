@@ -8,7 +8,7 @@ export default async function validateInputMarkup(outputs: Outputs) {
 		return;
 	}
 
-	const { source = "index.html" } = outputs?.build?.w3c || {};
+	const { source } = outputs?.prepare?.build || { source: "index.html" };
 
 	return await main({ source });
 }
