@@ -14,7 +14,7 @@ if (module === require.main) {
 
 export default async function main({ dest, file }: Input) {
 	console.log(`Validating Web IDL defined in ${file}...`);
-	await install("reffy@4");
+	await install("reffy@15");
 	const { crawlSpecs } = require("reffy");
 
 	const fileurl = new URL(file, `file://${dest}/`).href;
@@ -24,7 +24,7 @@ export default async function main({ dest, file }: Input) {
 	);
 	await rm(".cache", { recursive: true, force: true });
 
-	const idl = results[0]?.idl?.idl;
+	const idl = results[0]?.idl;
 	if (!idl) {
 		exit("No Web IDL found in spec, skipped validation", 0);
 	}
