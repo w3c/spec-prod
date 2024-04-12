@@ -1,6 +1,7 @@
 import { rm } from "fs/promises";
 import { env, exit, install, yesOrNo } from "./utils.js";
 import { BuildResult } from "./build.js";
+import { PUPPETEER_ENV } from "./constants.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
 if (module === require.main) {
@@ -14,6 +15,7 @@ if (module === require.main) {
 
 export default async function main({ dest, file }: Input) {
 	console.log(`Validating Web IDL defined in ${file}...`);
+	Object.assign(process.env, PUPPETEER_ENV);
 	await install("reffy@15");
 	const { crawlSpecs } = require("reffy");
 
@@ -22,6 +24,7 @@ export default async function main({ dest, file }: Input) {
 		[{ url: fileurl, nightly: { url: fileurl } }],
 		{ modules: ["idl"] },
 	);
+	Object.keys(PUPPETEER_ENV).forEach(key => delete process.env[key]);
 	await rm(".cache", { recursive: true, force: true });
 
 	const idl = results[0]?.idl;
