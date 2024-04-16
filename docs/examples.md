@@ -184,19 +184,23 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - source: spec.html
+          - name: spec-0
+            source: spec.html
             destination: index.html
             echidna_token: ECHIDNA_TOKEN_SPEC
-          - source: spec-1
+          - name: spec-1
+            source: spec-1
             destination: the-spec
             echidna_token: ECHIDNA_TOKEN_SPEC1
-          - source: spec-2
+          - name: spec-2
+            source: spec-2
             # destination defaults to spec-2/index.html
             # echidna_token defaults to no publication to w3.org/TR
     steps:
       - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
+          ARTIFACT_NAME: ${{ matrix.name }} # required when building multiple documents in same job
           SOURCE: ${{ matrix.source }}
           DESTINATION: ${{ matrix.destination }}
           GH_PAGES_BRANCH: gh-pages
