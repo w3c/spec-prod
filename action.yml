@@ -13,6 +13,9 @@ inputs:
     description: Source file path.
   DESTINATION:
     description: Destination path, relative to repository root.
+  ARTIFACT_NAME:
+    description: Name for build artifact.
+    default: "spec-prod-result"
   BUILD_FAIL_ON:
     description: Exit behaviour on errors.
     default: fatal
@@ -123,7 +126,7 @@ runs:
         path: |-
           ${{ steps.build.outputs.gh && fromJson(steps.build.outputs.gh).dest }}
           ${{ steps.build.outputs.w3c && fromJson(steps.build.outputs.w3c).dest }}
-        name: spec-prod-result
+        name: ${{ inputs.ARTIFACT_NAME }}
         retention-days: 5
 
     - name: Validate hyperlinks
