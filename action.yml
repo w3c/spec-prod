@@ -14,7 +14,7 @@ inputs:
   DESTINATION:
     description: Destination path, relative to repository root.
   ARTIFACT_NAME:
-    description: Name for build artifact.
+    description: Name for build artifact. Required when building multiple documents in same job.
     default: "spec-prod-result"
   BUILD_FAIL_ON:
     description: Exit behaviour on errors.

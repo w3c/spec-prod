@@ -200,7 +200,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: w3c/spec-prod@v2
         with:
-          ARTIFACT_NAME: ${{ matrix.name }}
+          ARTIFACT_NAME: ${{ matrix.name }} # required when building multiple documents in same job
           SOURCE: ${{ matrix.source }}
           DESTINATION: ${{ matrix.destination }}
           GH_PAGES_BRANCH: gh-pages
