@@ -12,7 +12,8 @@ export async function buildOptions(
 	inputs: Inputs,
 	githubContext: GitHubContext,
 ) {
-	const { toolchain, source, destination } = getBasicBuildOptions(inputs);
+	const { toolchain, source, destination, artifactName } =
+		getBasicBuildOptions(inputs);
 
 	const configOverride = {
 		gh: getConfigOverride(inputs.GH_PAGES_BUILD_OVERRIDE),
@@ -35,7 +36,14 @@ export async function buildOptions(
 	const flags = [];
 	flags.push(...getFailOnFlags(toolchain, inputs.BUILD_FAIL_ON));
 
-	return { toolchain, source, destination, flags, configOverride };
+	return {
+		toolchain,
+		source,
+		destination,
+		artifactName,
+		flags,
+		configOverride,
+	};
 }
 
 type NormalizedPath = { dir: string; file: string; path: string };
@@ -43,6 +51,7 @@ export type BasicBuildOptions = {
 	toolchain: "respec" | "bikeshed";
 	source: NormalizedPath;
 	destination: NormalizedPath;
+	artifactName: string;
 };
 function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 	let toolchain = inputs.TOOLCHAIN;
@@ -107,6 +116,21 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 		return { dir, file, path: path.join(dir, file) };
 	};
 
+	const getArtifactNameFromSource = (source: string): string => {
+		source = source.toLowerCase().trim();
+		const sourceSlug = source
+			.replace(/\//g, "-")
+			.replace(/\s+/g, "-")
+			.replace(/index\.(html|bs)$/, "")
+			.replace(/[^\w-]+/g, "")
+			.replace(/--+/g, "-")
+			.replace(/-$/g, "");
+		if (sourceSlug) {
+			return "spec-prod-result" + "-" + sourceSlug;
+		}
+		return "spec-prod-result";
+	};
+
 	destination = (() => {
 		const dest = path.parse(destination || source);
 		dest.ext = ".html";
@@ -116,6 +140,7 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 
 	return {
 		toolchain,
+		artifactName: inputs.ARTIFACT_NAME || getArtifactNameFromSource(source),
 		source: getNormalizedPath(source),
 		destination: getNormalizedPath(destination),
 	} as BasicBuildOptions;

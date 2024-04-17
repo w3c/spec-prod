@@ -6,8 +6,9 @@ import { env, exit, setOutput, sh, unique } from "./utils.js";
 import { deepEqual, StaticServer } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
 
-import { BasicBuildOptions } from "./prepare-build.js";
+import { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.js";
 import { ProcessedInput } from "./prepare.js";
+type BasicBuildOptions = Omit<BasicBuildOptions_, "artifactName">;
 type Input = ProcessedInput["build"];
 type ConfigOverride = Input["configOverride"]["gh" | "w3c"];
 type BuildSuffix = "common" | "gh" | "w3c";
