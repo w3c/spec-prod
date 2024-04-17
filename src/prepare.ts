@@ -25,6 +25,7 @@ export interface Inputs {
 	W3C_BUILD_OVERRIDE: string;
 	W3C_WG_DECISION_URL: string;
 	W3C_NOTIFICATIONS_CC: string;
+	ARTIFACT_NAME?: string;
 }
 
 export interface GitHubContext {

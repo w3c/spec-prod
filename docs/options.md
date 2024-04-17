@@ -32,14 +32,6 @@ Location of generated HTML document and other assets. This is useful when you've
 | `my-spec-src`     | `my-spec-out` | `./my-spec-out/index.html` | `./my-spec-out/`           |
 | `index.html`      | `index.html`  | `./index.html`             | `./`                       |
 
-## `ARTIFACT_NAME`
-
-Name for artifact which will be uploaded to workflow run. Required when building multiple documents in same job.
-
-**Possible values:** Any valid artifact name.
-
-**Default:** `"spec-prod-result"`.
-
 ## `BUILD_FAIL_ON`
 
 Define exit behaviour on build errors or warnings.
@@ -192,3 +184,11 @@ A URL to the working group decision to use auto-publish, usually from a w3c mail
 Comma separated list of email addresses to CC. This field is optional.
 
 **Default:** None.
+
+## `ARTIFACT_NAME`
+
+Name for artifact which will be uploaded to workflow run. Required to be unique when building multiple documents in same job.
+
+**Possible values:** Any valid artifact name.
+
+**Default:** `"spec-prod-result"` or inferred from `SOURCE`.

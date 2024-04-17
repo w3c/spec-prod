@@ -13,9 +13,6 @@ inputs:
     description: Source file path.
   DESTINATION:
     description: Destination path, relative to repository root.
-  ARTIFACT_NAME:
-    description: Name for build artifact. Required when building multiple documents in same job.
-    default: "spec-prod-result"
   BUILD_FAIL_ON:
     description: Exit behaviour on errors.
     default: fatal
@@ -49,6 +46,8 @@ inputs:
     description: Override Bikeshed's metadata or ReSpec's respecConfig for W3C deployment and validations.
   W3C_NOTIFICATIONS_CC:
     description: Comma separated list of email addresses to CC
+  ARTIFACT_NAME:
+    description: Name for build artifact
 
 runs:
   using: composite
@@ -126,7 +125,7 @@ runs:
         path: |-
           ${{ steps.build.outputs.gh && fromJson(steps.build.outputs.gh).dest }}
           ${{ steps.build.outputs.w3c && fromJson(steps.build.outputs.w3c).dest }}
-        name: ${{ inputs.ARTIFACT_NAME }}
+        name: ${{ steps.prepare.outputs.build && fromJson(steps.prepare.outputs.build).artifactName }}
         retention-days: 5
 
     - name: Validate hyperlinks
