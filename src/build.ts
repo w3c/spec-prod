@@ -1,10 +1,10 @@
 import * as path from "path";
 import { copyFile, mkdir, readFile, writeFile, unlink } from "fs/promises";
 import fetch from "node-fetch";
-import { getAllSubResources, ResourceType } from "subresources";
 import { env, exit, setOutput, sh, unique } from "./utils.js";
 import { deepEqual, StaticServer } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
+import type { ResourceType } from "subresources";
 
 import { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.js";
 import { ProcessedInput } from "./prepare.js";
@@ -172,15 +172,17 @@ async function findAssetsToCopy(source: Input["source"]) {
 	let localAssets: string[] = [];
 	let remoteAssets: URL[] = [];
 
+	Object.assign(process.env, PUPPETEER_ENV);
+	const {
+		getAllSubResources,
+	}: typeof import("subresources") = require("subresources");
+
 	const server = await new StaticServer().start();
 
 	const isLocalAsset = (url: URL) => url.origin === server.url.origin;
 	const remoteAssetRules: ((url: URL, type: ResourceType) => boolean)[] = [
 		(url: URL) => url.origin === "https://user-images.githubusercontent.com",
 	];
-
-	process.env["PUPPETEER_EXECUTABLE_PATH"] =
-		PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH;
 
 	const mainPage = urlToPage(new URL(tmpOutputFile(source), server.url));
 	const pages = new Set([mainPage]);
