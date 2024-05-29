@@ -62,7 +62,7 @@ runs:
         echo "action_path=${action_path}" >> "$GITHUB_OUTPUT"
       shell: bash
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
         package_json_file: ${{ steps.action_relative_path.outputs.action_path }}/package.json
     - uses: actions/setup-node@v4
