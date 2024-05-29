@@ -97,12 +97,12 @@ async function publish(input: Input, buildOutput: BuildResult) {
 	const { wgDecisionURL: decision, token, cc, repository } = input;
 	const annotation = `triggered by auto-publish spec-prod action on ${repository}`;
 	const tarFileName = "/tmp/echidna.tar";
-	await sh(`mv ${file} Overview.html`, { cwd: outputDir });
+	await sh(`mv -n ${file} Overview.html`, { cwd: outputDir });
 	await sh(`tar cvf ${tarFileName} *`, {
 		output: "stream",
 		cwd: outputDir,
 	});
-	await sh(`mv Overview.html ${file}`, { cwd: outputDir });
+	await sh(`mv -n Overview.html ${file}`, { cwd: outputDir });
 
 	let command = `curl '${API_URL}'`;
 	// command += ` -F "dry-run=true"`;
