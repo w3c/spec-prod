@@ -171,9 +171,8 @@ async function findAssetsToCopy(source: Input["source"]) {
 	console.groupCollapsed(`[INFO] Finding relevant assets…`);
 	let localAssets: string[] = [];
 	let remoteAssets: URL[] = [];
-	process.env["PUPPETEER_EXECUTABLE_PATH"] =
-		PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH;
-	const { getAllSubResources } = require("subresources");
+	const { getAllSubResources } =
+		require("subresources") as typeof import("subresources");
 
 	const server = await new StaticServer().start();
 
@@ -182,6 +181,7 @@ async function findAssetsToCopy(source: Input["source"]) {
 		(url: URL) => url.origin === "https://user-images.githubusercontent.com",
 	];
 
+	Object.assign(process.env, PUPPETEER_ENV);
 	const mainPage = urlToPage(new URL(tmpOutputFile(source), server.url));
 	const pages = new Set([mainPage]);
 	for (const page of pages) {
