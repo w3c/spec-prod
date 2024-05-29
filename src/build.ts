@@ -1,10 +1,10 @@
 import * as path from "path";
 import { copyFile, mkdir, readFile, writeFile, unlink } from "fs/promises";
 import fetch from "node-fetch";
-import { getAllSubResources, ResourceType } from "subresources";
 import { env, exit, setOutput, sh, unique } from "./utils.js";
 import { deepEqual, StaticServer } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
+import type { ResourceType } from "subresources";
 
 import { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.js";
 import { ProcessedInput } from "./prepare.js";
@@ -171,6 +171,7 @@ async function findAssetsToCopy(source: Input["source"]) {
 	console.groupCollapsed(`[INFO] Finding relevant assets…`);
 	let localAssets: string[] = [];
 	let remoteAssets: URL[] = [];
+	const { getAllSubResources } = require("subresources");
 
 	const server = await new StaticServer().start();
 
