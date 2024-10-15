@@ -21,7 +21,7 @@ export default async function main(toolchain: "respec" | "bikeshed" | string) {
 			break;
 		}
 		case "bikeshed": {
-			await sh("pip3 --version", "buffer");
+			await sh("pipx --version", "buffer");
 			await sh(`pipx install bikeshed --quiet`, {
 				output: "stream",
 				env: {
