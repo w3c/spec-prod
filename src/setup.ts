@@ -1,7 +1,7 @@
-import * as path from "path";
 import { addPath, exportVariable } from "@actions/core";
-import { env, exit, install, sh } from "./utils.js";
+import * as path from "path";
 import { ACTION_DIR, PUPPETEER_ENV } from "./constants.js";
+import { env, exit, install, sh } from "./utils.js";
 
 const PYTHONUSERBASE = path.join(ACTION_DIR, "python_modules");
 
@@ -21,17 +21,16 @@ export default async function main(toolchain: "respec" | "bikeshed" | string) {
 			break;
 		}
 		case "bikeshed": {
-			await sh("pip3 --version", "buffer");
-			await sh(`pip3 install bikeshed --quiet`, {
+			await sh("pipx --version", "buffer");
+			await sh(`pipx install bikeshed --quiet`, {
 				output: "stream",
-				cwd: ACTION_DIR,
 				env: {
 					PYTHONUSERBASE,
 				},
 			});
 			exportVariable("PYTHONUSERBASE", PYTHONUSERBASE);
 			await sh("bikeshed update", "stream");
-			await sh("pip3 show bikeshed | grep -i version", "buffer");
+			await sh("pipx list --short | grep -i bikeshed", "buffer");
 			break;
 		}
 		default: {
