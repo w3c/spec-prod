@@ -88,17 +88,14 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 	}
 
 	if (!toolchain) {
-		switch (source) {
-			case "index.html":
-				toolchain = "respec";
-				break;
-			case "index.bs":
-				toolchain = "bikeshed";
-				break;
-			default:
-				exit(
-					`Failed to figure out "TOOLCHAIN" from "SOURCE". Please specify the "TOOLCHAIN".`,
-				);
+		if (source.endsWith(".html")) {
+			toolchain = "respec";
+		} else if (source.endsWith(".bs")) {
+			toolchain = "bikeshed";
+		} else {
+			exit(
+				`Failed to figure out "TOOLCHAIN" from "SOURCE". Please specify the "TOOLCHAIN".`,
+			);
 		}
 	}
 
