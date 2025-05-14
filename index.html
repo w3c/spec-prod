@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 35.1.2">
+<meta name="generator" content="ReSpec 35.4.0">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 dfn{cursor:pointer}
@@ -44,7 +44,7 @@ a.bibref{text-decoration:none}
 .respec-offending-element{background:url(data:image/gif;base64,R0lGODdhBAADAPEAANv///8AAP///wAAACwAAAAABAADAEACBZQjmIAFADs=) bottom repeat-x}
 }
 #references :target{background:#eaf3ff;animation:pop .4s ease-in-out 0s 1}
-cite .bibref{font-style:normal}
+cite .bibref{font-style:italic}
 a[href].orcid{padding-left:4px;padding-right:4px}
 a[href].orcid>svg{margin-bottom:-2px}
 ol.tof,ul.tof{list-style:none outside none}
@@ -93,6 +93,23 @@ dd{margin-left:0}
 .hljs-link{text-decoration:underline}
 </style>
 <style>
+var:hover{text-decoration:underline;cursor:pointer}
+var.respec-hl{color:var(--color,#000);background-color:var(--bg-color);box-shadow:0 0 0 2px var(--bg-color)}
+@media (prefers-color-scheme:dark){
+var.respec-hl{filter:saturate(.9) brightness(.9)}
+}
+var.respec-hl-c1{--bg-color:#f4d200}
+var.respec-hl-c2{--bg-color:#ff87a2}
+var.respec-hl-c3{--bg-color:#96e885}
+var.respec-hl-c4{--bg-color:#3eeed2}
+var.respec-hl-c5{--bg-color:#eacfb6}
+var.respec-hl-c6{--bg-color:#82ddff}
+var.respec-hl-c7{--bg-color:#ffbcf2}
+@media print{
+var.respec-hl{background:0 0;color:#000;box-shadow:unset}
+}
+</style>
+<style>
 var{position:relative;cursor:pointer}
 var[data-type]::after,var[data-type]::before{position:absolute;left:50%;top:-6px;opacity:0;transition:opacity .4s;pointer-events:none}
 var[data-type]::before{content:"";transform:translateX(-50%);border-width:4px 6px 0 6px;border-style:solid;border-color:transparent;border-top-color:#222}
@@ -118,14 +135,14 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     null,
     null
   ],
-  "publishISODate": "2024-11-22T00:00:00.000Z",
-  "generatedSubtitle": "22 November 2024"
+  "publishISODate": "2025-05-14T00:00:00.000Z",
+  "generatedSubtitle": "14 May 2025"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/base.css"></head>
-	<body class="h-entry informative toc-inline"><div class="head">
+	<body class="h-entry informative"><div class="head">
     
     <h1 id="title" class="title">Spec Prod Documentation</h1> 
-    <p id="w3c-state"> <time class="dt-published" datetime="2024-11-22">22 November 2024</time></p>
+    <p id="w3c-state"> <time class="dt-published" datetime="2025-05-14">14 May 2025</time></p>
     <details open="">
       <summary>More details about this document</summary>
       <dl>
@@ -188,79 +205,79 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 <li><p>Create a <code>.github/workflows/auto-publish.yml</code> file at the root of the spec's repository.</p>
 </li>
 <li><p>In the <code>auto-publish.yml</code>, copy-paste and modify one of the <a href="#examples">examples</a> below that suits your needs. Most typical one:</p>
-<pre class="example"><code class="yml hljs" aria-busy="false"># Inside .github/workflows/auto-publish.yml
-name: Automatic Publication
+<pre class="example"><code class="yml hljs" aria-busy="false"><span class="hljs-comment"># Inside .github/workflows/auto-publish.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">Automatic</span> <span class="hljs-string">Publication</span>
 
-on:
-  pull_request: {}
-  push:
-    branches: [main]
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span> {}
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
 
-jobs:
-  validate-and-publish:
-    name: Validate and Publish to TR
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
-        with:
-          TOOLCHAIN: respec # or bikeshed
-          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
-          W3C_WG_DECISION_URL: " See Options for URLs! "
-          # Convert Editor's Draft to Working Draft!
-          W3C_BUILD_OVERRIDE: |
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">validate-and-publish:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Publish</span> <span class="hljs-string">to</span> <span class="hljs-string">TR</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">respec</span> <span class="hljs-comment"># or bikeshed</span>
+          <span class="hljs-attr">W3C_ECHIDNA_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.ECHIDNA_TOKEN</span> <span class="hljs-string">}}</span>
+          <span class="hljs-attr">W3C_WG_DECISION_URL:</span> <span class="hljs-string">" See Options for URLs! "</span>
+          <span class="hljs-comment"># Convert Editor's Draft to Working Draft!</span>
+          <span class="hljs-attr">W3C_BUILD_OVERRIDE:</span> <span class="hljs-string">|
             specStatus: WD
-</code></pre>
+</span></code></pre>
 </li>
 </ol>
 </section>
 		<section id="examples"><div class="header-wrapper"><h2 id="x2-examples"><bdi class="secno">2. </bdi>Examples</h2><a class="self-link" href="#examples" aria-label="Permalink for Section 2."></a></div>
 <section id="run-as-a-validator-on-pull-requests"><div class="header-wrapper"><h3 id="x2-1-run-as-a-validator-on-pull-requests"><bdi class="secno">2.1 </bdi>Run as a validator on pull requests</h3><a class="self-link" href="#run-as-a-validator-on-pull-requests" aria-label="Permalink for Section 2.1"></a></div>
 <p>If you do not pass any inputs, it by default builds a ReSpec or Bikeshed document (<code>index.html</code> or <code>index.bs</code>) and validates the output. It does not deploy the built document anywhere.</p>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
-name: CI
-on:
-  pull_request: {}
-jobs:
-  main:
-    name: Build and Validate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Create a file called .github/workflows/auto-publish.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span>
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span> {}
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">main:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">and</span> <span class="hljs-string">Validate</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
 </code></pre>
 <section id="selectively-enable-disable-validators"><div class="header-wrapper"><h4 id="x2-1-1-selectively-enable-disable-validators"><bdi class="secno">2.1.1 </bdi>Selectively enable/disable validators</h4><a class="self-link" href="#selectively-enable-disable-validators" aria-label="Permalink for Section 2.1.1"></a></div>
 <p>By default, both markup and Web IDL validators are enabled.</p>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
-name: CI
-on:
-  pull_request: {}
-jobs:
-  main:
-    name: Build and Validate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
-        with:
-          VALIDATE_WEBIDL: false
-          VALIDATE_MARKUP: true
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Create a file called .github/workflows/auto-publish.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span>
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span> {}
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">main:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">and</span> <span class="hljs-string">Validate</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">VALIDATE_WEBIDL:</span> <span class="hljs-literal">false</span>
+          <span class="hljs-attr">VALIDATE_MARKUP:</span> <span class="hljs-literal">true</span>
 </code></pre>
 </section></section><section id="specify-toolchain-bikeshed-or-respec"><div class="header-wrapper"><h3 id="x2-2-specify-toolchain-bikeshed-or-respec"><bdi class="secno">2.2 </bdi>Specify toolchain: Bikeshed or ReSpec</h3><a class="self-link" href="#specify-toolchain-bikeshed-or-respec" aria-label="Permalink for Section 2.2"></a></div>
 <p>Specify <code>TOOLCHAIN</code> if the action cannot figure out the toolchain itself, or if you like to be explicit.</p>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
-name: CI
-on:
-  pull_request: {}
-jobs:
-  main:
-    name: Build and Validate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
-        with:
-          TOOLCHAIN: respec # or bikeshed
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Create a file called .github/workflows/auto-publish.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span>
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span> {}
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">main:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">and</span> <span class="hljs-string">Validate</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">respec</span> <span class="hljs-comment"># or bikeshed</span>
 </code></pre>
 </section><section id="deploy-to-github-pages"><div class="header-wrapper"><h3 id="x2-3-deploy-to-github-pages"><bdi class="secno">2.3 </bdi>Deploy to GitHub pages</h3><a class="self-link" href="#deploy-to-github-pages" aria-label="Permalink for Section 2.3"></a></div>
 <p>Deployment is only done on <code>push</code> events. In this example:</p>
@@ -268,180 +285,180 @@ jobs:
 <li>the document is built and validated as a check in the pull request.</li>
 <li>the document is built and validated, and then deployed to <code>gh-pages</code> branch, when a commit is pushed to the <code>main</code> branch.</li>
 </ul>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
-name: CI
-on:
-  pull_request: {}
-  push:
-    branches: [main]
-jobs:
-  main:
-    name: Build, Validate and Deploy
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
-        with:
-          GH_PAGES_BRANCH: gh-pages
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Create a file called .github/workflows/auto-publish.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span>
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span> {}
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">main:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">permissions:</span>
+      <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">GH_PAGES_BRANCH:</span> <span class="hljs-string">gh-pages</span>
 </code></pre>
 <section id="change-output-location-for-built-files"><div class="header-wrapper"><h4 id="x2-3-1-change-output-location-for-built-files"><bdi class="secno">2.3.1 </bdi>Change output location for built files</h4><a class="self-link" href="#change-output-location-for-built-files" aria-label="Permalink for Section 2.3.1"></a></div>
 <p>By default, output location is mapped to the <code>SOURCE</code>. You can change that by providing a <a href="#destination"><code>DESTINATION</code></a>.</p>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
-name: CI
-on:
-  push:
-    branches: [main]
-jobs:
-  main:
-    name: Deploy to GitHub pages
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
-        with:
-          GH_PAGES_BRANCH: gh-pages
-          TOOLCHAIN: bikeshed
-          SOURCE: src/spec.bs
-          DESTINATION: specification/index.html # `src/spec.html` if not provided.
-          # Deployment will be available at: https://&lt;org&gt;.github.io/&lt;repo&gt;/specification/
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Create a file called .github/workflows/auto-publish.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span>
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">main:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">GitHub</span> <span class="hljs-string">pages</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">permissions:</span>
+      <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">GH_PAGES_BRANCH:</span> <span class="hljs-string">gh-pages</span>
+          <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">bikeshed</span>
+          <span class="hljs-attr">SOURCE:</span> <span class="hljs-string">src/spec.bs</span>
+          <span class="hljs-attr">DESTINATION:</span> <span class="hljs-string">specification/index.html</span> <span class="hljs-comment"># `src/spec.html` if not provided.</span>
+          <span class="hljs-comment"># Deployment will be available at: https://&lt;org&gt;.github.io/&lt;repo&gt;/specification/</span>
 </code></pre>
 </section></section><section id="deploy-to-w3c-using-echidna"><div class="header-wrapper"><h3 id="x2-4-deploy-to-w3c-using-echidna"><bdi class="secno">2.4 </bdi>Deploy to W3C using Echidna</h3><a class="self-link" href="#deploy-to-w3c-using-echidna" aria-label="Permalink for Section 2.4"></a></div>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
-name: CI
-on:
-  pull_request: {}
-  push:
-    branches: [main]
-jobs:
-  main:
-    name: Build, Validate and Deploy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
-        with:
-          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
-          # Replace following with appropriate value. See options.md for details.
-          W3C_WG_DECISION_URL: https://lists.w3.org/Archives/Public/public-group/2014JulSep/1234.html
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Create a file called .github/workflows/auto-publish.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span>
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span> {}
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">main:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">W3C_ECHIDNA_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.ECHIDNA_TOKEN</span> <span class="hljs-string">}}</span>
+          <span class="hljs-comment"># Replace following with appropriate value. See options.md for details.</span>
+          <span class="hljs-attr">W3C_WG_DECISION_URL:</span> <span class="hljs-string">https://lists.w3.org/Archives/Public/public-group/2014JulSep/1234.html</span>
 </code></pre>
 <section id="use-different-respecconfig-when-deploying-to-w3c"><div class="header-wrapper"><h4 id="x2-4-1-use-different-respecconfig-when-deploying-to-w3c"><bdi class="secno">2.4.1 </bdi>Use different <code>respecConfig</code> when deploying to W3C</h4><a class="self-link" href="#use-different-respecconfig-when-deploying-to-w3c" aria-label="Permalink for Section 2.4.1"></a></div>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override respecConfig for W3C deployment and validators.
-name: CI
-on:
-  pull_request: {}
-  push:
-    branches: [main]
-jobs:
-  main:
-    name: Build, Validate and Deploy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
-        with:
-          TOOLCHAIN: respec
-          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
-          W3C_WG_DECISION_URL: https://WG_DECISION_URL_FOR_MY_SPEC.com
-          # Publish to w3.org/TR as a Working Draft (WD) under a different shortName.
-          W3C_BUILD_OVERRIDE: |
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Example: Override respecConfig for W3C deployment and validators.</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span>
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span> {}
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">main:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">respec</span>
+          <span class="hljs-attr">W3C_ECHIDNA_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.ECHIDNA_TOKEN</span> <span class="hljs-string">}}</span>
+          <span class="hljs-attr">W3C_WG_DECISION_URL:</span> <span class="hljs-string">https://WG_DECISION_URL_FOR_MY_SPEC.com</span>
+          <span class="hljs-comment"># Publish to w3.org/TR as a Working Draft (WD) under a different shortName.</span>
+          <span class="hljs-attr">W3C_BUILD_OVERRIDE:</span> <span class="hljs-string">|
             specStatus: WD
             shortName: my-custom-shortname
-</code></pre>
+</span></code></pre>
 <p>See <a href="#w3c_build_override"><code>W3C_BUILD_OVERRIDE</code></a> and <a href="#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a> for details.</p>
 </section></section><section id="multiple-specs-in-same-repository"><div class="header-wrapper"><h3 id="x2-5-multiple-specs-in-same-repository"><bdi class="secno">2.5 </bdi>Multiple specs in same repository</h3><a class="self-link" href="#multiple-specs-in-same-repository" aria-label="Permalink for Section 2.5"></a></div>
 <p>If you maintain multiple documents in the same repository, you can provide source-destination pairs to build, validate and deploy each one separately.</p>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish.yml
-name: CI
-on:
-  pull_request: {}
-  push:
-    branches: [main]
-jobs:
-  main:
-    name: Build, Validate and Deploy
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    strategy:
-      max-parallel: 1
-      matrix:
-        include:
-          - source: spec.html
-            destination: index.html
-            echidna_token: ECHIDNA_TOKEN_SPEC
-          - source: spec-1
-            destination: the-spec
-            echidna_token: ECHIDNA_TOKEN_SPEC1
-          - source: spec-2
-            # destination defaults to spec-2/index.html
-            # echidna_token defaults to no publication to w3.org/TR
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
-        with:
-          SOURCE: ${{ matrix.source }}
-          DESTINATION: ${{ matrix.destination }}
-          GH_PAGES_BRANCH: gh-pages
-          W3C_ECHIDNA_TOKEN: ${{ secrets[matrix.echidna_token] }}
-          W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Create a file called .github/workflows/auto-publish.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span>
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span> {}
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">main:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">permissions:</span>
+      <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
+    <span class="hljs-attr">strategy:</span>
+      <span class="hljs-attr">max-parallel:</span> <span class="hljs-number">1</span>
+      <span class="hljs-attr">matrix:</span>
+        <span class="hljs-attr">include:</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-attr">source:</span> <span class="hljs-string">spec.html</span>
+            <span class="hljs-attr">destination:</span> <span class="hljs-string">index.html</span>
+            <span class="hljs-attr">echidna_token:</span> <span class="hljs-string">ECHIDNA_TOKEN_SPEC</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-attr">source:</span> <span class="hljs-string">spec-1</span>
+            <span class="hljs-attr">destination:</span> <span class="hljs-string">the-spec</span>
+            <span class="hljs-attr">echidna_token:</span> <span class="hljs-string">ECHIDNA_TOKEN_SPEC1</span>
+          <span class="hljs-bullet">-</span> <span class="hljs-attr">source:</span> <span class="hljs-string">spec-2</span>
+            <span class="hljs-comment"># destination defaults to spec-2/index.html</span>
+            <span class="hljs-comment"># echidna_token defaults to no publication to w3.org/TR</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">SOURCE:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.source</span> <span class="hljs-string">}}</span>
+          <span class="hljs-attr">DESTINATION:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.destination</span> <span class="hljs-string">}}</span>
+          <span class="hljs-attr">GH_PAGES_BRANCH:</span> <span class="hljs-string">gh-pages</span>
+          <span class="hljs-attr">W3C_ECHIDNA_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets[matrix.echidna_token]</span> <span class="hljs-string">}}</span>
+          <span class="hljs-attr">W3C_WG_DECISION_URL:</span> <span class="hljs-string">"https://lists.w3.org/Archives/Public/xyz.html"</span>
 </code></pre>
 <p><strong>Note:</strong> Echidna tokens need to be specified per document but secrets cannot be directly evaluated at the <code>matrix</code> level, meaning that <code>${{ secrets.ECHIDNA_TOKEN_SPEC }}</code> cannot be evaluated at that level. As in the above example, the idea is rather to name the token secret at the <code>matrix</code> level (through <code>echidna_token: ECHIDNA_TOKEN_SPEC</code>) and to evaluate the secret in the job's <code>steps</code> (through <code>${{ secrets[matrix.echidna_token] }}</code>).</p>
 <p><strong>Note:</strong> Add the <code>max-parallel: 1</code> setting as in the example if you run into situations where jobs attempt to push updates to the repository at the same time and fail (see <a href="https://github.com/w3c/spec-prod/issues/58">#58</a>). This setting makes GitHub run jobs sequentially.</p>
 <p><strong>Note:</strong> At present, each source might create its own commit in <code>GH_PAGES_BRANCH</code> even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when <a href="https://github.com/w3c/spec-prod/issues/8">#8</a> and <a href="https://github.com/w3c/spec-prod/issues/14">#14</a> are fixed.</p>
 <p>As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' <a href="https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths"><code>on.&lt;push|pull_request&gt;.paths</code></a> as:</p>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Create a file called .github/workflows/auto-publish-spec-1.yml
-name: CI (spec-1)
-on:
-  pull_request:
-    paths: ["spec-1/**"]
-  push:
-    branches: [main]
-    paths: ["spec-1/**"]
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Create a file called .github/workflows/auto-publish-spec-1.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span> <span class="hljs-string">(spec-1)</span>
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span>
+    <span class="hljs-attr">paths:</span> [<span class="hljs-string">"spec-1/**"</span>]
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
+    <span class="hljs-attr">paths:</span> [<span class="hljs-string">"spec-1/**"</span>]
 
-jobs:
-  main:
-    name: Build, Validate and Deploy
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
-        with:
-          SOURCE: spec-1
-          DESTINATION: the-spec
-          GH_PAGES_BRANCH: gh-pages
-          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
-          W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">main:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">permissions:</span>
+      <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">SOURCE:</span> <span class="hljs-string">spec-1</span>
+          <span class="hljs-attr">DESTINATION:</span> <span class="hljs-string">the-spec</span>
+          <span class="hljs-attr">GH_PAGES_BRANCH:</span> <span class="hljs-string">gh-pages</span>
+          <span class="hljs-attr">W3C_ECHIDNA_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.ECHIDNA_TOKEN</span> <span class="hljs-string">}}</span>
+          <span class="hljs-attr">W3C_WG_DECISION_URL:</span> <span class="hljs-string">"https://lists.w3.org/Archives/Public/xyz.html"</span>
 
-# Create another file called .github/workflows/auto-publish-spec-2.yml
-name: CI (spec-2)
-on:
-  pull_request:
-    paths: ["spec-2/**"]
-  push:
-    branches: [main]
-    paths: ["spec-2/**"]
+<span class="hljs-comment"># Create another file called .github/workflows/auto-publish-spec-2.yml</span>
+<span class="hljs-attr">name:</span> <span class="hljs-string">CI</span> <span class="hljs-string">(spec-2)</span>
+<span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span>
+    <span class="hljs-attr">paths:</span> [<span class="hljs-string">"spec-2/**"</span>]
+  <span class="hljs-attr">push:</span>
+    <span class="hljs-attr">branches:</span> [<span class="hljs-string">main</span>]
+    <span class="hljs-attr">paths:</span> [<span class="hljs-string">"spec-2/**"</span>]
 
-jobs:
-  main:
-    name: Build, Validate and Deploy
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: w3c/spec-prod@v2
-        with:
-          SOURCE: spec-2/spec.bs
-          DESTINATION: spec-2/index.html
-          GH_PAGES_BRANCH: gh-pages
-          W3C_ECHIDNA_TOKEN: ${{ secrets.ECHIDNA_TOKEN }}
-          W3C_WG_DECISION_URL: "https://lists.w3.org/Archives/Public/xyz.html"
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">main:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+    <span class="hljs-attr">permissions:</span>
+      <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">SOURCE:</span> <span class="hljs-string">spec-2/spec.bs</span>
+          <span class="hljs-attr">DESTINATION:</span> <span class="hljs-string">spec-2/index.html</span>
+          <span class="hljs-attr">GH_PAGES_BRANCH:</span> <span class="hljs-string">gh-pages</span>
+          <span class="hljs-attr">W3C_ECHIDNA_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.ECHIDNA_TOKEN</span> <span class="hljs-string">}}</span>
+          <span class="hljs-attr">W3C_WG_DECISION_URL:</span> <span class="hljs-string">"https://lists.w3.org/Archives/Public/xyz.html"</span>
 </code></pre>
 </section></section>
 		<section id="options"><div class="header-wrapper"><h2 id="x3-options"><bdi class="secno">3. </bdi>Options</h2><a class="self-link" href="#options" aria-label="Permalink for Section 3."></a></div>
@@ -539,18 +556,18 @@ jobs:
 <p>Override Bikeshed metadata or ReSpec config for the GitHub Pages deployment.</p>
 <p>Note that, you need to use <a href="https://tabatkins.github.io/bikeshed/">Bikeshed-specific metadata</a> (e.g. <code>status</code>) when using Bikeshed, and <a href="https://respec.org/docs/#configuration-options">ReSpec-specific config</a> (e.g. <code>specStatus</code>) when using ReSpec.</p>
 <p><strong>Possible values:</strong> A string or <a href="https://stackoverflow.com/a/15365296">YAML Literal Block Scalar</a> (multiline string) representing the override config/metadata as key-value pairs. That's mouthful, lets clarify using an example:</p>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override Bikeshed metadata for GitHub Pages deployment
-- uses: w3c/spec-prod@v2
-  with:
-    TOOLCHAIN: bikeshed
-    GH_PAGES_BUILD_OVERRIDE: |
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Example: Override Bikeshed metadata for GitHub Pages deployment</span>
+<span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+  <span class="hljs-attr">with:</span>
+    <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">bikeshed</span>
+    <span class="hljs-attr">GH_PAGES_BUILD_OVERRIDE:</span> <span class="hljs-string">|
       status: w3c/WD
       TR: https://www.w3.org/TR/my-cool-spec/
-    # Warning: The content in GH_PAGES_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
-    # GitHub Actions allow only strings as input.
-    #
-    # Info: Above is same as running Bikeshed CLI like:
-    # bikeshed spec INPUT OUTPUT --md-status="w3c/WD" --md-TR="https://www.w3.org/TR/my-cool-spec/"
+</span>    <span class="hljs-comment"># Warning: The content in GH_PAGES_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.</span>
+    <span class="hljs-comment"># GitHub Actions allow only strings as input.</span>
+    <span class="hljs-comment">#</span>
+    <span class="hljs-comment"># Info: Above is same as running Bikeshed CLI like:</span>
+    <span class="hljs-comment"># bikeshed spec INPUT OUTPUT --md-status="w3c/WD" --md-TR="https://www.w3.org/TR/my-cool-spec/"</span>
 </code></pre>
 <p><strong>Default:</strong> None.</p>
 </section><section id="w3c_build_override"><div class="header-wrapper"><h3 id="x3-6-w3c_build_override"><bdi class="secno">3.6 </bdi><code>W3C_BUILD_OVERRIDE</code></h3><a class="self-link" href="#w3c_build_override" aria-label="Permalink for Section 3.6"></a></div>
@@ -558,18 +575,18 @@ jobs:
 <p>The Action will try to make use of metadata/config from previously published version, if available. For example, you do not need to manually provide <code>respecConfig.previousPublishDate</code> (or, <code>Previous Version</code> in case of Bikeshed) when publishing to W3C.</p>
 <p><strong>Possible values:</strong> Same as <a href="#gh_pages_build_override"><code>GH_PAGES_BUILD_OVERRIDE</code></a>.</p>
 <p><strong>Default:</strong> None.</p>
-<pre class="example"><code class="yaml hljs" aria-busy="false"># Example: Override respecConfig for W3C deployment and validators.
-- uses: w3c/spec-prod@v2
-  with:
-    TOOLCHAIN: respec
-    W3C_BUILD_OVERRIDE: |
+<pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Example: Override respecConfig for W3C deployment and validators.</span>
+<span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
+  <span class="hljs-attr">with:</span>
+    <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">respec</span>
+    <span class="hljs-attr">W3C_BUILD_OVERRIDE:</span> <span class="hljs-string">|
       specStatus: WD
       shortName: my-custom-shortname
-    # Warning: The content in W3C_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.
-    # GitHub Actions allow only strings as input.
-    #
-    # Info: Above is equivalent to running ReSpec CLI like:
-    # respec -s index.html?specStatus=WD&amp;shortName=my-custom-shortname… -o OUTPUT
+</span>    <span class="hljs-comment"># Warning: The content in W3C_BUILD_OVERRIDE might look like YAML key-value pairs, but it's actually a string.</span>
+    <span class="hljs-comment"># GitHub Actions allow only strings as input.</span>
+    <span class="hljs-comment">#</span>
+    <span class="hljs-comment"># Info: Above is equivalent to running ReSpec CLI like:</span>
+    <span class="hljs-comment"># respec -s index.html?specStatus=WD&amp;shortName=my-custom-shortname… -o OUTPUT</span>
 </code></pre>
 </section><section id="validate_input_markup"><div class="header-wrapper"><h3 id="x3-7-validate_input_markup"><bdi class="secno">3.7 </bdi><code>VALIDATE_INPUT_MARKUP</code></h3><a class="self-link" href="#validate_input_markup" aria-label="Permalink for Section 3.7"></a></div>
 <p>Whether or not to validate the markup of the input document using the <a href="https://github.com/validator/validator">Nu Html Checker</a>. This option is unlikely to be useful for Bikeshed documents, or for ReSpec documents based on markdown.</p>
@@ -637,7 +654,104 @@ and <a href="https://www.w3.org/2021/03/18-pub-minutes.html">minutes</a> are ava
 
 <p role="navigation" id="back-to-top">
     <a href="#title"><abbr title="Back to Top">↑</abbr></a>
-  </p><script id="respec-dfn-panel">(() => {
+  </p><script id="respec-highlight-vars">(() => {
+// @ts-check
+
+if (document.respec) {
+  document.respec.ready.then(setupVarHighlighter);
+} else {
+  setupVarHighlighter();
+}
+
+function setupVarHighlighter() {
+  document
+    .querySelectorAll("var")
+    .forEach(varElem => varElem.addEventListener("click", highlightListener));
+}
+
+function highlightListener(ev) {
+  ev.stopPropagation();
+  const { target: varElem } = ev;
+  const hightligtedElems = highlightVars(varElem);
+  const resetListener = () => {
+    const hlColor = getHighlightColor(varElem);
+    hightligtedElems.forEach(el => removeHighlight(el, hlColor));
+    [...HL_COLORS.keys()].forEach(key => HL_COLORS.set(key, true));
+  };
+  if (hightligtedElems.length) {
+    document.body.addEventListener("click", resetListener, { once: true });
+  }
+}
+
+// availability of highlight colors. colors from var.css
+const HL_COLORS = new Map([
+  ["respec-hl-c1", true],
+  ["respec-hl-c2", true],
+  ["respec-hl-c3", true],
+  ["respec-hl-c4", true],
+  ["respec-hl-c5", true],
+  ["respec-hl-c6", true],
+  ["respec-hl-c7", true],
+]);
+
+function getHighlightColor(target) {
+  // return current colors if applicable
+  const { value } = target.classList;
+  const re = /respec-hl-\w+/;
+  const activeClass = re.test(value) && value.match(re);
+  if (activeClass) return activeClass[0];
+
+  // first color preference
+  if (HL_COLORS.get("respec-hl-c1") === true) return "respec-hl-c1";
+
+  // otherwise get some other available color
+  return [...HL_COLORS.keys()].find(c => HL_COLORS.get(c)) || "respec-hl-c1";
+}
+
+function highlightVars(varElem) {
+  const textContent = norm(varElem.textContent);
+  const parent = varElem.closest(".algorithm, section");
+  const highlightColor = getHighlightColor(varElem);
+
+  const varsToHighlight = [...parent.querySelectorAll("var")].filter(
+    el =>
+      norm(el.textContent) === textContent &&
+      el.closest(".algorithm, section") === parent
+  );
+
+  // update availability of highlight color
+  const colorStatus = varsToHighlight[0].classList.contains("respec-hl");
+  HL_COLORS.set(highlightColor, colorStatus);
+
+  // highlight vars
+  if (colorStatus) {
+    varsToHighlight.forEach(el => removeHighlight(el, highlightColor));
+    return [];
+  } else {
+    varsToHighlight.forEach(el => addHighlight(el, highlightColor));
+  }
+  return varsToHighlight;
+}
+
+function removeHighlight(el, highlightColor) {
+  el.classList.remove("respec-hl", highlightColor);
+  // clean up empty class attributes so they don't come in export
+  if (!el.classList.length) el.removeAttribute("class");
+}
+
+function addHighlight(elem, highlightColor) {
+  elem.classList.add("respec-hl", highlightColor);
+}
+
+/**
+ * Same as `norm` from src/core/utils, but our build process doesn't allow
+ * imports in runtime scripts, so duplicated here.
+ * @param {string} str
+ */
+function norm(str) {
+  return str.trim().replace(/\s+/g, " ");
+}
+})()</script><script id="respec-dfn-panel">(() => {
 // @ts-check
 if (document.respec) {
   document.respec.ready.then(setupPanel);
