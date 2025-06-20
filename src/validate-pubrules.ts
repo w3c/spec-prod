@@ -90,7 +90,7 @@ async function validate(url: URL) {
 	console.log("getting metadata");
 	const { metadata } = await extractMetadata(url);
 
-	const profile = require(`specberus/lib/util`).profiles[metadata.profile];
+	const profile = await require(`specberus/lib/util`).profiles[metadata.profile];
 	// @ts-ignore
 	profile.rules = profile.rules.filter(({ name }) => !INGORED_RULES.has(name));
 
