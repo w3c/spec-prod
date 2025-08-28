@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 35.4.0">
+<meta name="generator" content="ReSpec 35.5.1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 dfn{cursor:pointer}
@@ -135,14 +135,14 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     null,
     null
   ],
-  "publishISODate": "2025-05-14T00:00:00.000Z",
-  "generatedSubtitle": "14 May 2025"
+  "publishISODate": "2025-08-28T00:00:00.000Z",
+  "generatedSubtitle": "28 August 2025"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/base.css"></head>
 	<body class="h-entry informative"><div class="head">
     
     <h1 id="title" class="title">Spec Prod Documentation</h1> 
-    <p id="w3c-state"> <time class="dt-published" datetime="2025-05-14">14 May 2025</time></p>
+    <p id="w3c-state"> <time class="dt-published" datetime="2025-08-28">28 August 2025</time></p>
     <details open="">
       <summary>More details about this document</summary>
       <dl>
@@ -218,7 +218,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Publish</span> <span class="hljs-string">to</span> <span class="hljs-string">TR</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">respec</span> <span class="hljs-comment"># or bikeshed</span>
@@ -243,7 +243,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">and</span> <span class="hljs-string">Validate</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
 </code></pre>
 <section id="selectively-enable-disable-validators"><div class="header-wrapper"><h4 id="x2-1-1-selectively-enable-disable-validators"><bdi class="secno">2.1.1 </bdi>Selectively enable/disable validators</h4><a class="self-link" href="#selectively-enable-disable-validators" aria-label="Permalink for Section 2.1.1"></a></div>
@@ -257,7 +257,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">and</span> <span class="hljs-string">Validate</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">VALIDATE_WEBIDL:</span> <span class="hljs-literal">false</span>
@@ -274,7 +274,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">and</span> <span class="hljs-string">Validate</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">respec</span> <span class="hljs-comment"># or bikeshed</span>
@@ -298,7 +298,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">permissions:</span>
       <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">GH_PAGES_BRANCH:</span> <span class="hljs-string">gh-pages</span>
@@ -317,7 +317,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">permissions:</span>
       <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">GH_PAGES_BRANCH:</span> <span class="hljs-string">gh-pages</span>
@@ -338,7 +338,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">W3C_ECHIDNA_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.ECHIDNA_TOKEN</span> <span class="hljs-string">}}</span>
@@ -357,7 +357,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">respec</span>
@@ -397,7 +397,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
             <span class="hljs-comment"># destination defaults to spec-2/index.html</span>
             <span class="hljs-comment"># echidna_token defaults to no publication to w3.org/TR</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">SOURCE:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.source</span> <span class="hljs-string">}}</span>
@@ -426,7 +426,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">permissions:</span>
       <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">SOURCE:</span> <span class="hljs-string">spec-1</span>
@@ -451,7 +451,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">permissions:</span>
       <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v4</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">SOURCE:</span> <span class="hljs-string">spec-2/spec.bs</span>
