@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: w3c/spec-prod@v2
+      - uses: ./action.yml
         with:
           SOURCE: docs/index.html
           DESTINATION: index.html
