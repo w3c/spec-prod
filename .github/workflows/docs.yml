@@ -17,6 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        if: github.event_name != 'pull_request'
+      - uses: actions/checkout@v5
+        if: github.event_name == 'pull_request'
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
       - uses: ./action.yml
         with:
           SOURCE: docs/index.html
