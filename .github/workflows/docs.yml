@@ -16,8 +16,16 @@ jobs:
     name: Build Documentation
     runs-on: ubuntu-latest
     steps:
+      - name: Get ref to checkout
+        id: ref
+        run: |
+          echo "ref=${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v5
-      - uses: w3c/spec-prod@v2
+        with:
+          ref: ${{ steps.ref.outputs.ref }}
+
+      - name: "Run w3c/spec-prod@${{ steps.ref.outputs.ref }}"
+        uses: "./"
         with:
           SOURCE: docs/index.html
           DESTINATION: index.html

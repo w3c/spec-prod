@@ -65,9 +65,10 @@ runs:
     - uses: pnpm/action-setup@v4
       with:
         package_json_file: ${{ steps.action_relative_path.outputs.action_path }}/package.json
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v5
       with:
         node-version-file: ${{ steps.action_relative_path.outputs.action_path }}/.nvmrc
+        cache: "pnpm"
     - name: Set up action
       run: |
         echo "::group::Set up action"
@@ -78,6 +79,7 @@ runs:
       env:
         FORCE_COLOR: "true"
         PUPPETEER_SKIP_DOWNLOAD: "1"
+
     - name: Prepare
       id: prepare
       run: |

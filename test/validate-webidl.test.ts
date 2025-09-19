@@ -1,5 +1,5 @@
 import main from "../src/validate-webidl.js";
-import { Outputs } from "./index.test.js";
+import type { Outputs } from "./index.test.js";
 
 export default async function validateWebIdl(outputs: Outputs) {
 	const { webidl: shouldValidate = false } = outputs?.prepare?.validate || {};

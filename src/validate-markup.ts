@@ -1,9 +1,12 @@
+import { createRequire } from "node:module";
 import { env, exit, install, sh, yesOrNo } from "./utils.js";
 
-import { BuildResult } from "./build.js";
+import type { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
-if (module === require.main) {
+const require = createRequire(import.meta.url);
+
+if (import.meta.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_MARKUP")) === false) {
 		exit("Skipped", 0);
 	}

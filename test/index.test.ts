@@ -4,7 +4,7 @@
  *
  * Run this file in a local GitHub repo, and change inputs as needed.
  */
-import { platform } from "os";
+import { platform } from "node:os";
 import { formatAsHeading, pprint } from "../src/utils.js";
 
 let SILENT_CHILD = !true;
@@ -46,6 +46,7 @@ const run = (fn: AsyncFn) => async () => {
 	outputs[fn.name as keyof Outputs] = res;
 };
 
+// These are broken as of now.
 Promise.resolve()
 	.then(run(require("./prepare.test.js").default))
 	.then(run(require("./setup.test.js").default))

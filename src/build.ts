@@ -1,13 +1,14 @@
-import * as path from "path";
-import { copyFile, mkdir, readFile, writeFile, unlink } from "fs/promises";
-import fetch from "node-fetch";
+import * as path from "node:path";
+import { copyFile, mkdir, readFile, writeFile, unlink } from "node:fs/promises";
+import { Readable } from "node:stream";
+import type { ReadableStream } from "node:stream/web";
+import { getAllSubResources, type ResourceType } from "subresources";
 import { env, exit, setOutput, sh, unique } from "./utils.js";
 import { deepEqual, StaticServer } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
-import type { ResourceType } from "subresources";
 
-import { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.js";
-import { ProcessedInput } from "./prepare.js";
+import type { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.js";
+import type { ProcessedInput } from "./prepare.js";
 type BasicBuildOptions = Omit<BasicBuildOptions_, "artifactName">;
 type Input = ProcessedInput["build"];
 type ConfigOverride = Input["configOverride"]["gh" | "w3c"];
@@ -33,7 +34,7 @@ export interface BuildResult {
 const rel = (p: string) => path.relative(process.cwd(), p);
 const tmpOutputFile = (source: Input["source"]) => source.path + ".built.html";
 
-if (module === require.main) {
+if (import.meta.main) {
 	const input: Input = JSON.parse(env("INPUTS_BUILD"));
 	main(input).catch(err => exit(err.message || "Failed", err.code));
 }
@@ -173,9 +174,6 @@ async function findAssetsToCopy(source: Input["source"]) {
 	let remoteAssets: URL[] = [];
 
 	Object.assign(process.env, PUPPETEER_ENV);
-	const {
-		getAllSubResources,
-	}: typeof import("subresources") = require("subresources");
 
 	const server = await new StaticServer().start();
 
@@ -267,9 +265,11 @@ async function download(url: URL, destinationDir: string) {
 		if (!res.ok) {
 			throw new Error(`Status: ${res.status}`);
 		}
-		const text = await res.buffer();
 		await mkdir(path.dirname(destination), { recursive: true });
-		await writeFile(destination, text, "utf8");
+		await writeFile(
+			destination,
+			Readable.fromWeb(res.body as ReadableStream<Uint8Array>),
+		);
 	} catch (error) {
 		const msg = `Download: ${url.href} ➡ ${rel(destination)}`;
 		console.log("[WARNING]", msg, error.message);

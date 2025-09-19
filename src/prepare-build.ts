@@ -1,11 +1,11 @@
-import * as path from "path";
-import { existsSync } from "fs";
-import { readFile } from "fs/promises";
+import * as path from "node:path";
+import { existsSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import * as puppeteer from "puppeteer";
 import { PUPPETEER_ENV } from "./constants.js";
 import { exit } from "./utils.js";
 
-import { Inputs, GitHubContext } from "./prepare.js";
+import type { Inputs, GitHubContext } from "./prepare.js";
 export type BuildOptions = Awaited<ReturnType<typeof buildOptions>>;
 
 export async function buildOptions(

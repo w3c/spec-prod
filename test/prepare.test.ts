@@ -1,8 +1,8 @@
-import * as path from "path";
-import { readFileSync, readdirSync } from "fs";
+import * as path from "node:path";
+import { readFileSync, readdirSync } from "node:fs";
 import * as yaml from "yaml";
 
-import main, { Inputs, GitHubContext } from "../src/prepare.js";
+import main, { type Inputs, type GitHubContext } from "../src/prepare.js";
 
 type Job = { steps: { uses?: string; with: object }[] };
 type Workflow = {
@@ -46,7 +46,7 @@ function getInputsFromWorkflow(): Partial<Inputs> {
 }
 
 function getDefaultInputs(): Partial<Inputs> {
-	const action = path.join(__dirname, "..", "action.yml");
+	const action = path.join(import.meta.dirname, "..", "action.yml");
 	const text = readFileSync(action, "utf8");
 	const parsed = yaml.parse(text) as Workflow;
 	return Object.fromEntries(

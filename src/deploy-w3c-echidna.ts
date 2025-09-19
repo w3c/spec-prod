@@ -1,15 +1,13 @@
-import * as path from "path";
-import fetch from "node-fetch";
 import { env, exit, pprint, sh } from "./utils.js";
 
-import { W3CDeployOptions } from "./prepare-deploy.js";
-import { BuildResult } from "./build.js";
+import type { W3CDeployOptions } from "./prepare-deploy.js";
+import type { BuildResult } from "./build.js";
 type Input = Exclude<W3CDeployOptions, false>;
 
 const MAILING_LIST = `https://lists.w3.org/Archives/Public/public-tr-notifications/`;
 const API_URL = "https://labs.w3.org/echidna/api/request";
 
-if (module === require.main) {
+if (import.meta.main) {
 	const inputs: W3CDeployOptions = JSON.parse(env("INPUTS_DEPLOY"));
 	const buildOutput: BuildResult = JSON.parse(env("OUTPUTS_BUILD"));
 	if (inputs === false) {

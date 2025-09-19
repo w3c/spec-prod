@@ -1,5 +1,5 @@
 import main from "../src/build.js";
-import { Outputs } from "./index.test.js";
+import type { Outputs } from "./index.test.js";
 
 export default async function build(outputs: Outputs) {
 	const {
@@ -7,8 +7,16 @@ export default async function build(outputs: Outputs) {
 		source = { dir: "", file: "index.html", path: "index.html" },
 		destination = { dir: "", file: "index.html", path: "index.html" },
 		flags = ["-e"],
+		artifactName = "spec-prod-result",
 		configOverride = { w3c: { dir: "", file: "" }, gh: null },
 	} = outputs?.prepare?.build || {};
 
-	return await main({ toolchain, source, destination, flags, configOverride });
+	return await main({
+		toolchain,
+		source,
+		destination,
+		flags,
+		configOverride,
+		artifactName,
+	});
 }

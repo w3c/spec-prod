@@ -1,3 +1,4 @@
+import { createRequire } from "node:module";
 import {
 	env,
 	exit,
@@ -29,9 +30,11 @@ interface ExtractMetadataResult {
 	};
 }
 
+const require = createRequire(import.meta.url);
+
 const INGORED_RULES = new Set(["validation.html", "links.linkchecker"]);
 
-if (module === require.main) {
+if (import.meta.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_PUBRULES")) === false) {
 		exit("Skipped", 0);
 	}

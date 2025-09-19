@@ -38,7 +38,7 @@ export interface GitHubContext {
 	};
 }
 
-if (module === require.main) {
+if (import.meta.main) {
 	const inputs: Inputs = JSON.parse(env("INPUTS_USER"));
 	const githubContext: GitHubContext = JSON.parse(env("INPUTS_GITHUB"));
 	main(inputs, githubContext).catch(err =>

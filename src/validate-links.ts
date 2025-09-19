@@ -1,5 +1,5 @@
-import { env, exit, install, sh, yesOrNo } from "./utils.js";
-import { BuildResult } from "./build.js";
+import { env, exit, install, sh } from "./utils.js";
+import type { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
 const URL_IGNORE = [
@@ -10,7 +10,7 @@ const URL_IGNORE = [
 	`/TR/.+${new Date().toISOString().slice(0, 10).replace(/-/g, "")}/$`,
 ];
 
-if (module === require.main) {
+if (import.meta.main) {
 	const input: Input = JSON.parse(env("OUTPUTS_BUILD"));
 	main(input).catch(err => exit(err.message || "Failed", err.code));
 }
