@@ -1,4 +1,4 @@
-import * as path from "path";
+import * as path from "node:path";
 
 export const ACTION_DIR = path.join(__dirname, "..");
 

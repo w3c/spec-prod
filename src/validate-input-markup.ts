@@ -1,6 +1,6 @@
 import { env, exit, install, sh, yesOrNo } from "./utils.js";
 
-import { ProcessedInput } from "./prepare.js";
+import type { ProcessedInput } from "./prepare.js";
 type Input = Pick<ProcessedInput["build"], "source">;
 
 if (module === require.main) {

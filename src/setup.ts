@@ -1,5 +1,5 @@
+import * as path from "node:path";
 import { addPath, exportVariable } from "@actions/core";
-import * as path from "path";
 import { ACTION_DIR, PUPPETEER_ENV } from "./constants.js";
 import { env, exit, install, sh } from "./utils.js";
 

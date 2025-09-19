@@ -1,10 +1,10 @@
-import * as path from "path";
-import * as os from "os";
-import * as fs from "fs/promises";
+import * as path from "node:path";
+import * as os from "node:os";
+import * as fs from "node:fs/promises";
 import { setSecret } from "@actions/core";
 import { env, exit, sh } from "./utils.js";
 
-import { GithubPagesDeployOptions } from "./prepare-deploy.js";
+import type { GithubPagesDeployOptions } from "./prepare-deploy.js";
 type Input = Exclude<GithubPagesDeployOptions, false>;
 
 if (module === require.main) {

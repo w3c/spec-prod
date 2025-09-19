@@ -1,8 +1,8 @@
-import * as path from "path";
-import { readFileSync, readdirSync } from "fs";
+import * as path from "node:path";
+import { readFileSync, readdirSync } from "node:fs";
 import * as yaml from "yaml";
 
-import main, { Inputs, GitHubContext } from "../src/prepare.js";
+import main, { type Inputs, type GitHubContext } from "../src/prepare.js";
 
 type Job = { steps: { uses?: string; with: object }[] };
 type Workflow = {

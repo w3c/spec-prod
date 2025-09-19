@@ -1,6 +1,6 @@
 import { env, exit, install, sh, yesOrNo } from "./utils.js";
 
-import { BuildResult } from "./build.js";
+import type { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
 if (module === require.main) {

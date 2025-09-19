@@ -1,5 +1,5 @@
-import { env, exit, install, sh, yesOrNo } from "./utils.js";
-import { BuildResult } from "./build.js";
+import { env, exit, install, sh } from "./utils.js";
+import type { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
 const URL_IGNORE = [

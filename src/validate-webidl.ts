@@ -1,7 +1,8 @@
-import { rm } from "fs/promises";
+import { rm } from "node:fs/promises";
 import { env, exit, install, yesOrNo } from "./utils.js";
-import { BuildResult } from "./build.js";
 import { PUPPETEER_ENV } from "./constants.js";
+
+import type { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
 if (module === require.main) {

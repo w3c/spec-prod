@@ -4,7 +4,7 @@
  *
  * Run this file in a local GitHub repo, and change inputs as needed.
  */
-import { platform } from "os";
+import { platform } from "node:os";
 import { formatAsHeading, pprint } from "../src/utils.js";
 
 let SILENT_CHILD = !true;

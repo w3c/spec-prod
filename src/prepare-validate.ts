@@ -1,4 +1,4 @@
-import { Inputs } from "./prepare.js";
+import type { Inputs } from "./prepare.js";
 import { yesOrNo } from "./utils.js";
 
 export function validation(inputs: Inputs) {
