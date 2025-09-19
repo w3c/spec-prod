@@ -46,6 +46,7 @@ const run = (fn: AsyncFn) => async () => {
 	outputs[fn.name as keyof Outputs] = res;
 };
 
+// These are broken as of now.
 Promise.resolve()
 	.then(run(require("./prepare.test.js").default))
 	.then(run(require("./setup.test.js").default))

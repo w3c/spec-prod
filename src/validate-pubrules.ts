@@ -1,3 +1,4 @@
+import { createRequire } from "node:module";
 import {
 	env,
 	exit,
@@ -28,6 +29,8 @@ interface ExtractMetadataResult {
 		profile: string;
 	};
 }
+
+const require = createRequire(import.meta.url);
 
 const INGORED_RULES = new Set(["validation.html", "links.linkchecker"]);
 

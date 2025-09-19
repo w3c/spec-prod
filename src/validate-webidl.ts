@@ -1,9 +1,12 @@
 import { rm } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { env, exit, install, yesOrNo } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
 
 import type { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
+
+const require = createRequire(import.meta.url);
 
 if (import.meta.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_WEBIDL")) === false) {
