@@ -46,7 +46,7 @@ function getInputsFromWorkflow(): Partial<Inputs> {
 }
 
 function getDefaultInputs(): Partial<Inputs> {
-	const action = path.join(__dirname, "..", "action.yml");
+	const action = path.join(import.meta.dirname, "..", "action.yml");
 	const text = readFileSync(action, "utf8");
 	const parsed = yaml.parse(text) as Workflow;
 	return Object.fromEntries(
