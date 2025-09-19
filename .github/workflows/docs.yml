@@ -16,17 +16,15 @@ jobs:
     name: Build Documentation
     runs-on: ubuntu-latest
     steps:
+      - name: Get ref to checkout
+        id: ref
+        run: |
+          echo "ref=${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v5
-        if: github.event_name != 'pull_request'
         with:
-          repository: ${{ github.repository }}
-      - uses: actions/checkout@v5
-        if: github.event_name == 'pull_request'
-        with:
-          repository: ${{ github.repository }}
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ steps.ref.outputs.ref }}
 
-      - uses: '.'
+      - uses: ${{ format('{0}@{1}', github.repository, steps.ref.outputs.ref) }}
         with:
           SOURCE: docs/index.html
           DESTINATION: index.html
