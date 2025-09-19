@@ -1,11 +1,11 @@
 import * as path from "node:path";
 import { copyFile, mkdir, readFile, writeFile, unlink } from "node:fs/promises";
 import { Readable } from "node:stream";
+import type { ReadableStream } from "node:stream/web";
+import { getAllSubResources, type ResourceType } from "subresources";
 import { env, exit, setOutput, sh, unique } from "./utils.js";
 import { deepEqual, StaticServer } from "./utils.js";
 import { PUPPETEER_ENV } from "./constants.js";
-import type { ReadableStream } from "node:stream/web";
-import type { ResourceType } from "subresources";
 
 import type { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.js";
 import type { ProcessedInput } from "./prepare.js";
@@ -174,9 +174,6 @@ async function findAssetsToCopy(source: Input["source"]) {
 	let remoteAssets: URL[] = [];
 
 	Object.assign(process.env, PUPPETEER_ENV);
-	const {
-		getAllSubResources,
-	}: typeof import("subresources") = require("subresources");
 
 	const server = await new StaticServer().start();
 
