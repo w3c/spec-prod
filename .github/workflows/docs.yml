@@ -26,7 +26,7 @@ jobs:
           repository: ${{ github.repository }}
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - uses: ./action.yml
+      - uses: '.'
         with:
           SOURCE: docs/index.html
           DESTINATION: index.html
