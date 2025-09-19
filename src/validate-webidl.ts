@@ -5,7 +5,7 @@ import { PUPPETEER_ENV } from "./constants.js";
 import type { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
-if (module === require.main) {
+if (import.meta.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_WEBIDL")) === false) {
 		exit("Skipped", 0);
 	}

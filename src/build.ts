@@ -34,7 +34,7 @@ export interface BuildResult {
 const rel = (p: string) => path.relative(process.cwd(), p);
 const tmpOutputFile = (source: Input["source"]) => source.path + ".built.html";
 
-if (module === require.main) {
+if (import.meta.main) {
 	const input: Input = JSON.parse(env("INPUTS_BUILD"));
 	main(input).catch(err => exit(err.message || "Failed", err.code));
 }

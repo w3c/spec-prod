@@ -31,7 +31,7 @@ interface ExtractMetadataResult {
 
 const INGORED_RULES = new Set(["validation.html", "links.linkchecker"]);
 
-if (module === require.main) {
+if (import.meta.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_PUBRULES")) === false) {
 		exit("Skipped", 0);
 	}

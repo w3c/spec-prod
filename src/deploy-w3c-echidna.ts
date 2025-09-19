@@ -7,7 +7,7 @@ type Input = Exclude<W3CDeployOptions, false>;
 const MAILING_LIST = `https://lists.w3.org/Archives/Public/public-tr-notifications/`;
 const API_URL = "https://labs.w3.org/echidna/api/request";
 
-if (module === require.main) {
+if (import.meta.main) {
 	const inputs: W3CDeployOptions = JSON.parse(env("INPUTS_DEPLOY"));
 	const buildOutput: BuildResult = JSON.parse(env("OUTPUTS_BUILD"));
 	if (inputs === false) {

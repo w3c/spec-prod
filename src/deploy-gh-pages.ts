@@ -7,7 +7,7 @@ import { env, exit, sh } from "./utils.js";
 import type { GithubPagesDeployOptions } from "./prepare-deploy.js";
 type Input = Exclude<GithubPagesDeployOptions, false>;
 
-if (module === require.main) {
+if (import.meta.main) {
 	const inputs: GithubPagesDeployOptions = JSON.parse(env("INPUTS_DEPLOY"));
 	const outputDir = env("OUTPUT_DIR");
 

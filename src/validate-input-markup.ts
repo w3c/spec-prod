@@ -3,7 +3,7 @@ import { env, exit, install, sh, yesOrNo } from "./utils.js";
 import type { ProcessedInput } from "./prepare.js";
 type Input = Pick<ProcessedInput["build"], "source">;
 
-if (module === require.main) {
+if (import.meta.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_INPUT_MARKUP")) === false) {
 		exit("Skipped", 0);
 	}

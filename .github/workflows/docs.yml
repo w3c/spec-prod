@@ -24,7 +24,8 @@ jobs:
         with:
           ref: ${{ steps.ref.outputs.ref }}
 
-      - uses: './'
+      - name: "Run w3c/spec-prod@${{ steps.ref.outputs.ref }}"
+        uses: "./"
         with:
           SOURCE: docs/index.html
           DESTINATION: index.html

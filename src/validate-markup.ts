@@ -3,7 +3,7 @@ import { env, exit, install, sh, yesOrNo } from "./utils.js";
 import type { BuildResult } from "./build.js";
 type Input = Pick<BuildResult, "dest" | "file">;
 
-if (module === require.main) {
+if (import.meta.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_MARKUP")) === false) {
 		exit("Skipped", 0);
 	}
