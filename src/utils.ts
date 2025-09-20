@@ -44,6 +44,12 @@ export function formatAsHeading(text: string, symbol = "=") {
  */
 export async function install(name: string, env: ExecOptions["env"] = {}) {
 	const output = await sh(`pnpm add ${name}`, { cwd: ACTION_DIR, env });
+	// Restore as if `pnpm add --no-save` was supported.
+	// https://github.com/pnpm/pnpm/issues/1237
+	await sh("git restore package.json pnpm-lock.yaml", {
+		cwd: ACTION_DIR,
+		output: "silent",
+	}).catch(() => {});
 	const pkgName = name.replace(/@.+/, "");
 	const re = new RegExp(String.raw`\+ (${pkgName})\s(.+)$`);
 	const versionLine = output.split("\n").find(line => re.test(line));
