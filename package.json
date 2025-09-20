@@ -8,6 +8,16 @@
 		"subresources": "^2.0.0",
 		"yaml": "^2.8.1"
 	},
+	"pnpm": {
+		"overrides": {
+			"link-checker": "1.4.2",
+			"reffy": "^15",
+			"respec": "^35",
+			"specberus": "^11",
+			"vnu-jar": "^24",
+			"webidl2": "^24"
+		}
+	},
 	"engines": {
 		"node": "^24"
 	},
@@ -23,7 +33,7 @@
 		"@types/node": "^24.5.2",
 		"@types/serve-static": "^1.15.8",
 		"@types/split2": "^4.2.3",
-		"typescript": "^5.9.2",
-		"prettier": "^3.6.2"
+		"prettier": "^3.6.2",
+		"typescript": "^5.9.2"
 	}
 }

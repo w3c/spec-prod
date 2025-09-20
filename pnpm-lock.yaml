@@ -4,6 +4,14 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  link-checker: 1.4.2
+  reffy: ^15
+  respec: ^35
+  specberus: ^11
+  vnu-jar: ^24
+  webidl2: ^24
+
 importers:
 
   .:

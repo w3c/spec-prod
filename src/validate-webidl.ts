@@ -20,7 +20,7 @@ if (import.meta.main) {
 export default async function main({ dest, file }: Input) {
 	console.log(`Validating Web IDL defined in ${file}...`);
 	Object.assign(process.env, PUPPETEER_ENV);
-	await install("reffy@15");
+	await install("reffy");
 	const { crawlSpecs } = require("reffy");
 
 	const fileurl = new URL(file, `file://${dest}/`).href;
@@ -36,7 +36,7 @@ export default async function main({ dest, file }: Input) {
 		exit("No Web IDL found in spec, skipped validation", 0);
 	}
 
-	await install("webidl2@latest");
+	await install("webidl2");
 	// An outdated version might be cached from importing reffy.
 	delete require.cache[require.resolve("webidl2")];
 
