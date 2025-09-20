@@ -194,7 +194,15 @@ async function findAssetsToCopy(source: Input["source"]) {
 			);
 			continue;
 		}
-		for await (const res of getAllSubResources(rootUrl, { links: true })) {
+
+		const allSubResources = getAllSubResources(rootUrl, {
+			links: true,
+			puppeteerOptions: {
+				executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
+				args: ["--no-sandbox"],
+			},
+		});
+		for await (const res of allSubResources) {
 			const url = new URL(res.url);
 			if (isLocalAsset(url) && res.type === "link") {
 				const nextPage = urlToPage(url);

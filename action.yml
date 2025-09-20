@@ -68,7 +68,7 @@ runs:
     - uses: actions/setup-node@v5
       with:
         node-version-file: ${{ steps.action_relative_path.outputs.action_path }}/.nvmrc
-        cache: "pnpm"
+        package-manager-cache: false
     - name: Set up action
       run: |
         echo "::group::Set up action"

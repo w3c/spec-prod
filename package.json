@@ -5,10 +5,13 @@
 		"puppeteer": "^24",
 		"serve-static": "^2.2.0",
 		"split2": "^4.2.0",
-		"subresources": "^2.0.0",
+		"subresources": "^2.1.0",
 		"yaml": "^2.8.1"
 	},
 	"pnpm": {
+		"onlyBuiltDependencies": [
+			"puppeteer"
+		],
 		"overrides": {
 			"link-checker": "1.4.2",
 			"reffy": "^15",
