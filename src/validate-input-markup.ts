@@ -1,9 +1,12 @@
-import { env, exit, install, sh, yesOrNo } from "./utils.js";
+import { createRequire } from "node:module";
+import { env, exit, install, sh, yesOrNo } from "./utils.ts";
 
-import { ProcessedInput } from "./prepare.js";
+import type { ProcessedInput } from "./prepare.ts";
 type Input = Pick<ProcessedInput["build"], "source">;
 
-if (module === require.main) {
+const require = createRequire(import.meta.url);
+
+if (import.meta.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_INPUT_MARKUP")) === false) {
 		exit("Skipped", 0);
 	}

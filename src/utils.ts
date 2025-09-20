@@ -1,16 +1,14 @@
-import { deepStrictEqual } from "assert";
-import { inspect } from "util";
-import { exec } from "child_process";
-import { createServer } from "http";
+import { deepStrictEqual } from "node:assert";
+import { inspect } from "node:util";
+import { exec, type ExecOptions } from "node:child_process";
+import { createServer, type Server } from "node:http";
 
-import core = require("@actions/core");
-import split = require("split2");
-import serveStatic = require("serve-static");
-import finalhandler = require("finalhandler");
+import core from "@actions/core";
+import finalhandler from "finalhandler";
+import serveStatic from "serve-static";
+import split from "split2";
 
-import { ACTION_DIR } from "./constants.js";
-import { ExecOptions } from "child_process";
-import { Server } from "http";
+import { ACTION_DIR } from "./constants.ts";
 
 export function deepEqual(a: unknown, b: unknown) {
 	try {
@@ -46,6 +44,12 @@ export function formatAsHeading(text: string, symbol = "=") {
  */
 export async function install(name: string, env: ExecOptions["env"] = {}) {
 	const output = await sh(`pnpm add ${name}`, { cwd: ACTION_DIR, env });
+	// Restore as if `pnpm add --no-save` was supported.
+	// https://github.com/pnpm/pnpm/issues/1237
+	await sh("git restore package.json pnpm-lock.yaml", {
+		cwd: ACTION_DIR,
+		output: "silent",
+	}).catch(() => {});
 	const pkgName = name.replace(/@.+/, "");
 	const re = new RegExp(String.raw`\+ (${pkgName})\s(.+)$`);
 	const versionLine = output.split("\n").find(line => re.test(line));

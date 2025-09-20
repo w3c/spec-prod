@@ -1,6 +1,6 @@
-import * as path from "path";
+import * as path from "node:path";
 
-export const ACTION_DIR = path.join(__dirname, "..");
+export const ACTION_DIR = path.join(import.meta.dirname, "..");
 
 export const PUPPETEER_ENV = (() => {
 	const skipChromeDownload =

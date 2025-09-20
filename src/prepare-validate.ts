@@ -1,5 +1,5 @@
-import { Inputs } from "./prepare.js";
-import { yesOrNo } from "./utils.js";
+import type { Inputs } from "./prepare.ts";
+import { yesOrNo } from "./utils.ts";
 
 export function validation(inputs: Inputs) {
 	const input_markup = yesOrNo(inputs.VALIDATE_INPUT_MARKUP) || false;

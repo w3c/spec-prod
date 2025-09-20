@@ -1,6 +1,6 @@
-import { exit, yesOrNo } from "./utils.js";
+import { exit, yesOrNo } from "./utils.ts";
 
-import { Inputs, GitHubContext } from "./prepare.js";
+import type { Inputs, GitHubContext } from "./prepare.ts";
 export type W3CDeployOptions = Awaited<ReturnType<typeof w3cEchidnaDeployment>>;
 export type GithubPagesDeployOptions = ReturnType<typeof githubPagesDeployment>;
 

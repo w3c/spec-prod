@@ -1,10 +1,14 @@
-import { rm } from "fs/promises";
-import { env, exit, install, yesOrNo } from "./utils.js";
-import { BuildResult } from "./build.js";
-import { PUPPETEER_ENV } from "./constants.js";
+import { rm } from "node:fs/promises";
+import { createRequire } from "node:module";
+import { env, exit, install, yesOrNo } from "./utils.ts";
+import { PUPPETEER_ENV } from "./constants.ts";
+
+import type { BuildResult } from "./build.ts";
 type Input = Pick<BuildResult, "dest" | "file">;
 
-if (module === require.main) {
+const require = createRequire(import.meta.url);
+
+if (import.meta.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_WEBIDL")) === false) {
 		exit("Skipped", 0);
 	}
@@ -16,7 +20,7 @@ if (module === require.main) {
 export default async function main({ dest, file }: Input) {
 	console.log(`Validating Web IDL defined in ${file}...`);
 	Object.assign(process.env, PUPPETEER_ENV);
-	await install("reffy@15");
+	await install("reffy");
 	const { crawlSpecs } = require("reffy");
 
 	const fileurl = new URL(file, `file://${dest}/`).href;
@@ -32,7 +36,7 @@ export default async function main({ dest, file }: Input) {
 		exit("No Web IDL found in spec, skipped validation", 0);
 	}
 
-	await install("webidl2@latest");
+	await install("webidl2");
 	// An outdated version might be cached from importing reffy.
 	delete require.cache[require.resolve("webidl2")];
 
