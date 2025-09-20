@@ -29,10 +29,20 @@ interface ExtractMetadataResult {
 		profile: string;
 	};
 }
+interface SpecberusProfile {
+	config: unknown;
+	name: string;
+	rules: { name: string; [key: string]: unknown }[];
+}
 
 const require = createRequire(import.meta.url);
 
-const INGORED_RULES = new Set(["validation.html", "links.linkchecker"]);
+const IGNORED_RULES = new Set([
+	// Forbidden host (localhost)
+	"validation.html",
+	// Uses validator.w3c.org so we can't use localhost there
+	"links.linkchecker",
+]);
 
 if (import.meta.main) {
 	if (yesOrNo(env("INPUTS_VALIDATE_PUBRULES")) === false) {
@@ -44,14 +54,14 @@ if (import.meta.main) {
 }
 
 export default async function main({ dest, file }: Input) {
-	console.log(`Pubrules ${file}...`);
+	console.log(`Running specberus on ${file} in ${dest}...`);
 	await install("specberus");
 
 	const server = await new StaticServer(dest).start();
+	const url = new URL(file, server.url);
 	let result;
 	try {
-		// TODO: use correct file in URL
-		result = await validate(server.url);
+		result = await validate(url);
 	} catch (error) {
 		console.error(error);
 		exit("Something went wrong");
@@ -87,24 +97,25 @@ function sinkAsync<T>() {
 
 async function validate(url: URL) {
 	const { Specberus } = require("specberus");
-
 	const specberus = new Specberus();
 
 	console.log("getting metadata");
 	const { metadata } = await extractMetadata(url);
 
-	const profile = require(`specberus/lib/util`).profiles[metadata.profile];
-	// @ts-ignore
-	profile.rules = profile.rules.filter(({ name }) => !INGORED_RULES.has(name));
+	const { profiles } = require("specberus/lib/util");
+	const importedProfile: SpecberusProfile = await profiles[metadata.profile];
+	const profile: SpecberusProfile = {
+		...importedProfile,
+		rules: importedProfile.rules.filter(({ name }) => !IGNORED_RULES.has(name)),
+	};
 
-	console.log("validating");
+	console.log(`validating using profile: ${profile.name}`);
 	const { sink, resultPromise } = sinkAsync<Result>();
 	specberus.validate({
-		url,
+		url: url.href,
 		profile,
 		events: sink,
 		echidnaReady: true,
-		patentPolicy: "pp2020",
 	});
 	const result = await resultPromise;
 	delete result.info;
