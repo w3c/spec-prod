@@ -4,13 +4,12 @@
  *
  * Run this file in a local GitHub repo, and change inputs as needed.
  */
-import { platform } from "node:os";
+import { devNull } from "node:os";
+import { createRequire } from "node:module";
 import { formatAsHeading, pprint } from "../src/utils.ts";
 
 let SILENT_CHILD = !true;
 
-// TODO: use `os.devNull` when switching to Node 16.3+
-const devNull = platform() === "win32" ? String.raw`\\.\nul` : "/dev/null";
 Object.assign(process.env, {
 	GITHUB_ENV: devNull,
 	GITHUB_PATH: devNull,
@@ -20,7 +19,7 @@ const console = global.console;
 if (SILENT_CHILD) {
 	global.console = new Proxy(global.console, {
 		get(target, prop) {
-			// @ts-ignore
+			// @ts-expect-error
 			if (typeof target[prop] === "function") {
 				return () => {};
 			}
@@ -46,7 +45,7 @@ const run = (fn: AsyncFn) => async () => {
 	outputs[fn.name as keyof Outputs] = res;
 };
 
-// These are broken as of now.
+const require = createRequire(import.meta.url);
 Promise.resolve()
 	.then(run(require("./prepare.test.ts").default))
 	.then(run(require("./setup.test.ts").default))
