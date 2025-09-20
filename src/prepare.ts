@@ -1,11 +1,11 @@
-import { env, exit, formatAsHeading, pprint, setOutput } from "./utils.js";
+import { env, exit, formatAsHeading, pprint, setOutput } from "./utils.ts";
 
-import { buildOptions } from "./prepare-build.js";
+import { buildOptions } from "./prepare-build.ts";
 import {
 	githubPagesDeployment,
 	w3cEchidnaDeployment,
-} from "./prepare-deploy.js";
-import { validation } from "./prepare-validate.js";
+} from "./prepare-deploy.ts";
+import { validation } from "./prepare-validate.ts";
 
 export interface Inputs {
 	TOOLCHAIN: "respec" | "bikeshed" | string;

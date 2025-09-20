@@ -1,5 +1,5 @@
-import main from "../src/build.js";
-import type { Outputs } from "./index.test.js";
+import main from "../src/build.ts";
+import type { Outputs } from "./index.test.ts";
 
 export default async function build(outputs: Outputs) {
 	const {

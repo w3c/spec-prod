@@ -1,12 +1,12 @@
 {
 	"compilerOptions": {
+		"noEmit": true,
 		"checkJs": false,
-		"target": "es2024",
+		"target": "esnext",
 		"moduleResolution": "nodenext",
 		"module": "nodenext",
-		"removeComments": false,
-		"sourceMap": true,
 		"strict": true,
+		"rewriteRelativeImportExtensions": true,
 		"verbatimModuleSyntax": true,
 		"useUnknownInCatchVariables": false
 	}

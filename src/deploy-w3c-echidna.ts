@@ -1,7 +1,7 @@
-import { env, exit, pprint, sh } from "./utils.js";
+import { env, exit, pprint, sh } from "./utils.ts";
 
-import type { W3CDeployOptions } from "./prepare-deploy.js";
-import type { BuildResult } from "./build.js";
+import type { W3CDeployOptions } from "./prepare-deploy.ts";
+import type { BuildResult } from "./build.ts";
 type Input = Exclude<W3CDeployOptions, false>;
 
 const MAILING_LIST = `https://lists.w3.org/Archives/Public/public-tr-notifications/`;

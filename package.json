@@ -5,7 +5,8 @@
 		"puppeteer": "^24",
 		"serve-static": "^2.2.0",
 		"split2": "^4.2.0",
-		"subresources": "^2.0.0"
+		"subresources": "^2.0.0",
+		"yaml": "^2.8.1"
 	},
 	"engines": {
 		"node": "^24"
@@ -13,8 +14,8 @@
 	"type": "module",
 	"packageManager": "pnpm@10.17.0",
 	"scripts": {
-		"build": "tsc -p tsconfig.prod.json",
-		"dev": "tsc -p tsconfig.json -w",
+		"dev": "tsc -w",
+		"typecheck": "tsc",
 		"lint": "prettier . --check"
 	},
 	"devDependencies": {
@@ -22,10 +23,7 @@
 		"@types/node": "^24.5.2",
 		"@types/serve-static": "^1.15.8",
 		"@types/split2": "^4.2.3",
-		"typescript": "^5.9.2"
-	},
-	"optionalDependencies": {
-		"prettier": "^3.6.2",
-		"yaml": "^2.8.1"
+		"typescript": "^5.9.2",
+		"prettier": "^3.6.2"
 	}
 }

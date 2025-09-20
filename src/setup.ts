@@ -1,7 +1,7 @@
 import * as path from "node:path";
 import { addPath, exportVariable } from "@actions/core";
-import { ACTION_DIR, PUPPETEER_ENV } from "./constants.js";
-import { env, exit, install, sh } from "./utils.js";
+import { ACTION_DIR, PUPPETEER_ENV } from "./constants.ts";
+import { env, exit, install, sh } from "./utils.ts";
 
 const PYTHONUSERBASE = path.join(ACTION_DIR, "python_modules");
 

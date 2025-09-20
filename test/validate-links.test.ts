@@ -1,5 +1,5 @@
-import main from "../src/validate-links.js";
-import type { Outputs } from "./index.test.js";
+import main from "../src/validate-links.ts";
+import type { Outputs } from "./index.test.ts";
 
 export default async function validateLinks(outputs: Outputs) {
 	const { links: shouldValidate = false } = outputs?.prepare?.validate || {};

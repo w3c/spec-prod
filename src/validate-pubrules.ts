@@ -6,9 +6,9 @@ import {
 	StaticServer,
 	yesOrNo,
 	formatAsHeading,
-} from "./utils.js";
+} from "./utils.ts";
 
-import type { BuildResult } from "./build.js";
+import type { BuildResult } from "./build.ts";
 type Input = Pick<BuildResult, "dest" | "file">;
 
 interface SpecberusError {

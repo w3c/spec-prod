@@ -3,12 +3,12 @@ import { inspect } from "node:util";
 import { exec, type ExecOptions } from "node:child_process";
 import { createServer, type Server } from "node:http";
 
-import core = require("@actions/core");
-import split = require("split2");
-import serveStatic = require("serve-static");
-import finalhandler = require("finalhandler");
+import core from "@actions/core";
+import finalhandler from "finalhandler";
+import serveStatic from "serve-static";
+import split from "split2";
 
-import { ACTION_DIR } from "./constants.js";
+import { ACTION_DIR } from "./constants.ts";
 
 export function deepEqual(a: unknown, b: unknown) {
 	try {

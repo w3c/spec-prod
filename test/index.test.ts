@@ -5,7 +5,7 @@
  * Run this file in a local GitHub repo, and change inputs as needed.
  */
 import { platform } from "node:os";
-import { formatAsHeading, pprint } from "../src/utils.js";
+import { formatAsHeading, pprint } from "../src/utils.ts";
 
 let SILENT_CHILD = !true;
 
@@ -30,9 +30,9 @@ if (SILENT_CHILD) {
 }
 
 export interface Outputs {
-	prepare: Awaited<ReturnType<typeof import("../src/prepare.js").default>>;
-	setup: Awaited<ReturnType<typeof import("../src/setup.js").default>>;
-	build: Awaited<ReturnType<typeof import("../src/build.js").default>>;
+	prepare: Awaited<ReturnType<typeof import("../src/prepare.ts").default>>;
+	setup: Awaited<ReturnType<typeof import("../src/setup.ts").default>>;
+	build: Awaited<ReturnType<typeof import("../src/build.ts").default>>;
 }
 const outputs: Partial<Outputs> = {};
 type AsyncFn = (outputs: Partial<Outputs>) => Promise<object | undefined>;
@@ -48,15 +48,15 @@ const run = (fn: AsyncFn) => async () => {
 
 // These are broken as of now.
 Promise.resolve()
-	.then(run(require("./prepare.test.js").default))
-	.then(run(require("./setup.test.js").default))
-	.then(run(require("./validate-input-markup.test.js").default))
-	.then(run(require("./build.test.js").default))
-	.then(run(require("./validate-links.test.js").default))
-	.then(run(require("./validate-markup.test.js").default))
-	.then(run(require("./validate-webidl.test.js").default))
-	.then(run(require("./validate-pubrules.test.js").default))
-	.then(run(require("./deploy-gh-pages.test.js").default))
+	.then(run(require("./prepare.test.ts").default))
+	.then(run(require("./setup.test.ts").default))
+	.then(run(require("./validate-input-markup.test.ts").default))
+	.then(run(require("./build.test.ts").default))
+	.then(run(require("./validate-links.test.ts").default))
+	.then(run(require("./validate-markup.test.ts").default))
+	.then(run(require("./validate-webidl.test.ts").default))
+	.then(run(require("./validate-pubrules.test.ts").default))
+	.then(run(require("./deploy-gh-pages.test.ts").default))
 	.then(() => {
 		console.log();
 		console.log(formatAsHeading("OUTPUTS", "#"));

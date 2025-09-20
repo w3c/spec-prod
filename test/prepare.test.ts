@@ -2,7 +2,7 @@ import * as path from "node:path";
 import { readFileSync, readdirSync } from "node:fs";
 import * as yaml from "yaml";
 
-import main, { type Inputs, type GitHubContext } from "../src/prepare.js";
+import main, { type Inputs, type GitHubContext } from "../src/prepare.ts";
 
 type Job = { steps: { uses?: string; with: object }[] };
 type Workflow = {

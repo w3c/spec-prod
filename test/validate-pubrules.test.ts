@@ -1,5 +1,5 @@
-import main from "../src/validate-pubrules.js";
-import type { Outputs } from "./index.test.js";
+import main from "../src/validate-pubrules.ts";
+import type { Outputs } from "./index.test.ts";
 
 export default async function validatePubrules(outputs: Outputs) {
 	const { pubrules: shouldValidate = false } = outputs?.prepare?.validate || {};

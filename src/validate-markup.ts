@@ -1,7 +1,7 @@
 import { createRequire } from "node:module";
-import { env, exit, install, sh, yesOrNo } from "./utils.js";
+import { env, exit, install, sh, yesOrNo } from "./utils.ts";
 
-import type { BuildResult } from "./build.js";
+import type { BuildResult } from "./build.ts";
 type Input = Pick<BuildResult, "dest" | "file">;
 
 const require = createRequire(import.meta.url);

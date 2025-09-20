@@ -1,9 +1,9 @@
 import { rm } from "node:fs/promises";
 import { createRequire } from "node:module";
-import { env, exit, install, yesOrNo } from "./utils.js";
-import { PUPPETEER_ENV } from "./constants.js";
+import { env, exit, install, yesOrNo } from "./utils.ts";
+import { PUPPETEER_ENV } from "./constants.ts";
 
-import type { BuildResult } from "./build.js";
+import type { BuildResult } from "./build.ts";
 type Input = Pick<BuildResult, "dest" | "file">;
 
 const require = createRequire(import.meta.url);

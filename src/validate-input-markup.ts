@@ -1,7 +1,7 @@
 import { createRequire } from "node:module";
-import { env, exit, install, sh, yesOrNo } from "./utils.js";
+import { env, exit, install, sh, yesOrNo } from "./utils.ts";
 
-import type { ProcessedInput } from "./prepare.js";
+import type { ProcessedInput } from "./prepare.ts";
 type Input = Pick<ProcessedInput["build"], "source">;
 
 const require = createRequire(import.meta.url);

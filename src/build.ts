@@ -3,12 +3,12 @@ import { copyFile, mkdir, readFile, writeFile, unlink } from "node:fs/promises";
 import { Readable } from "node:stream";
 import type { ReadableStream } from "node:stream/web";
 import { getAllSubResources, type ResourceType } from "subresources";
-import { env, exit, setOutput, sh, unique } from "./utils.js";
-import { deepEqual, StaticServer } from "./utils.js";
-import { PUPPETEER_ENV } from "./constants.js";
+import { env, exit, setOutput, sh, unique } from "./utils.ts";
+import { deepEqual, StaticServer } from "./utils.ts";
+import { PUPPETEER_ENV } from "./constants.ts";
 
-import type { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.js";
-import type { ProcessedInput } from "./prepare.js";
+import type { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.ts";
+import type { ProcessedInput } from "./prepare.ts";
 type BasicBuildOptions = Omit<BasicBuildOptions_, "artifactName">;
 type Input = ProcessedInput["build"];
 type ConfigOverride = Input["configOverride"]["gh" | "w3c"];
