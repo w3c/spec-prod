@@ -136,6 +136,14 @@ Whether or not to validate markup of the generated document using the [Nu Html C
 
 **Default:** true
 
+## `VALIDATE_PUBRULES`
+
+Whether or not to validate compliance with [W3C Publication Rules](https://www.w3.org/pubrules/) using [Specberus](https://github.com/w3c/specberus).
+
+**Possible values:** true, false
+
+**Default:** false
+
 ## `GH_PAGES_BRANCH`
 
 Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or provide a Git branch name to push to. You would need to enable GitHub pages publish source in repository settings manually.
