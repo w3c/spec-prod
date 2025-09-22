@@ -1,14 +1,6 @@
 name: Node CI (PR)
 on:
-  pull_request:
-    paths:
-      - "src/**"
-      - "test/**"
-      - "action.yml"
-      - "tsconfig.json"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - ".github/workflows/**"
+  pull_request: {}
 
 env:
   PUPPETEER_SKIP_DOWNLOAD: 1
