@@ -1,5 +1,5 @@
-import main from "../src/deploy-gh-pages.js";
-import { Outputs } from "./index.test.js";
+import main from "../src/deploy-gh-pages.ts";
+import type { Outputs } from "./index.test.ts";
 
 export default async function deployGhPages(outputs: Outputs) {
 	const { ghPages = false } = outputs?.prepare?.deploy || {};

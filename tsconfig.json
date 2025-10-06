@@ -1,12 +1,13 @@
 {
 	"compilerOptions": {
+		"noEmit": true,
 		"checkJs": false,
-		"target": "ES2020",
-		"moduleResolution": "Node",
-		"module": "CommonJS",
-		"removeComments": false,
-		"sourceMap": true,
+		"target": "esnext",
+		"moduleResolution": "nodenext",
+		"module": "nodenext",
 		"strict": true,
+		"rewriteRelativeImportExtensions": true,
+		"verbatimModuleSyntax": true,
 		"useUnknownInCatchVariables": false
 	}
 }

@@ -1,14 +1,6 @@
 name: Node CI (PR)
 on:
-  pull_request:
-    paths:
-      - "src/**"
-      - "test/**"
-      - "action.yml"
-      - "tsconfig.json"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - ".github/workflows/**"
+  pull_request: {}
 
 env:
   PUPPETEER_SKIP_DOWNLOAD: 1
@@ -19,13 +11,13 @@ jobs:
     name: Check linting issues
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: codespell-project/actions-codespell@v2
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version-file: ".nvmrc"
           cache: pnpm
       - run: pnpm i
       - run: pnpm lint
-      - run: pnpm build --noEmit
+      - run: pnpm typecheck

@@ -1,5 +1,5 @@
-import main from "../src/validate-markup.js";
-import { Outputs } from "./index.test.js";
+import main from "../src/validate-markup.ts";
+import type { Outputs } from "./index.test.ts";
 
 export default async function validateMarkup(outputs: Outputs) {
 	const { markup: shouldValidate = false } = outputs?.prepare?.validate || {};
