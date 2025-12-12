@@ -1,5 +1,6 @@
 import { createRequire } from "node:module";
 import { env, exit, install, sh, yesOrNo } from "./utils.ts";
+import { ensureVnuJar } from "./vnu-jar-download.ts";
 
 import type { ProcessedInput } from "./prepare.ts";
 type Input = Pick<ProcessedInput["build"], "source">;
@@ -17,8 +18,11 @@ if (import.meta.main) {
 
 export default async function main({ source }: Input) {
 	console.log(`Validating ${source}...`);
-	await install("vnu-jar");
-	const vnuJar = require("vnu-jar");
+	const vnuJar = await ensureVnuJar({
+		log: console.log,
+		maxRetries: 5,
+		retryDelayMs: 500,
+	});
 
 	try {
 		await sh(`java -jar "${vnuJar}" ${source}`, {
