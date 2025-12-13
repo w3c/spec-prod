@@ -1,6 +1,8 @@
+import path from "node:path";
 import { deepStrictEqual } from "node:assert";
 import { inspect } from "node:util";
 import { exec, type ExecOptions } from "node:child_process";
+import { readFile, writeFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 
 import core from "@actions/core";
@@ -43,13 +45,17 @@ export function formatAsHeading(text: string, symbol = "=") {
  * Locally install a npm package using pnpm.
  */
 export async function install(name: string, env: ExecOptions["env"] = {}) {
+	const [packageJson, pnpmLock] = await Promise.all([
+		readFile(path.join(ACTION_DIR, "package.json")),
+		readFile(path.join(ACTION_DIR, "pnpm-lock.yaml")),
+	]);
 	const output = await sh(`pnpm add ${name}`, { cwd: ACTION_DIR, env });
 	// Restore as if `pnpm add --no-save` was supported.
 	// https://github.com/pnpm/pnpm/issues/1237
-	await sh("git restore package.json pnpm-lock.yaml", {
-		cwd: ACTION_DIR,
-		output: "silent",
-	}).catch(() => {});
+	await Promise.all([
+		writeFile(path.join(ACTION_DIR, "package.json"), packageJson),
+		writeFile(path.join(ACTION_DIR, "pnpm-lock.yaml"), pnpmLock),
+	]);
 	const pkgName = name.replace(/@.+/, "");
 	const re = new RegExp(String.raw`\+ (${pkgName})\s(.+)$`);
 	const versionLine = output.split("\n").find(line => re.test(line));
