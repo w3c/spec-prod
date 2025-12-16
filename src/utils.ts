@@ -31,7 +31,8 @@ export function exit(message: string, code = 1): never {
 	if (code === 0) {
 		console.log(message);
 	} else {
-		console.log(message);
+		console.error(message);
+		core.error(message);
 	}
 	process.exit(code);
 }
