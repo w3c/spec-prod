@@ -26,17 +26,16 @@ interface PublishState {
 	response?: string | EchidnaResponse | { message: string; [x: string]: any };
 }
 
-interface EchidnaJobs
-	extends Record<
-		| "token-checker"
-		| "third-party-checker"
-		| "update-tr-shortlink"
-		| "tr-install"
-		| "publish"
-		| "ip-checker"
-		| "metadata",
-		{ errors: any[] }
-	> {
+interface EchidnaJobs extends Record<
+	| "token-checker"
+	| "third-party-checker"
+	| "update-tr-shortlink"
+	| "tr-install"
+	| "publish"
+	| "ip-checker"
+	| "metadata",
+	{ errors: any[] }
+> {
 	specberus: {
 		errors: {
 			key: string;

@@ -1,12 +1,12 @@
 {
 	"dependencies": {
-		"@actions/core": "^1.11.1",
-		"finalhandler": "^2.1.0",
+		"@actions/core": "^2.0.1",
+		"finalhandler": "^2.1.1",
 		"puppeteer": "^24",
 		"serve-static": "^2.2.0",
 		"split2": "^4.2.0",
 		"subresources": "^2.1.0",
-		"yaml": "^2.8.1"
+		"yaml": "^2.8.2"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
@@ -25,7 +25,7 @@
 		"node": "^24"
 	},
 	"type": "module",
-	"packageManager": "pnpm@10.17.0",
+	"packageManager": "pnpm@10.25.0",
 	"scripts": {
 		"dev": "tsc -w",
 		"typecheck": "tsc",
@@ -34,9 +34,9 @@
 	"devDependencies": {
 		"@types/finalhandler": "^1.2.4",
 		"@types/node": "^24.5.2",
-		"@types/serve-static": "^1.15.8",
+		"@types/serve-static": "^2.2.0",
 		"@types/split2": "^4.2.3",
-		"prettier": "^3.6.2",
-		"typescript": "^5.9.2"
+		"prettier": "^3.7.4",
+		"typescript": "^5.9.3"
 	}
 }
