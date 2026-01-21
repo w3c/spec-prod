@@ -22,7 +22,7 @@ To get started, do the following:
        name: Validate and Publish to TR
        runs-on: ubuntu-latest
        steps:
-         - uses: actions/checkout@v5
+         - uses: actions/checkout@v6
          - uses: w3c/spec-prod@v2
            with:
              TOOLCHAIN: respec # or bikeshed
