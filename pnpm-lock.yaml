@@ -9,7 +9,7 @@ overrides:
   reffy: ^15
   respec: ^35
   specberus: ^11
-  vnu-jar: ^24
+  vnu-jar: ^26
   webidl2: ^24
 
 importers:
