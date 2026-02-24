@@ -22,7 +22,7 @@ export default async function main(toolchain: "respec" | "bikeshed" | string) {
 		}
 		case "bikeshed": {
 			await sh("pipx --version", "buffer");
-			await sh(`pipx install 'bikeshed==5.*' --quiet`, {
+			await sh(`pipx install 'bikeshed==7.*' --quiet`, {
 				output: "stream",
 				env: {
 					PYTHONUSERBASE,
