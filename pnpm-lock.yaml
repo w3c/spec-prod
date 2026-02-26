@@ -32,8 +32,8 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       subresources:
-        specifier: ^2.1.0
-        version: 2.1.0(typescript@5.9.3)
+        specifier: ^3.0.1
+        version: 3.0.1(typescript@5.9.3)
       yaml:
         specifier: ^2.8.2
         version: 2.8.2
@@ -526,8 +526,8 @@ packages:
     resolution: {integrity: sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==}
     engines: {node: '>=8'}
 
-  subresources@2.1.0:
-    resolution: {integrity: sha512-fHYy8gVI0MV6acfpWSJMFCk/C9jjWZG5eBf49wUvd61EJ/dxUI6aH26AIHg1rnIN5rJBYMmOSrlVba3KTt/5UA==}
+  subresources@3.0.1:
+    resolution: {integrity: sha512-lqTXeADU89Hzqx35HRbogG0+Oh0hUvitMY1QGm4fyekN1H9a5CEy03muCyeLOvdIHzEhesesRdaQypoMtVeOVA==}
 
   supports-color@5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
@@ -1125,7 +1125,7 @@ snapshots:
     dependencies:
       ansi-regex: 5.0.1
 
-  subresources@2.1.0(typescript@5.9.3):
+  subresources@3.0.1(typescript@5.9.3):
     dependencies:
       puppeteer: 24.22.0(typescript@5.9.3)
     transitivePeerDependencies:
