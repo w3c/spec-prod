@@ -1,9 +1,9 @@
 {
 	"dependencies": {
-		"@actions/core": "^2.0.1",
+		"@actions/core": "^3.0.0",
 		"finalhandler": "^2.1.1",
 		"puppeteer": "^24",
-		"serve-static": "^2.2.0",
+		"serve-static": "^2.2.1",
 		"split2": "^4.2.0",
 		"subresources": "^3.0.1",
 		"yaml": "^2.8.2"
@@ -25,7 +25,7 @@
 		"node": "^24"
 	},
 	"type": "module",
-	"packageManager": "pnpm@10.25.0",
+	"packageManager": "pnpm@10.30.3",
 	"scripts": {
 		"dev": "tsc -w",
 		"typecheck": "tsc",
@@ -33,10 +33,10 @@
 	},
 	"devDependencies": {
 		"@types/finalhandler": "^1.2.4",
-		"@types/node": "^24.5.2",
+		"@types/node": "^24.10.14",
 		"@types/serve-static": "^2.2.0",
 		"@types/split2": "^4.2.3",
-		"prettier": "^3.7.4",
+		"prettier": "^3.8.1",
 		"typescript": "^5.9.3"
 	}
 }
