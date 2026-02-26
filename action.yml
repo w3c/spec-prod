@@ -65,7 +65,7 @@ runs:
     - uses: pnpm/action-setup@v4
       with:
         package_json_file: ${{ steps.action_relative_path.outputs.action_path }}/package.json
-    - uses: actions/setup-node@v5
+    - uses: actions/setup-node@v6
       with:
         node-version-file: ${{ steps.action_relative_path.outputs.action_path }}/.nvmrc
         package-manager-cache: false
@@ -121,7 +121,7 @@ runs:
 
     - name: Upload Build Artifacts
       id: upload-build-artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         path: |-
           ${{ steps.build.outputs.gh && fromJson(steps.build.outputs.gh).dest }}
@@ -194,5 +194,5 @@ runs:
       shell: bash
       run: |
         # Failed
-        node -e 'require("@actions/core").setFailed("Failed. See details above.")'
+        node -e 'import { setFailed } from "@actions/core"; setFailed("Failed. See details above.")'
       working-directory: ${{ github.action_path }}
