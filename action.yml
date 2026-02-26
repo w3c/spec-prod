@@ -32,6 +32,9 @@ inputs:
   VALIDATE_PUBRULES:
     description: Validate against W3C Publication Rules
     default: "false"
+  SUBRESOURCES_METHOD:
+    description: Method to use to find subresources. Possible values - 'dom', 'network'
+    default: "dom"
   GH_PAGES_BRANCH:
     description: Provide a branch name to deploy to GitHub pages.
   GH_PAGES_BUILD_OVERRIDE:

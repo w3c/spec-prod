@@ -144,6 +144,14 @@ Whether or not to validate compliance with [W3C Publication Rules](https://www.w
 
 **Default:** false
 
+## `SUBRESOURCES_METHOD`
+
+Method to use to find the subresources of the spec.
+
+**Possible values:** dom, network
+
+**Default:** dom
+
 ## `GH_PAGES_BRANCH`
 
 Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or provide a Git branch name to push to. You would need to enable GitHub pages publish source in repository settings manually.

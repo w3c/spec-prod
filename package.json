@@ -5,7 +5,7 @@
 		"puppeteer": "^24",
 		"serve-static": "^2.2.0",
 		"split2": "^4.2.0",
-		"subresources": "^2.1.0",
+		"subresources": "^3.0.1",
 		"yaml": "^2.8.2"
 	},
 	"pnpm": {

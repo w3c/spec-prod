@@ -2,13 +2,15 @@ import * as path from "node:path";
 import { copyFile, mkdir, readFile, writeFile, unlink } from "node:fs/promises";
 import { Readable } from "node:stream";
 import type { ReadableStream } from "node:stream/web";
-import { getAllSubResources, type ResourceType } from "subresources";
+import type { ResourceType } from "subresources/types";
+import { getAllSubResources as domSubResources} from "subresources/dom";
+import { getAllSubResources as networkSubResources} from "subresources/network";
 import { env, exit, setOutput, sh, unique } from "./utils.ts";
 import { deepEqual, StaticServer } from "./utils.ts";
 import { PUPPETEER_ENV } from "./constants.ts";
 
 import type { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.ts";
-import type { ProcessedInput } from "./prepare.ts";
+import type { Inputs, ProcessedInput } from "./prepare.ts";
 type BasicBuildOptions = Omit<BasicBuildOptions_, "artifactName">;
 type Input = ProcessedInput["build"];
 type ConfigOverride = Input["configOverride"]["gh" | "w3c"];
@@ -168,7 +170,7 @@ async function copyRelevantAssets(
 	};
 }
 
-async function findAssetsToCopy(source: Input["source"]) {
+async function findAssetsToCopy(source: Input["source"], method: Inputs["SUBRESOURCES_METHOD"]) {
 	console.groupCollapsed(`[INFO] Finding relevant assets…`);
 	let localAssets: string[] = [];
 	let remoteAssets: URL[] = [];
@@ -195,13 +197,14 @@ async function findAssetsToCopy(source: Input["source"]) {
 			continue;
 		}
 
-		const allSubResources = getAllSubResources(rootUrl, {
+		const options = {
 			links: true,
 			puppeteerOptions: {
 				executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
 				args: ["--no-sandbox"],
-			},
-		});
+			}
+		};
+		const allSubResources = method === "dom" ? domSubResources(rootUrl, options) : networkSubResources(rootUrl, options);
 		for await (const res of allSubResources) {
 			const url = new URL(res.url);
 			if (isLocalAsset(url) && res.type === "link") {
