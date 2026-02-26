@@ -3,8 +3,8 @@ import { copyFile, mkdir, readFile, writeFile, unlink } from "node:fs/promises";
 import { Readable } from "node:stream";
 import type { ReadableStream } from "node:stream/web";
 import type { ResourceType } from "subresources/types";
-import { getAllSubResources as domSubResources} from "subresources/dom";
-import { getAllSubResources as networkSubResources} from "subresources/network";
+import { getAllSubResources as domSubResources } from "subresources/dom";
+import { getAllSubResources as networkSubResources } from "subresources/network";
 import { env, exit, setOutput, sh, unique } from "./utils.ts";
 import { deepEqual, StaticServer } from "./utils.ts";
 import { PUPPETEER_ENV } from "./constants.ts";
@@ -202,7 +202,7 @@ async function findAssetsToCopy(source: Input["source"]) {
 			puppeteerOptions: {
 				executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
 				args: ["--no-sandbox"],
-			}
+			},
 		};
 		// Merge results from both DOM- and network-based collectors
 		// so we don't miss anything.
