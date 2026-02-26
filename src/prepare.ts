@@ -17,7 +17,6 @@ export interface Inputs {
 	VALIDATE_MARKUP: string;
 	VALIDATE_PUBRULES: string;
 	VALIDATE_WEBIDL: string;
-	SUBRESOURCES_METHOD: "dom" | "network" | string;
 	GH_PAGES_BRANCH: string;
 	GH_PAGES_TOKEN: string;
 	GH_PAGES_BUILD_OVERRIDE: string;

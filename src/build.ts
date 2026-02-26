@@ -10,7 +10,7 @@ import { deepEqual, StaticServer } from "./utils.ts";
 import { PUPPETEER_ENV } from "./constants.ts";
 
 import type { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.ts";
-import type { Inputs, ProcessedInput } from "./prepare.ts";
+import type { ProcessedInput } from "./prepare.ts";
 type BasicBuildOptions = Omit<BasicBuildOptions_, "artifactName">;
 type Input = ProcessedInput["build"];
 type ConfigOverride = Input["configOverride"]["gh" | "w3c"];
@@ -170,7 +170,7 @@ async function copyRelevantAssets(
 	};
 }
 
-async function findAssetsToCopy(source: Input["source"], method: Inputs["SUBRESOURCES_METHOD"]) {
+async function findAssetsToCopy(source: Input["source"]) {
 	console.groupCollapsed(`[INFO] Finding relevant assets…`);
 	let localAssets: string[] = [];
 	let remoteAssets: URL[] = [];
@@ -204,7 +204,12 @@ async function findAssetsToCopy(source: Input["source"], method: Inputs["SUBRESO
 				args: ["--no-sandbox"],
 			}
 		};
-		const allSubResources = method === "dom" ? domSubResources(rootUrl, options) : networkSubResources(rootUrl, options);
+		// Merge results from both DOM- and network-based collectors
+		// so we don't miss anything.
+		const allSubResources = mergeAsyncIterables(
+			domSubResources(rootUrl, options),
+			networkSubResources(rootUrl, options),
+		);
 		for await (const res of allSubResources) {
 			const url = new URL(res.url);
 			if (isLocalAsset(url) && res.type === "link") {
@@ -310,4 +315,13 @@ function trimList(list: string[], len = 8) {
 
 function urlToPage(url: URL) {
 	return new URL(url.pathname, url.origin).href;
+}
+
+// merge multiple async iterables into a single async iterable.
+async function* mergeAsyncIterables<T>(...iters: AsyncIterable<T>[]) {
+	for (const it of iters) {
+		for await (const v of it) {
+			yield v;
+		}
+	}
 }
