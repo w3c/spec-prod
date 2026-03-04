@@ -5,7 +5,7 @@ import { exec, type ExecOptions } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 
-import core from "@actions/core";
+import * as core from "@actions/core";
 import finalhandler from "finalhandler";
 import serveStatic from "serve-static";
 import split from "split2";

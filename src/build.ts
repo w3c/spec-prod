@@ -2,7 +2,9 @@ import * as path from "node:path";
 import { copyFile, mkdir, readFile, writeFile, unlink } from "node:fs/promises";
 import { Readable } from "node:stream";
 import type { ReadableStream } from "node:stream/web";
-import { getAllSubResources, type ResourceType } from "subresources";
+import type { ResourceType } from "subresources/types";
+import { getAllSubResources as domSubResources } from "subresources/dom";
+import { getAllSubResources as networkSubResources } from "subresources/network";
 import { env, exit, setOutput, sh, unique } from "./utils.ts";
 import { deepEqual, StaticServer } from "./utils.ts";
 import { PUPPETEER_ENV } from "./constants.ts";
@@ -195,13 +197,19 @@ async function findAssetsToCopy(source: Input["source"]) {
 			continue;
 		}
 
-		const allSubResources = getAllSubResources(rootUrl, {
+		const options = {
 			links: true,
 			puppeteerOptions: {
 				executablePath: PUPPETEER_ENV.PUPPETEER_EXECUTABLE_PATH,
 				args: ["--no-sandbox"],
 			},
-		});
+		};
+		// Merge results from both DOM- and network-based collectors
+		// so we don't miss anything.
+		const allSubResources = mergeAsyncIterables(
+			domSubResources(rootUrl, options),
+			networkSubResources(rootUrl, options),
+		);
 		for await (const res of allSubResources) {
 			const url = new URL(res.url);
 			if (isLocalAsset(url) && res.type === "link") {
@@ -307,4 +315,13 @@ function trimList(list: string[], len = 8) {
 
 function urlToPage(url: URL) {
 	return new URL(url.pathname, url.origin).href;
+}
+
+// merge multiple async iterables into a single async iterable.
+async function* mergeAsyncIterables<T>(...iters: AsyncIterable<T>[]) {
+	for (const it of iters) {
+		for await (const v of it) {
+			yield v;
+		}
+	}
 }
