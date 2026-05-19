@@ -7,7 +7,7 @@ import { getAllSubResources as domSubResources } from "subresources/dom";
 import { getAllSubResources as networkSubResources } from "subresources/network";
 import { env, exit, setOutput, sh, unique } from "./utils.ts";
 import { deepEqual, StaticServer } from "./utils.ts";
-import { PUPPETEER_ENV } from "./constants.ts";
+import { ACTION_DIR, PUPPETEER_ENV } from "./constants.ts";
 
 import type { BasicBuildOptions as BasicBuildOptions_ } from "./prepare-build.ts";
 import type { ProcessedInput } from "./prepare.ts";
@@ -101,7 +101,13 @@ async function buildReSpec(
 		src.searchParams.set(key, val);
 	}
 	const outFile = tmpOutputFile(source);
-	console.log('when building', process.env.PATH)
+	console.log(
+		"during build",
+		await sh(
+			`ls -la ${path.join(ACTION_DIR, "node_modules", ".bin")}`,
+			"buffer",
+		),
+	);
 	try {
 		await sh(`respec -s "${src}" -o "${outFile}" --verbose -t 20 ${flags}`, {
 			output: "stream",
