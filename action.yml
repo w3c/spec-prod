@@ -94,8 +94,8 @@ runs:
       if: ${{ steps.prepare.outputs.build && fromJson(steps.prepare.outputs.build).toolchain == 'bikeshed' }}
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
-        
+        python-version: "3.12"
+
     - name: Setup toolchain
       run: |
         echo "::group::Setup toolchain"
