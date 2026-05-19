@@ -96,15 +96,6 @@ runs:
       with:
         python-version: "3.12"
 
-    - name: Setup toolchain
-      run: |
-        echo "::group::Setup toolchain"
-        node ${{ github.action_path }}/src/setup.ts
-        echo "::endgroup::"
-      shell: bash
-      env:
-        INPUTS_TOOLCHAIN: ${{ steps.prepare.outputs.build && fromJson(steps.prepare.outputs.build).toolchain }}
-
     - name: Validate input markup
       run: |
         echo "::group::Validate input markup"
@@ -114,6 +105,15 @@ runs:
       env:
         INPUTS_VALIDATE_INPUT_MARKUP: ${{ steps.prepare.outputs.validate && fromJson(steps.prepare.outputs.validate).input_markup }}
         INPUTS_BUILD: ${{ steps.prepare.outputs.build && toJSON(fromJson(steps.prepare.outputs.build)) }}
+
+    - name: Setup toolchain
+      run: |
+        echo "::group::Setup toolchain"
+        node ${{ github.action_path }}/src/setup.ts
+        echo "::endgroup::"
+      shell: bash
+      env:
+        INPUTS_TOOLCHAIN: ${{ steps.prepare.outputs.build && fromJson(steps.prepare.outputs.build).toolchain }}
 
     - name: Generate Static HTML
       id: build
