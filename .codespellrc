@@ -1,6 +1,6 @@
 # Ref: https://github.com/codespell-project/codespell#using-a-config-file
 [codespell]
-skip = .git,.codespellrc
+skip = .git,.codespellrc,pnpm-lock.yaml,package.json
 check-hidden = true
-# ignore-regex = 
+# ignore-regex =
 # ignore-words-list =
