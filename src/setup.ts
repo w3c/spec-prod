@@ -11,6 +11,7 @@ if (import.meta.main) {
 }
 
 export default async function main(toolchain: "respec" | "bikeshed" | string) {
+	console.log('before setup', process.env.PATH)
 	addPath(path.join(ACTION_DIR, "node_modules", ".bin"));
 	addPath(path.join(PYTHONUSERBASE, "bin"));
 
@@ -18,6 +19,7 @@ export default async function main(toolchain: "respec" | "bikeshed" | string) {
 		case "respec": {
 			await install("respec", PUPPETEER_ENV);
 			await sh("respec --version", "buffer");
+			console.log('after setup', process.env.PATH)
 			break;
 		}
 		case "bikeshed": {

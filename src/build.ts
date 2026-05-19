@@ -101,6 +101,7 @@ async function buildReSpec(
 		src.searchParams.set(key, val);
 	}
 	const outFile = tmpOutputFile(source);
+	console.log('when building', process.env.PATH)
 	try {
 		await sh(`respec -s "${src}" -o "${outFile}" --verbose -t 20 ${flags}`, {
 			output: "stream",
