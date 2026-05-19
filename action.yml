@@ -96,6 +96,13 @@ runs:
       with:
         python-version: "3.12"
 
+    - name: Setup toolchain
+      run: node ${{ github.action_path }}/src/setup.ts
+      shell: bash
+      env:
+        INPUTS_TOOLCHAIN: ${{ env.TOOLCHAIN }}
+        PIPX_DEFAULT_PYTHON: python3 
+
     - name: Validate input markup
       run: |
         echo "::group::Validate input markup"
