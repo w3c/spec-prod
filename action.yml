@@ -96,13 +96,6 @@ runs:
       with:
         python-version: "3.12"
 
-    - name: Setup toolchain
-      run: node ${{ github.action_path }}/src/setup.ts
-      shell: bash
-      env:
-        INPUTS_TOOLCHAIN: ${{ env.TOOLCHAIN }}
-        PIPX_DEFAULT_PYTHON: python3 
-
     - name: Validate input markup
       run: |
         echo "::group::Validate input markup"
@@ -121,6 +114,7 @@ runs:
       shell: bash
       env:
         INPUTS_TOOLCHAIN: ${{ steps.prepare.outputs.build && fromJson(steps.prepare.outputs.build).toolchain }}
+        PIPX_DEFAULT_PYTHON: python3
 
     - name: Generate Static HTML
       id: build
