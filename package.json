@@ -15,8 +15,8 @@
 		"overrides": {
 			"link-checker": "1.4.2",
 			"reffy": "^15",
-			"respec": "^35",
-			"specberus": "^11",
+			"respec": "^37",
+			"specberus": "^12",
 			"vnu-jar": "^26",
 			"webidl2": "^24"
 		}
