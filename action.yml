@@ -114,7 +114,6 @@ runs:
       shell: bash
       env:
         INPUTS_TOOLCHAIN: ${{ steps.prepare.outputs.build && fromJson(steps.prepare.outputs.build).toolchain }}
-        PIPX_DEFAULT_PYTHON: python3
 
     - name: Generate Static HTML
       id: build
