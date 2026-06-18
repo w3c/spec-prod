@@ -30,9 +30,9 @@ interface ExtractMetadataResult {
 	};
 }
 interface SpecberusProfile {
-	config: unknown;
+	config: any;
 	name: string;
-	rules: { name: string; [key: string]: unknown }[];
+	rules: { name: string; check: (ctx: any) => void }[];
 }
 
 const require = createRequire(import.meta.url);
@@ -82,52 +82,37 @@ export default async function main({ dest, file }: Input) {
 	}
 }
 
-function sinkAsync<T>() {
-	const { Sink } = require("specberus/lib/sink");
-	const noop = () => {};
-	const sink = new Sink(noop, noop, noop, noop);
-	return {
-		sink,
-		resultPromise: new Promise<T>((res, rej) => {
-			sink.on("end-all", res);
-			sink.on("exception", rej);
-		}),
-	};
-}
-
 async function validate(url: URL) {
-	const { Specberus } = require("specberus");
+	// @ts-ignore (specberus is lazily installed)
+	const { Specberus } = await import("specberus");
 	const specberus = new Specberus();
 
 	console.log("getting metadata");
-	const { metadata } = await extractMetadata(url);
+	const {
+		metadata: { profile },
+	} = await extractMetadata(url);
 
-	const { profiles } = require("specberus/lib/util");
-	const importedProfile: SpecberusProfile = await profiles[metadata.profile];
-	const profile: SpecberusProfile = {
+	// @ts-ignore (specberus is lazily installed)
+	const { profiles } = await import("specberus/lib/util.js");
+	const importedProfile: SpecberusProfile = await profiles[profile];
+	const filteredProfile = {
 		...importedProfile,
 		rules: importedProfile.rules.filter(({ name }) => !IGNORED_RULES.has(name)),
 	};
 
-	console.log(`validating using profile: ${profile.name}`);
-	const { sink, resultPromise } = sinkAsync<Result>();
-	specberus.validate({
+	console.log(`validating using profile: ${filteredProfile.name}`);
+	const { errors, metadata, success, warnings } = await specberus.validate({
 		url: url.href,
-		profile,
-		events: sink,
-		echidnaReady: true,
+		profile: filteredProfile,
 	});
-	const result = await resultPromise;
-	delete result.info;
-	return result;
+	return { errors, metadata, success, warnings };
 }
 
 async function extractMetadata(url: URL) {
-	const { Specberus } = require("specberus");
+	// @ts-ignore (specberus is lazily installed)
+	const { Specberus } = await import("specberus");
 	const specberus = new Specberus();
 
-	const { sink, resultPromise } = sinkAsync<ExtractMetadataResult>();
-	specberus.extractMetadata({ url, events: sink });
-	const result = await resultPromise;
+	const result = await specberus.extractMetadata({ url });
 	return result;
 }
