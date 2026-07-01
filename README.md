@@ -14,7 +14,11 @@ During a pull request, the action:
 - converts the ReSpec/Bikeshed source document to regular HTML
 - runs broken hyperlink checker, and validate markup using W3C nu validator
 
-Additionally, if a commit is pushed to the "main" branch, the action deploys the built specification to /TR/.
+Additionally, during a push, the action deploys the built specification to /TR/.
+It is therefore important to properly configure the action,
+to only consider "push" events on the `main` branch
+(or whichever branch contains the main version),
+as illustrated below.
 
 ```yml
 # .github/workflows/auto-publish.yml
