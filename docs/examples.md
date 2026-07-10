@@ -66,6 +66,8 @@ Deployment is only done on `push` events. In this example:
 - the document is built and validated as a check in the pull request.
 - the document is built and validated, and then deployed to `gh-pages` branch, when a commit is pushed to the `main` branch.
 
+Note that `spec-prod` does not check the branch when deploying. Since deployment is often only desired from a single branch (usually `main`), it is important to filter `push` events in the `on` clause of the action.
+
 ```yaml
 # Create a file called .github/workflows/auto-publish.yml
 name: CI
