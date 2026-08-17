@@ -1,0 +1,11 @@
+allowBuilds:
+  puppeteer: false
+  vnu-jar: false
+
+overrides:
+  link-checker: "1.4.2"
+  reffy: "^15"
+  respec: "^37"
+  specberus: "^13.0.1"
+  vnu-jar: "^26"
+  webidl2: "^24"

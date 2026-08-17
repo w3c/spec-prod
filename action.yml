@@ -62,10 +62,10 @@ runs:
         echo "action_path=${action_path}" >> "$GITHUB_OUTPUT"
       shell: bash
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         package_json_file: ${{ steps.action_relative_path.outputs.action_path }}/package.json
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v7
       with:
         node-version-file: ${{ steps.action_relative_path.outputs.action_path }}/.nvmrc
         package-manager-cache: false
@@ -92,7 +92,7 @@ runs:
 
     - name: Set up Python for Bikeshed
       if: ${{ steps.prepare.outputs.build && fromJson(steps.prepare.outputs.build).toolchain == 'bikeshed' }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: "3.12"
 
