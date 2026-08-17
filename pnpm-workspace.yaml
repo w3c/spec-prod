@@ -1,5 +1,6 @@
 allowBuilds:
   puppeteer: false
+  vnu-jar: false
 
 overrides:
   link-checker: "1.4.2"
