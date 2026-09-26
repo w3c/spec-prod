@@ -16,18 +16,15 @@ jobs:
     name: Build Documentation
     runs-on: ubuntu-latest
     steps:
-      - name: Get ref to checkout
-        id: ref
-        run: |
-          echo "ref=${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}" >> $GITHUB_OUTPUT
-          echo "repo=${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v7
         with:
-          ref: ${{ steps.ref.outputs.ref }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
       # Uses `<repo>@<sha>` instead of "./" so the action (and its
       # node_modules) is checked out separately from the gh-pages working tree.
-      - uses: ${{ steps.ref.outputs.repo }}@${{ steps.ref.outputs.ref }}
+      # Note: `uses:` only supports the `github`/`needs` contexts, not `steps`,
+      # so the ref/repo must be computed inline here.
+      - uses: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}@${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         with:
           SOURCE: docs/index.html
           DESTINATION: index.html
