@@ -21,7 +21,8 @@ export default async function main({ dest, file }: Input) {
 	console.log(`Validating Web IDL defined in ${file}...`);
 	Object.assign(process.env, PUPPETEER_ENV);
 	await install("reffy");
-	const { crawlSpecs } = require("reffy");
+	// @ts-expect-error
+	const { crawlSpecs } = await import("reffy");
 
 	const fileurl = new URL(file, `file://${dest}/`).href;
 	const results = await crawlSpecs(
