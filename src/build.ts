@@ -80,6 +80,9 @@ async function build(
 		case "bikeshed":
 			await buildBikeshed(source, additionalFlags, conf);
 			break;
+		case "static":
+			await buildStatic(source);
+			break;
 		default:
 			throw new Error(`Unknown "TOOLCHAIN": "${toolchain}"`);
 	}
@@ -109,6 +112,10 @@ async function buildReSpec(
 	} finally {
 		await server.stop();
 	}
+}
+
+async function buildStatic(source: Input["source"]) {
+	await copyFile(source.path, tmpOutputFile(source));
 }
 
 async function buildBikeshed(
