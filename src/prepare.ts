@@ -8,7 +8,7 @@ import {
 import { validation } from "./prepare-validate.ts";
 
 export interface Inputs {
-	TOOLCHAIN: "respec" | "bikeshed" | string;
+	TOOLCHAIN: "respec" | "bikeshed" | "static" | string;
 	SOURCE: string;
 	DESTINATION: string;
 	BUILD_FAIL_ON: string;

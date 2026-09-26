@@ -48,7 +48,7 @@ export async function buildOptions(
 
 type NormalizedPath = { dir: string; file: string; path: string };
 export type BasicBuildOptions = {
-	toolchain: "respec" | "bikeshed";
+	toolchain: "respec" | "bikeshed" | "static";
 	source: NormalizedPath;
 	destination: NormalizedPath;
 	artifactName: string;
@@ -65,6 +65,9 @@ function getBasicBuildOptions(inputs: Inputs): BasicBuildOptions {
 				break;
 			case "bikeshed":
 				source ||= "index.bs";
+				break;
+			case "static":
+				source ||= "index.html";
 				break;
 			default:
 				exit(`Invalid input "TOOLCHAIN": ${toolchain}`);
@@ -388,6 +391,8 @@ function getFailOnFlags(
 		case "bikeshed": {
 			return [`--die-on=${failOn}`];
 		}
+		case "static":
+			return [];
 		default:
 			throw new Error("Unreachable");
 	}
