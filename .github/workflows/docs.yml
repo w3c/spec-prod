@@ -20,11 +20,16 @@ jobs:
         with:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
-      # Uses `<repo>@<sha>` instead of "./" so the action (and its
-      # node_modules) is checked out separately from the gh-pages working tree.
-      # Note: `uses:` only supports the `github`/`needs` contexts, not `steps`,
-      # so the ref/repo must be computed inline here.
-      - uses: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}@${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      # Check out the action's own source into a separate directory (instead
+      # of using "./"), so it (and its node_modules) stays isolated from the
+      # gh-pages working tree above.
+      - uses: actions/checkout@v7
+        with:
+          repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          path: .spec-prod-action
+
+      - uses: ./.spec-prod-action
         with:
           SOURCE: docs/index.html
           DESTINATION: index.html
