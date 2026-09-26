@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 35.5.1">
+<meta name="generator" content="ReSpec 37.3.6">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 dfn{cursor:pointer}
@@ -16,6 +16,7 @@ dfn{cursor:pointer}
 .dfn-panel .marker{padding:.1em;margin-left:.5em;border-radius:.2em;text-align:center;white-space:nowrap;font-size:90%;color:#040b1c}
 .dfn-panel .marker.dfn-exported{background:#d1edfd;box-shadow:0 0 0 .125em #1ca5f940}
 .dfn-panel .marker.idl-block{background:#8ccbf2;box-shadow:0 0 0 .125em #0670b161}
+.dfn-panel .marker.cddl-block{background:#8ccbf2;box-shadow:0 0 0 .125em #0670b161}
 .dfn-panel a:not(:hover){text-decoration:none!important;border-bottom:none!important}
 .dfn-panel a[href]:hover{border-bottom-width:1px}
 .dfn-panel ul{padding:0}
@@ -25,6 +26,8 @@ dfn{cursor:pointer}
 		
 		
 <title>Spec Prod Documentation</title>
+		
+<meta name="color-scheme" content="light dark">
 		
 		
 	
@@ -44,13 +47,17 @@ a.bibref{text-decoration:none}
 .respec-offending-element{background:url(data:image/gif;base64,R0lGODdhBAADAPEAANv///8AAP///wAAACwAAAAABAADAEACBZQjmIAFADs=) bottom repeat-x}
 }
 #references :target{background:#eaf3ff;animation:pop .4s ease-in-out 0s 1}
+@media (prefers-color-scheme:dark){
+#references :target{background:color-mix(in srgb, #eaf3ff 15%, transparent)}
+}
+body:has(input[name=color-scheme][value=dark]:checked) #references :target{background:color-mix(in srgb, #eaf3ff 15%, transparent)}
 cite .bibref{font-style:italic}
 a[href].orcid{padding-left:4px;padding-right:4px}
 a[href].orcid>svg{margin-bottom:-2px}
 ol.tof,ul.tof{list-style:none outside none}
 .caption{margin-top:.5em;font-style:italic}
 #issue-summary>ul{column-count:2}
-#issue-summary li{list-style:none;display:inline-block}
+#issue-summary li{list-style:none}
 details.respec-tests-details{margin-left:1em;display:inline-block;vertical-align:top}
 details.respec-tests-details>*{padding-right:2em}
 details.respec-tests-details[open]{z-index:999999;position:absolute;border:thin solid #cad3e2;border-radius:.3em;background-color:#fff;padding-bottom:.5em}
@@ -60,24 +67,52 @@ details.respec-tests-details>li{padding-left:1em}
 .self-link:hover{opacity:1;text-decoration:none;background-color:transparent}
 aside.example .marker>a.self-link{color:inherit}
 .header-wrapper{display:flex;align-items:baseline}
-:is(h2,h3,h4,h5,h6):not(#toc>h2,#abstract>h2,#sotd>h2,.head>h2){position:relative;left:-.5em}
-:is(h2,h3,h4,h5,h6):not(#toch2)+a.self-link{color:inherit;order:-1;position:relative;left:-1.1em;font-size:1rem;opacity:.5}
-:is(h2,h3,h4,h5,h6)+a.self-link::before{content:"§";text-decoration:none;color:var(--heading-text)}
+:is(h2,h3,h4,h5,h6):not(:where(#toc>h2,#abstract>h2,#sotd>h2,.head>h2)):has(+a.self-link){position:relative;left:-.5em}
+:is(h2,h3,h4,h5,h6):not(:where(#toch2))+a.self-link{color:inherit;order:-1;position:relative;left:-1.1em;font-size:1rem;opacity:.8;text-decoration:none}
+:is(h2,h3,h4,h5,h6)+a.self-link::before{content:"§"}
 :is(h2,h3)+a.self-link{top:-.2em}
-:is(h4,h5,h6)+a.self-link::before{color:#000}
+:is(h2,h3)+a.self-link::before{color:var(--heading-text)}
 @media (max-width:767px){
 dd{margin-left:0}
 }
 @media print{
 .removeOnSave{display:none}
 }
+body:has(input[name=color-scheme][value=light]:checked),head:not(:has(meta[name=color-scheme][content~=dark]))+body{color-scheme:light}
+body:has(input[name=color-scheme][value=dark]:checked){color-scheme:dark}
 </style>
-<meta name="color-scheme" content="light">
 <meta name="description" content="The w3c/spec-prod GitHub Action lets you:">
 <style>
-.hljs{--base:#fafafa;--mono-1:#383a42;--mono-2:#686b77;--mono-3:#717277;--hue-1:#0b76c5;--hue-2:#336ae3;--hue-3:#a626a4;--hue-4:#42803c;--hue-5:#ca4706;--hue-5-2:#c91243;--hue-6:#986801;--hue-6-2:#9a6a01}
+.hljs,body:has(input[name=color-scheme][value=light]:checked) .hljs,head:not(:has(meta[name=color-scheme][content~=dark]))+body .hljs{--base:#fafafa;--mono-1:#383a42;--mono-2:#686b77;--mono-3:#717277;--hue-1:#0b76c5;--hue-2:#336ae3;--hue-3:#a626a4;--hue-4:#42803c;--hue-5:#ca4706;--hue-5-2:#c91243;--hue-6:#986801;--hue-6-2:#9a6a01}
 @media (prefers-color-scheme:dark){
-.hljs{--base:#282c34;--mono-1:#abb2bf;--mono-2:#818896;--mono-3:#5c6370;--hue-1:#56b6c2;--hue-2:#61aeee;--hue-3:#c678dd;--hue-4:#98c379;--hue-5:#e06c75;--hue-5-2:#be5046;--hue-6:#d19a66;--hue-6-2:#e6c07b}
+.hljs{
+  --base: #282c34;
+  --mono-1: #abb2bf;
+  --mono-2: #818896;
+  --mono-3: #5c6370;
+  --hue-1: #56b6c2;
+  --hue-2: #61aeee;
+  --hue-3: #c678dd;
+  --hue-4: #98c379;
+  --hue-5: #e06c75;
+  --hue-5-2: #be5046;
+  --hue-6: #d19a66;
+  --hue-6-2: #e6c07b;
+}
+}
+body:has(input[name=color-scheme][value=dark]:checked) .hljs{
+  --base: #282c34;
+  --mono-1: #abb2bf;
+  --mono-2: #818896;
+  --mono-3: #5c6370;
+  --hue-1: #56b6c2;
+  --hue-2: #61aeee;
+  --hue-3: #c678dd;
+  --hue-4: #98c379;
+  --hue-5: #e06c75;
+  --hue-5-2: #be5046;
+  --hue-6: #d19a66;
+  --hue-6-2: #e6c07b;
 }
 .hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;color:var(--mono-1,#383a42);background:#fafafa;background:var(--base,#fafafa)}
 .hljs-comment,.hljs-quote{color:#717277;color:var(--mono-3,#717277);font-style:italic}
@@ -110,7 +145,7 @@ var.respec-hl{background:0 0;color:#000;box-shadow:unset}
 }
 </style>
 <style>
-var{position:relative;cursor:pointer}
+var[data-type]{position:relative}
 var[data-type]::after,var[data-type]::before{position:absolute;left:50%;top:-6px;opacity:0;transition:opacity .4s;pointer-events:none}
 var[data-type]::before{content:"";transform:translateX(-50%);border-width:4px 6px 0 6px;border-style:solid;border-color:transparent;border-top-color:#222}
 var[data-type]::after{content:attr(data-type);transform:translateX(-50%) translateY(-100%);background:#222;text-align:center;font-family:"Dank Mono","Fira Code",monospace;font-style:normal;padding:6px;border-radius:3px;color:#daca88;text-indent:0;font-weight:400}
@@ -121,7 +156,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "editors": [
     {
       "name": "Sid Vishnoi",
-      "url": "https://github.com/sidvishnoi"
+      "url": "https://sidvishnoi.com?ref=spec-prod"
     }
   ],
   "github": {
@@ -135,14 +170,15 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     null,
     null
   ],
-  "publishISODate": "2025-08-28T00:00:00.000Z",
-  "generatedSubtitle": "28 August 2025"
+  "publishISODate": "2026-09-26T00:00:00.000Z",
+  "generatedSubtitle": "26 September 2026"
 }</script>
-<link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/base.css"></head>
+<link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/base.css">
+<link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)"></head>
 	<body class="h-entry informative"><div class="head">
     
     <h1 id="title" class="title">Spec Prod Documentation</h1> 
-    <p id="w3c-state"> <time class="dt-published" datetime="2025-08-28">28 August 2025</time></p>
+    <p id="w3c-state"> <time class="dt-published" datetime="2026-09-26">26 September 2026</time></p>
     <details open="">
       <summary>More details about this document</summary>
       <dl>
@@ -155,8 +191,10 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
         
         
         
-        <dt>Editor:</dt><dd class="editor p-author h-card vcard">
-    <a class="u-url url p-name fn" href="https://github.com/sidvishnoi">Sid Vishnoi</a>
+        <dt>
+                  Editor:
+                </dt><dd class="editor p-author h-card vcard">
+    <a class="u-url url p-name fn" href="https://sidvishnoi.com?ref=spec-prod">Sid Vishnoi</a>
   </dd>
         
         
@@ -192,7 +230,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 					Publish generated spec to GitHub Pages and/or w3.org (using Echidna).
 				</li>
 			</ul>
-		</section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a class="tocxref" href="#abstract">Abstract</a></li><li class="tocline"><a class="tocxref" href="#getting-started"><bdi class="secno">1. </bdi>Getting started</a></li><li class="tocline"><a class="tocxref" href="#examples"><bdi class="secno">2. </bdi>Examples</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#run-as-a-validator-on-pull-requests"><bdi class="secno">2.1 </bdi>Run as a validator on pull requests</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#selectively-enable-disable-validators"><bdi class="secno">2.1.1 </bdi>Selectively enable/disable validators</a></li></ol></li><li class="tocline"><a class="tocxref" href="#specify-toolchain-bikeshed-or-respec"><bdi class="secno">2.2 </bdi>Specify toolchain: Bikeshed or ReSpec</a></li><li class="tocline"><a class="tocxref" href="#deploy-to-github-pages"><bdi class="secno">2.3 </bdi>Deploy to GitHub pages</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#change-output-location-for-built-files"><bdi class="secno">2.3.1 </bdi>Change output location for built files</a></li></ol></li><li class="tocline"><a class="tocxref" href="#deploy-to-w3c-using-echidna"><bdi class="secno">2.4 </bdi>Deploy to W3C using Echidna</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#use-different-respecconfig-when-deploying-to-w3c"><bdi class="secno">2.4.1 </bdi>Use different <code>respecConfig</code> when deploying to W3C</a></li></ol></li><li class="tocline"><a class="tocxref" href="#multiple-specs-in-same-repository"><bdi class="secno">2.5 </bdi>Multiple specs in same repository</a></li></ol></li><li class="tocline"><a class="tocxref" href="#options"><bdi class="secno">3. </bdi>Options</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#toolchain"><bdi class="secno">3.1 </bdi><code>TOOLCHAIN</code></a></li><li class="tocline"><a class="tocxref" href="#source"><bdi class="secno">3.2 </bdi><code>SOURCE</code></a></li><li class="tocline"><a class="tocxref" href="#destination"><bdi class="secno">3.3 </bdi><code>DESTINATION</code></a></li><li class="tocline"><a class="tocxref" href="#build_fail_on"><bdi class="secno">3.4 </bdi><code>BUILD_FAIL_ON</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_build_override"><bdi class="secno">3.5 </bdi><code>GH_PAGES_BUILD_OVERRIDE</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_build_override"><bdi class="secno">3.6 </bdi><code>W3C_BUILD_OVERRIDE</code></a></li><li class="tocline"><a class="tocxref" href="#validate_input_markup"><bdi class="secno">3.7 </bdi><code>VALIDATE_INPUT_MARKUP</code></a></li><li class="tocline"><a class="tocxref" href="#validate_webidl"><bdi class="secno">3.8 </bdi><code>VALIDATE_WEBIDL</code></a></li><li class="tocline"><a class="tocxref" href="#validate_links"><bdi class="secno">3.9 </bdi><code>VALIDATE_LINKS</code></a></li><li class="tocline"><a class="tocxref" href="#validate_markup"><bdi class="secno">3.10 </bdi><code>VALIDATE_MARKUP</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_branch"><bdi class="secno">3.11 </bdi><code>GH_PAGES_BRANCH</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_token"><bdi class="secno">3.12 </bdi><code>GH_PAGES_TOKEN</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_echidna_token"><bdi class="secno">3.13 </bdi><code>W3C_ECHIDNA_TOKEN</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_wg_decision_url"><bdi class="secno">3.14 </bdi><code>W3C_WG_DECISION_URL</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_notifications_cc"><bdi class="secno">3.15 </bdi><code>W3C_NOTIFICATIONS_CC</code></a></li><li class="tocline"><a class="tocxref" href="#artifact_name"><bdi class="secno">3.16 </bdi><code>ARTIFACT_NAME</code></a></li></ol></li><li class="tocline"><a class="tocxref" href="#other-useful-resources"><bdi class="secno">4. </bdi>Other useful resources</a></li></ol></nav>
+		</section><nav id="toc"><h2 class="introductory" id="table-of-contents">Table of Contents</h2><ol class="toc"><li class="tocline"><a class="tocxref" href="#abstract">Abstract</a></li><li class="tocline"><a class="tocxref" href="#getting-started"><bdi class="secno">1. </bdi>Getting started</a></li><li class="tocline"><a class="tocxref" href="#examples"><bdi class="secno">2. </bdi>Examples</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#run-as-a-validator-on-pull-requests"><bdi class="secno">2.1 </bdi>Run as a validator on pull requests</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#selectively-enable-disable-validators"><bdi class="secno">2.1.1 </bdi>Selectively enable/disable validators</a></li></ol></li><li class="tocline"><a class="tocxref" href="#specify-toolchain-bikeshed-or-respec"><bdi class="secno">2.2 </bdi>Specify toolchain: Bikeshed or ReSpec</a></li><li class="tocline"><a class="tocxref" href="#deploy-to-github-pages"><bdi class="secno">2.3 </bdi>Deploy to GitHub pages</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#change-output-location-for-built-files"><bdi class="secno">2.3.1 </bdi>Change output location for built files</a></li></ol></li><li class="tocline"><a class="tocxref" href="#deploy-to-w3c-using-echidna"><bdi class="secno">2.4 </bdi>Deploy to W3C using Echidna</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#use-different-respecconfig-when-deploying-to-w3c"><bdi class="secno">2.4.1 </bdi>Use different <code>respecConfig</code> when deploying to W3C</a></li></ol></li><li class="tocline"><a class="tocxref" href="#multiple-specs-in-same-repository"><bdi class="secno">2.5 </bdi>Multiple specs in same repository</a></li></ol></li><li class="tocline"><a class="tocxref" href="#options"><bdi class="secno">3. </bdi>Options</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#toolchain"><bdi class="secno">3.1 </bdi><code>TOOLCHAIN</code></a></li><li class="tocline"><a class="tocxref" href="#source"><bdi class="secno">3.2 </bdi><code>SOURCE</code></a></li><li class="tocline"><a class="tocxref" href="#destination"><bdi class="secno">3.3 </bdi><code>DESTINATION</code></a></li><li class="tocline"><a class="tocxref" href="#build_fail_on"><bdi class="secno">3.4 </bdi><code>BUILD_FAIL_ON</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_build_override"><bdi class="secno">3.5 </bdi><code>GH_PAGES_BUILD_OVERRIDE</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_build_override"><bdi class="secno">3.6 </bdi><code>W3C_BUILD_OVERRIDE</code></a></li><li class="tocline"><a class="tocxref" href="#validate_input_markup"><bdi class="secno">3.7 </bdi><code>VALIDATE_INPUT_MARKUP</code></a></li><li class="tocline"><a class="tocxref" href="#validate_webidl"><bdi class="secno">3.8 </bdi><code>VALIDATE_WEBIDL</code></a></li><li class="tocline"><a class="tocxref" href="#validate_links"><bdi class="secno">3.9 </bdi><code>VALIDATE_LINKS</code></a></li><li class="tocline"><a class="tocxref" href="#validate_markup"><bdi class="secno">3.10 </bdi><code>VALIDATE_MARKUP</code></a></li><li class="tocline"><a class="tocxref" href="#validate_pubrules"><bdi class="secno">3.11 </bdi><code>VALIDATE_PUBRULES</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_branch"><bdi class="secno">3.12 </bdi><code>GH_PAGES_BRANCH</code></a></li><li class="tocline"><a class="tocxref" href="#gh_pages_token"><bdi class="secno">3.13 </bdi><code>GH_PAGES_TOKEN</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_echidna_token"><bdi class="secno">3.14 </bdi><code>W3C_ECHIDNA_TOKEN</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_wg_decision_url"><bdi class="secno">3.15 </bdi><code>W3C_WG_DECISION_URL</code></a></li><li class="tocline"><a class="tocxref" href="#w3c_notifications_cc"><bdi class="secno">3.16 </bdi><code>W3C_NOTIFICATIONS_CC</code></a></li><li class="tocline"><a class="tocxref" href="#artifact_name"><bdi class="secno">3.17 </bdi><code>ARTIFACT_NAME</code></a></li></ol></li><li class="tocline"><a class="tocxref" href="#other-useful-resources"><bdi class="secno">4. </bdi>Other useful resources</a></li></ol></nav>
 		<section id="getting-started"><div class="header-wrapper"><h2 id="x1-getting-started"><bdi class="secno">1. </bdi>Getting started</h2><a class="self-link" href="#getting-started" aria-label="Permalink for Section 1."></a></div>
 <p>To get started, do the following:</p>
 <ol>
@@ -218,7 +256,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Publish</span> <span class="hljs-string">to</span> <span class="hljs-string">TR</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">respec</span> <span class="hljs-comment"># or bikeshed</span>
@@ -243,7 +281,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">and</span> <span class="hljs-string">Validate</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
 </code></pre>
 <section id="selectively-enable-disable-validators"><div class="header-wrapper"><h4 id="x2-1-1-selectively-enable-disable-validators"><bdi class="secno">2.1.1 </bdi>Selectively enable/disable validators</h4><a class="self-link" href="#selectively-enable-disable-validators" aria-label="Permalink for Section 2.1.1"></a></div>
@@ -257,7 +295,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">and</span> <span class="hljs-string">Validate</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">VALIDATE_WEBIDL:</span> <span class="hljs-literal">false</span>
@@ -274,7 +312,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">and</span> <span class="hljs-string">Validate</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">respec</span> <span class="hljs-comment"># or bikeshed</span>
@@ -285,6 +323,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 <li>the document is built and validated as a check in the pull request.</li>
 <li>the document is built and validated, and then deployed to <code>gh-pages</code> branch, when a commit is pushed to the <code>main</code> branch.</li>
 </ul>
+<p>Note that <code>spec-prod</code> does not check the branch when deploying. Since deployment is often only desired from a single branch (usually <code>main</code>), it is important to filter <code>push</code> events in the <code>on</code> clause of the action.</p>
 <pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Create a file called .github/workflows/auto-publish.yml</span>
 <span class="hljs-attr">name:</span> <span class="hljs-string">CI</span>
 <span class="hljs-attr">on:</span>
@@ -298,7 +337,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">permissions:</span>
       <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">GH_PAGES_BRANCH:</span> <span class="hljs-string">gh-pages</span>
@@ -317,7 +356,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">permissions:</span>
       <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">GH_PAGES_BRANCH:</span> <span class="hljs-string">gh-pages</span>
@@ -338,7 +377,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">W3C_ECHIDNA_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.ECHIDNA_TOKEN</span> <span class="hljs-string">}}</span>
@@ -357,7 +396,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">name:</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Validate</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
     <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">TOOLCHAIN:</span> <span class="hljs-string">respec</span>
@@ -397,7 +436,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
             <span class="hljs-comment"># destination defaults to spec-2/index.html</span>
             <span class="hljs-comment"># echidna_token defaults to no publication to w3.org/TR</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">SOURCE:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.source</span> <span class="hljs-string">}}</span>
@@ -409,7 +448,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 <p><strong>Note:</strong> Echidna tokens need to be specified per document but secrets cannot be directly evaluated at the <code>matrix</code> level, meaning that <code>${{ secrets.ECHIDNA_TOKEN_SPEC }}</code> cannot be evaluated at that level. As in the above example, the idea is rather to name the token secret at the <code>matrix</code> level (through <code>echidna_token: ECHIDNA_TOKEN_SPEC</code>) and to evaluate the secret in the job's <code>steps</code> (through <code>${{ secrets[matrix.echidna_token] }}</code>).</p>
 <p><strong>Note:</strong> Add the <code>max-parallel: 1</code> setting as in the example if you run into situations where jobs attempt to push updates to the repository at the same time and fail (see <a href="https://github.com/w3c/spec-prod/issues/58">#58</a>). This setting makes GitHub run jobs sequentially.</p>
 <p><strong>Note:</strong> At present, each source might create its own commit in <code>GH_PAGES_BRANCH</code> even when content of other sources hasn't changed. This is because the build output for each source contains build date. Though, if you deploy multiple times in the same day, the noise will reduce effectively as the build date (hence the diff) hasn't changed. The situation will improve when <a href="https://github.com/w3c/spec-prod/issues/8">#8</a> and <a href="https://github.com/w3c/spec-prod/issues/14">#14</a> are fixed.</p>
-<p>As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' <a href="https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestpaths"><code>on.&lt;push|pull_request&gt;.paths</code></a> as:</p>
+<p>As a <em title="a cumbersome one!">workaround</em>, you can create separate workflows for each document and use GitHub Actions' <a href="https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onpushpull_requestpull_request_targetpathspaths-ignore"><code>on.&lt;push|pull_request&gt;.paths</code></a> as:</p>
 <pre class="example"><code class="yaml hljs" aria-busy="false"><span class="hljs-comment"># Create a file called .github/workflows/auto-publish-spec-1.yml</span>
 <span class="hljs-attr">name:</span> <span class="hljs-string">CI</span> <span class="hljs-string">(spec-1)</span>
 <span class="hljs-attr">on:</span>
@@ -426,7 +465,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">permissions:</span>
       <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">SOURCE:</span> <span class="hljs-string">spec-1</span>
@@ -451,7 +490,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <span class="hljs-attr">permissions:</span>
       <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
     <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v5</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v7</span>
       <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">w3c/spec-prod@v2</span>
         <span class="hljs-attr">with:</span>
           <span class="hljs-attr">SOURCE:</span> <span class="hljs-string">spec-2/spec.bs</span>
@@ -464,8 +503,9 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 		<section id="options"><div class="header-wrapper"><h2 id="x3-options"><bdi class="secno">3. </bdi>Options</h2><a class="self-link" href="#options" aria-label="Permalink for Section 3."></a></div>
 <section id="toolchain"><div class="header-wrapper"><h3 id="x3-1-toolchain"><bdi class="secno">3.1 </bdi><code>TOOLCHAIN</code></h3><a class="self-link" href="#toolchain" aria-label="Permalink for Section 3.1"></a></div>
 <p>Toolchain to use.</p>
-<p><strong>Possible values:</strong> <code>respec</code>, <code>bikeshed</code>.</p>
+<p><strong>Possible values:</strong> <code>respec</code>, <code>bikeshed</code>, <code>static</code>.</p>
 <p><strong>Default:</strong> None. Inferred from <code>SOURCE</code>: <code>respec</code> if an <code>index.html</code> exists, or <code>bikeshed</code> if an <code>index.bs</code> exists.</p>
+<p>Use <code>static</code> when <code>SOURCE</code> is already a fully built, publishable HTML document and no build step should run. spec-prod will still validate, copy relevant assets and deploy like any other toolchain.</p>
 </section><section id="source"><div class="header-wrapper"><h3 id="x3-2-source"><bdi class="secno">3.2 </bdi><code>SOURCE</code></h3><a class="self-link" href="#source" aria-label="Permalink for Section 3.2"></a></div>
 <p>Source file path.</p>
 <p><strong>Possible values:</strong> Any valid POSIX file path relative to repository root.</p>
@@ -607,20 +647,24 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 <p>Whether or not to validate markup of the generated document using the <a href="https://github.com/validator/validator">Nu Html Checker</a>.</p>
 <p><strong>Possible values:</strong> true, false</p>
 <p><strong>Default:</strong> true</p>
-</section><section id="gh_pages_branch"><div class="header-wrapper"><h3 id="x3-11-gh_pages_branch"><bdi class="secno">3.11 </bdi><code>GH_PAGES_BRANCH</code></h3><a class="self-link" href="#gh_pages_branch" aria-label="Permalink for Section 3.11"></a></div>
+</section><section id="validate_pubrules"><div class="header-wrapper"><h3 id="x3-11-validate_pubrules"><bdi class="secno">3.11 </bdi><code>VALIDATE_PUBRULES</code></h3><a class="self-link" href="#validate_pubrules" aria-label="Permalink for Section 3.11"></a></div>
+<p>Whether or not to validate compliance with <a href="https://www.w3.org/pubrules/">W3C Publication Rules</a> using <a href="https://github.com/w3c/specberus">Specberus</a>.</p>
+<p><strong>Possible values:</strong> true, false</p>
+<p><strong>Default:</strong> false</p>
+</section><section id="gh_pages_branch"><div class="header-wrapper"><h3 id="x3-12-gh_pages_branch"><bdi class="secno">3.12 </bdi><code>GH_PAGES_BRANCH</code></h3><a class="self-link" href="#gh_pages_branch" aria-label="Permalink for Section 3.12"></a></div>
 <p>Whether or not to deploy to GitHub pages. Set to a Falsy value to not deploy, or provide a Git branch name to push to. You would need to enable GitHub pages publish source in repository settings manually.
 When this option is set, you need to ensure that the <code>GITHUB_TOKEN</code> for the job running spec-prod has <a href="https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token"><code>write</code> access to the <code>contents</code> scope</a>.</p>
 <p><strong>Possible values:</strong>: None, or a git branch name.</p>
 <p><strong>Default:</strong> None</p>
-</section><section id="gh_pages_token"><div class="header-wrapper"><h3 id="x3-12-gh_pages_token"><bdi class="secno">3.12 </bdi><code>GH_PAGES_TOKEN</code></h3><a class="self-link" href="#gh_pages_token" aria-label="Permalink for Section 3.12"></a></div>
+</section><section id="gh_pages_token"><div class="header-wrapper"><h3 id="x3-13-gh_pages_token"><bdi class="secno">3.13 </bdi><code>GH_PAGES_TOKEN</code></h3><a class="self-link" href="#gh_pages_token" aria-label="Permalink for Section 3.13"></a></div>
 <p>GitHub Personal access token. This field is required only if the default GitHub actions token doesn't have enough permissions, or you want to have more control. Make sure to <a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets">pass it as a secret</a>.</p>
 <p><strong>Possible values:</strong>: A valid personal GitHub token.</p>
 <p><strong>Default:</strong> <a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token"><code>GITHUB_TOKEN</code></a></p>
-</section><section id="w3c_echidna_token"><div class="header-wrapper"><h3 id="x3-13-w3c_echidna_token"><bdi class="secno">3.13 </bdi><code>W3C_ECHIDNA_TOKEN</code></h3><a class="self-link" href="#w3c_echidna_token" aria-label="Permalink for Section 3.13"></a></div>
+</section><section id="w3c_echidna_token"><div class="header-wrapper"><h3 id="x3-14-w3c_echidna_token"><bdi class="secno">3.14 </bdi><code>W3C_ECHIDNA_TOKEN</code></h3><a class="self-link" href="#w3c_echidna_token" aria-label="Permalink for Section 3.14"></a></div>
 <p>The automated publication workflow requires a <a href="https://github.com/w3c/echidna/wiki/Token-creation">token</a> associated with the specification you want to publish. Working Group Chairs and W3C Team members can <a href="https://www.w3.org/Web/publications/register">request a token</a> directly from the W3C. This can then be saved as <code>ECHIDNA_TOKEN</code> in your repository settings under <a href="downloaded-assets/user-images.githubusercontent.com/870154/81380287-f9579f80-914d-11ea-84bc-5707bff75dba.png">"Secrets"</a>.</p>
 <p><strong>Possible values:</strong> A valid Echidna token.</p>
 <p><strong>Default:</strong> None.</p>
-</section><section id="w3c_wg_decision_url"><div class="header-wrapper"><h3 id="x3-14-w3c_wg_decision_url"><bdi class="secno">3.14 </bdi><code>W3C_WG_DECISION_URL</code></h3><a class="self-link" href="#w3c_wg_decision_url" aria-label="Permalink for Section 3.14"></a></div>
+</section><section id="w3c_wg_decision_url"><div class="header-wrapper"><h3 id="x3-15-w3c_wg_decision_url"><bdi class="secno">3.15 </bdi><code>W3C_WG_DECISION_URL</code></h3><a class="self-link" href="#w3c_wg_decision_url" aria-label="Permalink for Section 3.15"></a></div>
 <p>A URL to the working group decision to use auto-publish, usually from a w3c mailing list.</p>
 <p><strong>Possible values:</strong> A non-exhaustive list of possible values:</p>
 <ul>
@@ -635,10 +679,10 @@ When this option is set, you need to ensure that the <code>GITHUB_TOKEN</code> f
 <li>Web Payments WG: <a href="https://www.w3.org/2016/04/14-wpwg-minutes.html#item02">https://www.w3.org/2016/04/14-wpwg-minutes.html#item02</a></li>
 </ul>
 <p><strong>Default:</strong> None.</p>
-</section><section id="w3c_notifications_cc"><div class="header-wrapper"><h3 id="x3-15-w3c_notifications_cc"><bdi class="secno">3.15 </bdi><code>W3C_NOTIFICATIONS_CC</code></h3><a class="self-link" href="#w3c_notifications_cc" aria-label="Permalink for Section 3.15"></a></div>
+</section><section id="w3c_notifications_cc"><div class="header-wrapper"><h3 id="x3-16-w3c_notifications_cc"><bdi class="secno">3.16 </bdi><code>W3C_NOTIFICATIONS_CC</code></h3><a class="self-link" href="#w3c_notifications_cc" aria-label="Permalink for Section 3.16"></a></div>
 <p>Comma separated list of email addresses to CC. This field is optional.</p>
 <p><strong>Default:</strong> None.</p>
-</section><section id="artifact_name"><div class="header-wrapper"><h3 id="x3-16-artifact_name"><bdi class="secno">3.16 </bdi><code>ARTIFACT_NAME</code></h3><a class="self-link" href="#artifact_name" aria-label="Permalink for Section 3.16"></a></div>
+</section><section id="artifact_name"><div class="header-wrapper"><h3 id="x3-17-artifact_name"><bdi class="secno">3.17 </bdi><code>ARTIFACT_NAME</code></h3><a class="self-link" href="#artifact_name" aria-label="Permalink for Section 3.17"></a></div>
 <p>Name for artifact which will be uploaded to workflow run. Required to be unique when building multiple documents in same job.</p>
 <p><strong>Possible values:</strong> Any valid artifact name.</p>
 <p><strong>Default:</strong> <code>"spec-prod-result"</code> or inferred from <code>SOURCE</code>.</p>
@@ -669,9 +713,12 @@ function setupVarHighlighter() {
     .forEach(varElem => varElem.addEventListener("click", highlightListener));
 }
 
+/**
+ * @param {MouseEvent} ev
+ */
 function highlightListener(ev) {
   ev.stopPropagation();
-  const { target: varElem } = ev;
+  const varElem = /** @type {HTMLElement} */ (ev.target);
   const hightligtedElems = highlightVars(varElem);
   const resetListener = () => {
     const hlColor = getHighlightColor(varElem);
@@ -694,6 +741,9 @@ const HL_COLORS = new Map([
   ["respec-hl-c7", true],
 ]);
 
+/**
+ * @param {HTMLElement} target
+ */
 function getHighlightColor(target) {
   // return current colors if applicable
   const { value } = target.classList;
@@ -708,9 +758,15 @@ function getHighlightColor(target) {
   return [...HL_COLORS.keys()].find(c => HL_COLORS.get(c)) || "respec-hl-c1";
 }
 
+/**
+ * @param {HTMLElement} varElem
+ */
 function highlightVars(varElem) {
   const textContent = norm(varElem.textContent);
-  const parent = varElem.closest(".algorithm, section");
+  const parent = /** @type {HTMLElement} */ (
+    varElem.closest(".algorithm, section")
+  );
+  if (!parent) return [];
   const highlightColor = getHighlightColor(varElem);
 
   const varsToHighlight = [...parent.querySelectorAll("var")].filter(
@@ -733,12 +789,20 @@ function highlightVars(varElem) {
   return varsToHighlight;
 }
 
+/**
+ * @param {HTMLElement} el
+ * @param {string} highlightColor
+ */
 function removeHighlight(el, highlightColor) {
   el.classList.remove("respec-hl", highlightColor);
   // clean up empty class attributes so they don't come in export
   if (!el.classList.length) el.removeAttribute("class");
 }
 
+/**
+ * @param {HTMLElement} elem
+ * @param {string} highlightColor
+ */
 function addHighlight(elem, highlightColor) {
   elem.classList.add("respec-hl", highlightColor);
 }
@@ -766,8 +830,11 @@ function setupPanel() {
 }
 
 function panelListener() {
-  /** @type {HTMLElement} */
+  /** @type {HTMLElement | null} */
   let panel = null;
+  /**
+   * @param {KeyboardEvent|MouseEvent} event
+   */
   return event => {
     const { target, type } = event;
 
@@ -775,24 +842,34 @@ function panelListener() {
 
     // For keys, we only care about Enter key to activate the panel
     // otherwise it's activated via a click.
-    if (type === "keydown" && event.key !== "Enter") return;
+    if (
+      type === "keydown" &&
+      /** @type {KeyboardEvent} */ (event).key !== "Enter"
+    )
+      return;
 
     const action = deriveAction(event);
 
     switch (action) {
       case "show": {
         hidePanel(panel);
-        /** @type {HTMLElement} */
+        /** @type {HTMLElement | null} */
         const dfn = target.closest("dfn, .index-term");
+        if (!dfn?.id) break;
         panel = document.getElementById(`dfn-panel-for-${dfn.id}`);
-        const coords = deriveCoordinates(event);
+        if (!panel) break;
+        const coords = deriveCoordinates(
+          /** @type {MouseEvent|KeyboardEvent} */ (event)
+        );
         displayPanel(dfn, panel, coords);
         break;
       }
       case "dock": {
-        panel.style.left = null;
-        panel.style.top = null;
-        panel.classList.add("docked");
+        if (panel) {
+          panel.style.left = "";
+          panel.style.top = "";
+          panel.classList.add("docked");
+        }
         break;
       }
       case "hide": {
@@ -843,7 +920,8 @@ function deriveAction(event) {
     if (hitALink) {
       return target.classList.contains("self-link") ? "hide" : "dock";
     }
-    const panel = target.closest(".dfn-panel");
+
+    const panel = /** @type {HTMLElement} */ (target.closest(".dfn-panel"));
     return panel.classList.contains("docked") ? "hide" : "none";
   }
   if (document.querySelector(".dfn-panel:not([hidden])")) {
@@ -887,9 +965,9 @@ function displayPanel(dfn, panel, { x, y }) {
     const newLeft = Math.max(MARGIN, x + MARGIN - panelRect.width);
     const newCaretOffset = left - newLeft;
     panel.style.left = `${newLeft}px`;
-    /** @type {HTMLElement} */
+    /** @type {HTMLElement | null} */
     const caret = panel.querySelector(".caret");
-    caret.style.left = `${newCaretOffset}px`;
+    if (caret) caret.style.left = `${newCaretOffset}px`;
   }
 
   // As it's a dialog, we trap focus.
@@ -938,6 +1016,9 @@ function trapFocus(panel, dfn) {
 function createTrapListener(anchors, panel, dfn) {
   const lastIndex = anchors.length - 1;
   let currentIndex = 0;
+  /**
+   * @param {KeyboardEvent} event
+   */
   return event => {
     switch (event.key) {
       // Hitting "Tab" traps us in a nice loop around elements.
@@ -967,7 +1048,7 @@ function createTrapListener(anchors, panel, dfn) {
   };
 }
 
-/** @param {HTMLElement} panel */
+/** @param {HTMLElement | null} panel */
 function hidePanel(panel) {
   if (!panel) return;
   panel.hidden = true;
