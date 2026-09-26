@@ -10,7 +10,9 @@ if (import.meta.main) {
 	main(toolchain).catch(err => exit(err.message || "Failed", err.code));
 }
 
-export default async function main(toolchain: "respec" | "bikeshed" | string) {
+export default async function main(
+	toolchain: "respec" | "bikeshed" | "static" | string,
+) {
 	addPath(path.join(ACTION_DIR, "node_modules", ".bin"));
 	addPath(path.join(PYTHONUSERBASE, "bin"));
 
@@ -34,8 +36,12 @@ export default async function main(toolchain: "respec" | "bikeshed" | string) {
 			await sh("pipx list --short | grep -i bikeshed", "buffer");
 			break;
 		}
+		case "static": {
+			console.log('[INFO] No toolchain to set up for "static" documents.');
+			break;
+		}
 		default: {
-			const msg = `Environment variable "INPUTS_TOOLCHAIN" must be either one of "respec" or "bikeshed". found "${toolchain}"`;
+			const msg = `Environment variable "INPUTS_TOOLCHAIN" must be either one of "respec", "bikeshed" or "static". Found "${toolchain}"`;
 			exit(msg, 1);
 		}
 	}

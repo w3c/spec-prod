@@ -4,9 +4,11 @@
 
 Toolchain to use.
 
-**Possible values:** `respec`, `bikeshed`.
+**Possible values:** `respec`, `bikeshed`, `static`.
 
 **Default:** None. Inferred from `SOURCE`: `respec` if an `index.html` exists, or `bikeshed` if an `index.bs` exists.
+
+Use `static` when `SOURCE` is already a fully built, publishable HTML document and no build step should run. spec-prod will still validate, copy relevant assets and deploy like any other toolchain.
 
 ## `SOURCE`
 
