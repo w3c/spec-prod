@@ -16,17 +16,23 @@ jobs:
     name: Build Documentation
     runs-on: ubuntu-latest
     steps:
+      - name: Get ref to checkout
+        id: ref
+        run: |
+          echo "ref=${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}" >> $GITHUB_OUTPUT
+          echo "repo=${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}" >> $GITHUB_OUTPUT
+
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ steps.ref.outputs.ref }}
 
       # Check out the action's own source into a separate directory (instead
       # of using "./"), so it (and its node_modules) stays isolated from the
       # gh-pages working tree above.
       - uses: actions/checkout@v7
         with:
-          repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
-          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          repository: ${{ steps.ref.outputs.repo }}
+          ref: ${{ steps.ref.outputs.ref }}
           path: .spec-prod-action
 
       - uses: ./.spec-prod-action
