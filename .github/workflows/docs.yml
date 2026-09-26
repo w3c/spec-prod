@@ -20,12 +20,14 @@ jobs:
         id: ref
         run: |
           echo "ref=${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}" >> $GITHUB_OUTPUT
+          echo "repo=${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v7
         with:
           ref: ${{ steps.ref.outputs.ref }}
 
-      - name: "Run w3c/spec-prod@${{ steps.ref.outputs.ref }}"
-        uses: "./"
+      # Uses `<repo>@<sha>` instead of "./" so the action (and its
+      # node_modules) is checked out separately from the gh-pages working tree.
+      - uses: ${{ steps.ref.outputs.repo }}@${{ steps.ref.outputs.ref }}
         with:
           SOURCE: docs/index.html
           DESTINATION: index.html
