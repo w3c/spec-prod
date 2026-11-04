@@ -9,3 +9,6 @@ overrides:
   specberus: "^13.0.1"
   vnu-jar: "^26"
   webidl2: "^24"
+
+minimumReleaseAgeExclude:
+  - vnu-jar # vnu-jar releases every few days and we want latest
