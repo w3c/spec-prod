@@ -25,7 +25,7 @@ export default async function main(
 		case "bikeshed": {
 			process.env.PIPX_DEFAULT_PYTHON = "python3";
 			await sh("pipx --version", "buffer");
-			await sh(`pipx install 'bikeshed==7.*' --quiet`, {
+			await sh(`pipx install 'bikeshed' --quiet`, {
 				output: "stream",
 				env: {
 					PYTHONUSERBASE,
