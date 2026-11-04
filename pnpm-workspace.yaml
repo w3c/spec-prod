@@ -9,3 +9,10 @@ overrides:
   specberus: "^13.0.1"
   vnu-jar: "^26"
   webidl2: "^24"
+
+# By default, pnpm holds back any version published less than a day ago
+# (minimumReleaseAge). But a vnu-jar release can carry checker fixes that spec
+# builds need right away — e.g. support for CSS that Bikeshed has just started
+# emitting — so install the newest vnu-jar as soon as it's published.
+minimumReleaseAgeExclude:
+  - vnu-jar
