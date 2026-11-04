@@ -145,7 +145,7 @@ async function copyRelevantAssets(
 	const tmpOutFile = tmpOutputFile(source);
 
 	const assets = await findAssetsToCopy(source);
-	await copyLocalAssets(assets.local, rootDir);
+	await copyLocalAssets(assets.local, source.dir, destinationDir, rootDir);
 	const newRemoteURLs = await downloadRemoteAssets(
 		assets.remote,
 		destinationDir,
@@ -247,11 +247,25 @@ async function findAssetsToCopy(source: Input["source"]) {
 	return { local: localAssets.sort(), remote: remoteAssets.sort() };
 }
 
-async function copyLocalAssets(assets: string[], destinationDir: string) {
+async function copyLocalAssets(
+	assets: string[],
+	sourceDir: string,
+	destinationDir: string,
+	rootDir: string,
+) {
+	// keep asset's location relative to the document, not repository root
+	const getDestination = (asset: string) => {
+		const relative = path.relative(`/${sourceDir}`, asset);
+		const destination = path.join(destinationDir, relative);
+		if (destination.startsWith(rootDir + path.sep)) {
+			return destination;
+		}
+		console.warn(`${asset} is outside output directory for this DESTINATION.`);
+		return path.join(rootDir, asset);
+	};
+
 	console.groupCollapsed(`Copying ${assets.length} local files…`);
-	await Promise.all(
-		assets.map(asset => copy(asset, path.join(destinationDir, asset))),
-	);
+	await Promise.all(assets.map(asset => copy(asset, getDestination(asset))));
 	console.groupEnd();
 }
 
