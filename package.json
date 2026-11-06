@@ -4,7 +4,7 @@
 		"finalhandler": "^2.1.1",
 		"puppeteer": "^25",
 		"serve-static": "^2.2.1",
-		"subresources": "^3.0.1",
+		"subresources": "^3.0.2",
 		"yaml": "^2.9.1"
 	},
 	"engines": {
