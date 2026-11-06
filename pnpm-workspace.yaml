@@ -12,3 +12,4 @@ overrides:
 
 minimumReleaseAgeExclude:
   - vnu-jar # vnu-jar releases every few days and we want latest
+  - subresources@3.0.2
