@@ -4,11 +4,12 @@ import { inspect } from "node:util";
 import { exec, type ExecOptions } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
+import { createInterface } from "node:readline";
+import type { Readable } from "node:stream";
 
 import * as core from "@actions/core";
 import finalhandler from "finalhandler";
 import serveStatic from "serve-static";
-import split from "split2";
 
 import { ACTION_DIR } from "./constants.ts";
 
@@ -91,10 +92,8 @@ export async function sh(command: string, options: ShOptions | ShOutput = {}) {
 	const { output, ...execOptions } =
 		typeof options === "string" ? { output: options } : options;
 
-	const BOLD = "\x1b[1m";
-	const RESET = "\x1b[22m";
 	if (output !== "silent") {
-		console.group(`${BOLD}$ ${command}${RESET}`);
+		core.startGroup(`$ ${command}`);
 	}
 
 	try {
@@ -106,15 +105,15 @@ export async function sh(command: string, options: ShOptions | ShOutput = {}) {
 				env: { ...process.env, ...execOptions.env },
 				encoding: "utf-8",
 			});
-			child.stdout!.pipe(split()).on("data", chunk => {
-				if (output === "stream") console.log(chunk);
-				stdout += chunk + "\n";
+			readLines(child.stdout!, line => {
+				if (output === "stream") console.log(line);
+				stdout += line + "\n";
 			});
-			child.stderr!.pipe(split()).on("data", chunk => {
-				if (output === "stream") console.log(chunk);
-				stderr += chunk + "\n";
+			readLines(child.stderr!, line => {
+				if (output === "stream") console.log(line);
+				stderr += line + "\n";
 			});
-			child.on("exit", code => {
+			child.on("close", code => {
 				stdout = stdout.trim();
 				stderr = stderr.trim();
 				if (output === "buffer") {
@@ -131,9 +130,13 @@ export async function sh(command: string, options: ShOptions | ShOutput = {}) {
 		});
 	} finally {
 		if (output !== "silent") {
-			console.groupEnd();
-		}
+			core.endGroup();
+    }
 	}
+}
+
+function readLines(input: Readable, onLine: (line: string) => void) {
+	createInterface({ input, crlfDelay: Infinity }).on("line", onLine);
 }
 
 export function unique<T>(items: T[], key?: (item: T) => string | number) {
