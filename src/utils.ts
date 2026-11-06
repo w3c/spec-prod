@@ -139,7 +139,7 @@ export async function sh(
 		if (isGroupOpen) {
 			core.endGroup();
 		} else if (!silent) {
-			console.log(`  ${title}`);
+			console.log(` ${title}`);
 		}
 	}
 }
