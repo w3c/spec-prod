@@ -95,13 +95,10 @@ async function publish(input: Input, buildOutput: BuildResult) {
 	const annotation = `triggered by auto-publish spec-prod action on ${repository}`;
 	const tarFileName = "/tmp/echidna.tar";
 	await sh(`mv -n ${file} Overview.html`, { cwd: outputDir });
-	await sh(`tar cvf ${tarFileName} *`, {
-		output: "stream",
-		cwd: outputDir,
-	});
+	await sh(`tar cvf ${tarFileName} *`, { cwd: outputDir });
 	await sh(`mv -n Overview.html ${file}`, { cwd: outputDir });
 
-	let command = `curl '${API_URL}'`;
+	let command = `curl -sS '${API_URL}'`;
 	// command += ` -F "dry-run=true"`;
 	command += ` -F "tar=@${tarFileName}"`;
 	command += ` -F "token=${token}"`;

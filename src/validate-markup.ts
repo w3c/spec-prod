@@ -21,10 +21,7 @@ export default async function main({ dest, file }: Input) {
 	const vnuJar = require("vnu-jar");
 
 	try {
-		await sh(`java -jar "${vnuJar}" --also-check-css ${file}`, {
-			output: "stream",
-			cwd: dest,
-		});
+		await sh(`java -jar "${vnuJar}" --also-check-css ${file}`, { cwd: dest });
 		exit("✅  Looks good! No HTML validation errors!", 0);
 	} catch {
 		exit("❌  Not so good... please fix the issues above.");

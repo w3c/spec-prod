@@ -106,7 +106,6 @@ async function buildReSpec(
 	const outFile = tmpOutputFile(source);
 	try {
 		await sh(`respec -s "${src}" -o "${outFile}" --verbose -t 20 ${flags}`, {
-			output: "stream",
 			env: PUPPETEER_ENV,
 		});
 	} finally {
@@ -130,7 +129,6 @@ async function buildBikeshed(
 	const outFile = tmpOutputFile(source);
 	await sh(
 		`bikeshed ${flags} spec "${source.path}" "${outFile}" ${metadataFlags}`,
-		"stream",
 	);
 }
 
@@ -167,7 +165,7 @@ async function copyRelevantAssets(
 	await unlink(tmpOutFile);
 
 	// List all files in output directory
-	await sh(`ls -R`, { output: "buffer", cwd: destinationDir });
+	await sh(`ls -R`, { cwd: destinationDir });
 
 	return {
 		root: rootDir,

@@ -79,22 +79,26 @@ export function setOutput<K extends string, V>(key: K, value: V) {
 	return { [key]: value } as { [k in K]: V };
 }
 
-type ShOutput = "buffer" | "stream" | "silent";
 interface ShOptions extends ExecOptions {
-	output?: ShOutput;
+	silent?: boolean;
 }
 /**
  * Asynchronously run a shell command get its result.
  * @returns stdout
  * @throws {Promise<{ stdout: string, stderr: string, code: number }>}
  */
-export async function sh(command: string, options: ShOptions | ShOutput = {}) {
-	const { output, ...execOptions } =
-		typeof options === "string" ? { output: options } : options;
-
-	if (output !== "silent") {
-		core.startGroup(`$ ${command}`);
-	}
+export async function sh(
+	command: string,
+	{ silent, ...execOptions }: ShOptions = {},
+) {
+	const title = `$ ${command}`;
+	let isGroupOpen = false;
+	const openGroup = () => {
+		if (!isGroupOpen) core.startGroup(title);
+		isGroupOpen = true;
+	};
+	// Show what's running, even if it's quiet for long (or hangs).
+	const groupTimer = silent ? undefined : setTimeout(openGroup, 200);
 
 	try {
 		return await new Promise<string>((resolve, reject) => {
@@ -105,21 +109,23 @@ export async function sh(command: string, options: ShOptions | ShOutput = {}) {
 				env: { ...process.env, ...execOptions.env },
 				encoding: "utf-8",
 			});
+			const printLine = (line: string) => {
+				if (!silent) {
+					openGroup();
+					console.log(line);
+				}
+			};
 			readLines(child.stdout!, line => {
-				if (output === "stream") console.log(line);
+				printLine(line);
 				stdout += line + "\n";
 			});
 			readLines(child.stderr!, line => {
-				if (output === "stream") console.log(line);
+				printLine(line);
 				stderr += line + "\n";
 			});
 			child.on("close", code => {
 				stdout = stdout.trim();
 				stderr = stderr.trim();
-				if (output === "buffer") {
-					if (stdout) console.log(stdout);
-					if (stderr) console.error(stderr);
-				}
 				if (code === 0) {
 					resolve(stdout);
 				} else {
@@ -129,9 +135,12 @@ export async function sh(command: string, options: ShOptions | ShOutput = {}) {
 			});
 		});
 	} finally {
-		if (output !== "silent") {
+		clearTimeout(groupTimer);
+		if (isGroupOpen) {
 			core.endGroup();
-    }
+		} else if (!silent) {
+			console.log(`  ${title}`);
+		}
 	}
 }
 
