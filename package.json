@@ -4,7 +4,6 @@
 		"finalhandler": "^2.1.1",
 		"puppeteer": "^25",
 		"serve-static": "^2.2.1",
-		"split2": "^4.2.0",
 		"subresources": "^3.0.1",
 		"yaml": "^2.9.1"
 	},
@@ -22,7 +21,6 @@
 		"@types/finalhandler": "^1.2.4",
 		"@types/node": "^26.6.6",
 		"@types/serve-static": "^2.2.0",
-		"@types/split2": "^4.2.3",
 		"prettier": "^3.9.10",
 		"typescript": "^7.0.2"
 	}

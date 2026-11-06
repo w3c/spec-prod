@@ -19,7 +19,7 @@ export default async function main({ dest: dir }: Input) {
 	await install("link-checker");
 	const opts = getLinkCheckerOptions(URL_IGNORE);
 	// Note: link-checker checks a directory, not a file.
-	await sh(`link-checker ${opts} ${dir}`, "stream");
+	await sh(`link-checker ${opts} ${dir}`);
 }
 
 function getLinkCheckerOptions(ignoreList: string[]) {

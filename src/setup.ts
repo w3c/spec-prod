@@ -19,21 +19,18 @@ export default async function main(
 	switch (toolchain) {
 		case "respec": {
 			await install("respec", PUPPETEER_ENV);
-			await sh("respec --version", "buffer");
+			await sh("respec --version");
 			break;
 		}
 		case "bikeshed": {
 			process.env.PIPX_DEFAULT_PYTHON = "python3";
-			await sh("pipx --version", "buffer");
+			await sh("pipx --version");
 			await sh(`pipx install 'bikeshed==7.*' --quiet`, {
-				output: "stream",
-				env: {
-					PYTHONUSERBASE,
-				},
+				env: { PYTHONUSERBASE },
 			});
 			exportVariable("PYTHONUSERBASE", PYTHONUSERBASE);
-			await sh("bikeshed update", "stream");
-			await sh("pipx list --short | grep -i bikeshed", "buffer");
+			await sh("bikeshed update");
+			await sh("pipx list --short | grep -i bikeshed");
 			break;
 		}
 		case "static": {

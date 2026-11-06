@@ -4,11 +4,12 @@ import { inspect } from "node:util";
 import { exec, type ExecOptions } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
+import { createInterface } from "node:readline";
+import type { Readable } from "node:stream";
 
 import * as core from "@actions/core";
 import finalhandler from "finalhandler";
 import serveStatic from "serve-static";
-import split from "split2";
 
 import { ACTION_DIR } from "./constants.ts";
 
@@ -78,24 +79,26 @@ export function setOutput<K extends string, V>(key: K, value: V) {
 	return { [key]: value } as { [k in K]: V };
 }
 
-type ShOutput = "buffer" | "stream" | "silent";
 interface ShOptions extends ExecOptions {
-	output?: ShOutput;
+	silent?: boolean;
 }
 /**
  * Asynchronously run a shell command get its result.
  * @returns stdout
  * @throws {Promise<{ stdout: string, stderr: string, code: number }>}
  */
-export async function sh(command: string, options: ShOptions | ShOutput = {}) {
-	const { output, ...execOptions } =
-		typeof options === "string" ? { output: options } : options;
-
-	const BOLD = "\x1b[1m";
-	const RESET = "\x1b[22m";
-	if (output !== "silent") {
-		console.group(`${BOLD}$ ${command}${RESET}`);
-	}
+export async function sh(
+	command: string,
+	{ silent, ...execOptions }: ShOptions = {},
+) {
+	const title = `$ ${command}`;
+	let isGroupOpen = false;
+	const openGroup = () => {
+		if (!isGroupOpen) core.startGroup(title);
+		isGroupOpen = true;
+	};
+	// Show what's running, even if it's quiet for long (or hangs).
+	const groupTimer = silent ? undefined : setTimeout(openGroup, 200);
 
 	try {
 		return await new Promise<string>((resolve, reject) => {
@@ -106,21 +109,23 @@ export async function sh(command: string, options: ShOptions | ShOutput = {}) {
 				env: { ...process.env, ...execOptions.env },
 				encoding: "utf-8",
 			});
-			child.stdout!.pipe(split()).on("data", chunk => {
-				if (output === "stream") console.log(chunk);
-				stdout += chunk + "\n";
+			const printLine = (line: string) => {
+				if (!silent) {
+					openGroup();
+					console.log(line);
+				}
+			};
+			readLines(child.stdout!, line => {
+				printLine(line);
+				stdout += line + "\n";
 			});
-			child.stderr!.pipe(split()).on("data", chunk => {
-				if (output === "stream") console.log(chunk);
-				stderr += chunk + "\n";
+			readLines(child.stderr!, line => {
+				printLine(line);
+				stderr += line + "\n";
 			});
-			child.on("exit", code => {
+			child.on("close", code => {
 				stdout = stdout.trim();
 				stderr = stderr.trim();
-				if (output === "buffer") {
-					if (stdout) console.log(stdout);
-					if (stderr) console.error(stderr);
-				}
 				if (code === 0) {
 					resolve(stdout);
 				} else {
@@ -130,10 +135,17 @@ export async function sh(command: string, options: ShOptions | ShOutput = {}) {
 			});
 		});
 	} finally {
-		if (output !== "silent") {
-			console.groupEnd();
+		clearTimeout(groupTimer);
+		if (isGroupOpen) {
+			core.endGroup();
+		} else if (!silent) {
+			console.log(` ${title}`);
 		}
 	}
+}
+
+function readLines(input: Readable, onLine: (line: string) => void) {
+	createInterface({ input, crlfDelay: Infinity }).on("line", onLine);
 }
 
 export function unique<T>(items: T[], key?: (item: T) => string | number) {

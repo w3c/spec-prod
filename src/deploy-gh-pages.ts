@@ -22,7 +22,7 @@ export default async function main(inputs: Input, outputDir: string) {
 	await fs.copyFile(".git/config", "/tmp/spec-prod-git-config");
 	try {
 		await prepare(inputs, outputDir);
-		const gitStatus = await sh(`git status`, "stream");
+		const gitStatus = await sh(`git status`);
 		const hasChanges = !gitStatus.includes("nothing to commit");
 		const committed = hasChanges && (await commit(inputs));
 		if (!committed) {
@@ -52,22 +52,24 @@ async function prepare(opts: PrepareInputs, outputDir: string) {
 	// If it exists, we do a pull, otherwise we create a new orphan branch.
 	const repoUri = `https://github.com/${repository}.git/`;
 	if (await sh(`git ls-remote --heads "${repoUri}" "${targetBranch}"`)) {
-		await sh(`git fetch origin "${targetBranch}"`, "stream");
-		await sh(`git checkout "${targetBranch}"`, "stream");
+		await sh(`git fetch origin "${targetBranch}"`);
+		await sh(`git checkout "${targetBranch}"`);
 	} else {
-		await sh(`git checkout --orphan "${targetBranch}"`, "stream");
-		await sh(`git reset --hard`, "stream");
+		await sh(`git checkout --orphan "${targetBranch}"`);
+		await sh(`git reset --hard`);
 	}
 
-	await sh(`rsync -a ${outputDir} .`, "stream");
-	await sh(`git add -A`, "stream");
+	await sh(`rsync -a ${outputDir} .`);
+	await sh(`git add -A`);
 }
 
 type CommitInputs = Pick<Input, "sha" | "event" | "actor">;
 async function commit({ sha, event, actor }: CommitInputs) {
 	const GITHUB_ACTIONS_BOT = `github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>`;
 
-	const author = await sh(`git show -s --format='%an | %ae' ${sha}`);
+	const author = await sh(`git show -s --format='%an | %ae' ${sha}`, {
+		silent: true,
+	});
 	const [name, email] = author.split(" | ");
 	setSecret(email);
 	await sh(`git config user.name "${name}"`);
@@ -101,7 +103,7 @@ async function push({ repository, targetBranch, token }: PushInputs) {
 	const repoURI = `https://x-access-token:${token}@github.com/${repository}.git/`;
 	await sh(`git remote set-url origin "${repoURI}"`);
 	await sh(`git pull origin "${targetBranch}" --rebase`).catch(() => {});
-	await sh(`git push --force-with-lease origin "${targetBranch}"`, "stream");
+	await sh(`git push --force-with-lease origin "${targetBranch}"`);
 }
 
 async function cleanUp() {
